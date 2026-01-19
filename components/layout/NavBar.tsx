@@ -3,11 +3,7 @@
 import NextLink from 'next/link';
 import { motion, isValidMotionProp } from 'framer-motion';
 import { Button, chakra, Container, Flex, HStack, Link, Text, shouldForwardProp } from '@chakra-ui/react';
-
-const links = [
-  { href: '/', label: 'Portfolio' },
-  { href: '/blog', label: 'Blog' },
-];
+import { navContent } from '../../data/siteContent';
 
 const MotionHeader = chakra(motion.header, {
   shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
@@ -31,11 +27,11 @@ export default function NavBar() {
         <Flex align="center" justify="space-between" gap={4}>
           <Link as={NextLink} href="/" _hover={{ textDecoration: 'none' }}>
             <Text fontWeight={800} letterSpacing="-0.03em" fontSize="lg">
-              Chakra Portfolio
+              {navContent.brand}
             </Text>
           </Link>
           <HStack spacing={3}>
-            {links.map((link) => (
+            {navContent.links.map((link) => (
               <Button
                 key={link.href}
                 as={NextLink}

@@ -1,42 +1,64 @@
 "use client";
 
 import { Flex, Heading, Stack, Text, Button, Badge, SimpleGrid, Box } from '@chakra-ui/react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import { MotionBox } from '../motion/MotionPrimitives';
 import { fadeRise, headingReveal, orbReveal, staggerContainer } from '../motion/variants';
+import { heroContent } from '../../data/siteContent';
 
 export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: contentRef,
+    offset: ['start end', 'end start'],
+  });
+  const titleScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1.08, 0.98]);
+  const bodyScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.98, 1.04, 0.99]);
+  const bodyOpacity = useTransform(scrollYProgress, [0, 0.45, 1], [0.75, 1, 0.85]);
 
   return (
-    <Stack spacing={{ base: 10, md: 12 }} mt={{ base: 4, md: 6 }}>
+    <Stack spacing={{ base: 10, md: 12 }} mt={{ base: 4, md: 6 }} ref={contentRef}>
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 8, md: 10 }} alignItems="center">
         <MotionBox variants={staggerContainer(0.18, 0.12)} initial="hidden" animate="show">
           <Stack spacing={5}>
             <MotionBox variants={fadeRise}>
               <Badge colorScheme="brand" alignSelf={{ base: 'flex-start', md: 'flex-start' }} borderRadius="full" px={3} py={1}>
-                Next.js 16 준비 완료 · Chakra UI
+                {heroContent.badge}
               </Badge>
             </MotionBox>
-            <MotionBox variants={shouldReduceMotion ? fadeRise : headingReveal}>
+            <MotionBox
+              variants={shouldReduceMotion ? fadeRise : headingReveal}
+              style={shouldReduceMotion ? undefined : { scale: titleScale }}
+            >
               <Heading as="h1" size="2xl" letterSpacing="-0.03em" lineHeight={1.1}>
-                담백하지만 모션이 살아있는 포트폴리오
+                {heroContent.title}
               </Heading>
             </MotionBox>
-            <MotionBox variants={fadeRise}>
+            <MotionBox
+              variants={fadeRise}
+              style={shouldReduceMotion ? undefined : { scale: bodyScale, opacity: bodyOpacity }}
+            >
               <Text color="whiteAlpha.800" fontSize="lg" lineHeight={1.7}>
-                Chakra UI와 Lenis, Framer Motion을 결합해 부드러운 흐름을 가진 두 페이지 포트폴리오를 만들었습니다.
-                협업과 루틴을 중시하는 개발자의 이야기를 명료하게 전합니다.
+                {heroContent.description}
               </Text>
             </MotionBox>
             <MotionBox variants={fadeRise}>
               <Flex gap={3} wrap="wrap">
-                <Button as="a" href="#projects" colorScheme="brand" size="md" borderRadius="full">
-                  프로젝트 보기
-                </Button>
-                <Button as="a" href="#about" variant="outline" colorScheme="brand" size="md" borderRadius="full">
-                  소개 읽기
-                </Button>
+                {heroContent.ctas.map((cta) => (
+                  <Button
+                    key={cta.href}
+                    as="a"
+                    href={cta.href}
+                    colorScheme="brand"
+                    size="md"
+                    borderRadius="full"
+                    variant={cta.variant}
+                  >
+                    {cta.label}
+                  </Button>
+                ))}
               </Flex>
             </MotionBox>
           </Stack>
@@ -60,10 +82,10 @@ export default function Hero() {
           >
             <Stack spacing={2} textAlign="center">
               <Badge colorScheme="brand" variant="subtle" alignSelf="center" px={3} py={1}>
-                Motion & Routine
+                {heroContent.orb.badge}
               </Badge>
-              <Heading as="h3" size="md">UX Frontend Developer</Heading>
-              <Text color="whiteAlpha.800">프론트엔드 · 인터랙션</Text>
+              <Heading as="h3" size="md">{heroContent.orb.title}</Heading>
+              <Text color="whiteAlpha.800">{heroContent.orb.subtitle}</Text>
             </Stack>
           </Box>
         </MotionBox>
