@@ -5,13 +5,14 @@ import { experiences } from '../../data/portfolioContent';
 import ExperienceCard from './ExperienceCard';
 import { MotionBox } from '../motion/MotionPrimitives';
 import { headingReveal, staggerContainer } from '../motion/variants';
+import { projectsContent } from '../../data/siteContent';
 
 export default function Projects() {
   return (
     <Stack id="projects" spacing={8} mt={{ base: 10, md: 16 }}>
       <MotionBox variants={headingReveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }}>
         <Heading as="h2" size="lg" letterSpacing="-0.02em">
-          Projects & Experience
+          {projectsContent.sectionTitle}
         </Heading>
       </MotionBox>
       <MotionBox

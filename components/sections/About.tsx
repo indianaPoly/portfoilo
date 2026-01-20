@@ -2,6 +2,7 @@
 
 import { Heading, SimpleGrid, Stack, Text, Tag, VStack } from '@chakra-ui/react';
 import { profileIntro, techStack, education, awards } from '../../data/portfolioContent';
+import { aboutContent } from '../../data/siteContent';
 import AboutPanel from './AboutPanel';
 import { MotionBox } from '../motion/MotionPrimitives';
 import { fadeRise, headingReveal, staggerContainer } from '../motion/variants';
@@ -11,7 +12,7 @@ export default function About() {
     <Stack id="about" spacing={8} mt={{ base: 10, md: 16 }}>
       <MotionBox variants={headingReveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }}>
         <Heading as="h2" size="lg" letterSpacing="-0.02em">
-          About
+          {aboutContent.sectionTitle}
         </Heading>
       </MotionBox>
       <MotionBox
@@ -21,7 +22,7 @@ export default function About() {
         viewport={{ once: true, amount: 0.3 }}
       >
         <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-          <AboutPanel title="함께 고민하는 개발자">
+          <AboutPanel title={aboutContent.panels.profile}>
             <VStack align="start" spacing={3} color="whiteAlpha.800">
               {profileIntro.map((text) => (
                 <MotionBox key={text} variants={fadeRise}>
@@ -30,7 +31,7 @@ export default function About() {
               ))}
             </VStack>
           </AboutPanel>
-          <AboutPanel title="Tech & 학습">
+          <AboutPanel title={aboutContent.panels.tech}>
             <Stack direction="row" wrap="wrap" gap={2} mb={4}>
               {techStack.map((stack) => (
                 <MotionBox key={stack} variants={fadeRise}>
@@ -41,7 +42,7 @@ export default function About() {
               ))}
             </Stack>
             <Heading as="h4" size="sm" mb={2} color="whiteAlpha.800">
-              교육 & 활동
+              {aboutContent.educationTitle}
             </Heading>
             <VStack align="start" spacing={2} color="whiteAlpha.800">
               <Text fontWeight="semibold">{education.school}</Text>
@@ -50,7 +51,7 @@ export default function About() {
               ))}
             </VStack>
             <Heading as="h4" size="sm" mt={4} mb={2} color="whiteAlpha.800">
-              수상/자격
+              {aboutContent.awardsTitle}
             </Heading>
             <VStack align="start" spacing={2} color="whiteAlpha.800">
               {awards.map((award) => (

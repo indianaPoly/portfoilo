@@ -6,12 +6,13 @@ import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
 import Providers from './providers';
 import { Container } from '@chakra-ui/react';
+import { rootMetadata } from '../data/siteMetadata';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Portfolio | Next.js 16 ready',
-  description: 'Minimal yet polished portfolio with motion and smooth scrolling.',
+  title: rootMetadata.title,
+  description: rootMetadata.description,
 };
 
 export default function RootLayout({
