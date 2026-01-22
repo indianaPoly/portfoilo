@@ -2,21 +2,33 @@ import { extendTheme, theme as base } from '@chakra-ui/react';
 
 const theme = extendTheme({
   config: {
-    initialColorMode: 'dark',
+    initialColorMode: 'light',
     useSystemColorMode: false,
   },
   colors: {
     brand: {
-      50: '#e6e9ff',
-      100: '#c7caf5',
-      200: '#a6a9e9',
-      300: '#8688dd',
-      400: '#6d6fd2',
-      500: '#5456b9',
-      600: '#423f91',
-      700: '#2f2b69',
-      800: '#1c1842',
-      900: '#0b091c',
+      50: '#e7f0ff',
+      100: '#c9dcff',
+      200: '#a7c6ff',
+      300: '#7fa8ff',
+      400: '#5687ff',
+      500: '#3182f6',
+      600: '#2566d0',
+      700: '#1e4fa6',
+      800: '#163a7b',
+      900: '#0f2752',
+    },
+    ink: {
+      50: '#f8fafc',
+      100: '#f1f5f9',
+      200: '#e2e8f0',
+      300: '#cbd5f5',
+      400: '#94a3b8',
+      500: '#64748b',
+      600: '#475569',
+      700: '#334155',
+      800: '#1e293b',
+      900: '#0f172a',
     },
   },
   fonts: {
@@ -26,19 +38,23 @@ const theme = extendTheme({
   styles: {
     global: {
       'html, body': {
-        background:
-          'radial-gradient(circle at 18% 18%, rgba(76, 68, 255, 0.09), transparent 34%), radial-gradient(circle at 78% 4%, rgba(74, 210, 203, 0.12), transparent 26%), #0d1018',
-        color: '#e8ecf4',
-        minHeight: '100%'
+        background: '#f2f4f6',
+        color: '#0f172a',
+        minHeight: '100%',
       },
       '::selection': {
-        background: 'rgba(124,108,255,0.28)',
+        background: '#3182f6',
+        color: '#ffffff',
       },
     },
   },
   radii: {
     lg: '16px',
     xl: '20px',
+    full: '9999px',
+  },
+  shadows: {
+    soft: '0 8px 24px rgba(15, 23, 42, 0.08)',
   },
 });
 

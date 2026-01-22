@@ -5,7 +5,7 @@ import LenisProvider from '../components/layout/LenisProvider';
 import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
 import Providers from './providers';
-import { Container } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 import { rootMetadata } from '../data/siteMetadata';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -26,8 +26,16 @@ export default function RootLayout({
         <Providers>
           <LenisProvider>
             <NavBar />
-            <Container as="main" maxW="1200px" px={{ base: 5, md: 8 }} py={{ base: 8, md: 14 }}>
-              {children}
+            <Container as="main" maxW="960px" px={{ base: 4, md: 8 }} py={{ base: 8, md: 12 }}>
+              <Box
+                bg="white"
+                borderRadius={{ base: 'xl', md: '2xl' }}
+                boxShadow="soft"
+                px={{ base: 5, md: 10 }}
+                py={{ base: 8, md: 12 }}
+              >
+                {children}
+              </Box>
             </Container>
             <Footer />
           </LenisProvider>

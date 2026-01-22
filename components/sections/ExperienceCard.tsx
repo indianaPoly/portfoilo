@@ -26,21 +26,21 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
   return (
     <MotionBox
       variants={cardRise}
-      border="1px solid"
-      borderColor="whiteAlpha.200"
       borderRadius="xl"
       p={6}
-      bg="whiteAlpha.50"
-      backdropFilter="blur(6px)"
+      bg="white"
+      border="1px solid"
+      borderColor="ink.200"
+      boxShadow="soft"
       display="grid"
       gap={4}
       style={{ transformPerspective: 900 }}
     >
-      <Stack direction="row" justify="space-between" align="center">
+      <Stack direction="row" justify="space-between" align="center" gap={4} flexWrap="wrap">
         <Heading as="h3" size="md" letterSpacing="-0.01em">
           {experience.company}
         </Heading>
-        <Tag colorScheme="brand" variant="outline" borderRadius="full">
+        <Tag borderRadius="full" bg="ink.50" color="ink.700" px={3}>
           {experience.period}
         </Tag>
       </Stack>

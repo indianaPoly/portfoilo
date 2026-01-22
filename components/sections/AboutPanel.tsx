@@ -14,12 +14,12 @@ export default function AboutPanel({ title, children }: AboutPanelProps) {
   return (
     <MotionBox
       variants={cardRise}
-      border="1px solid"
-      borderColor="whiteAlpha.200"
       borderRadius="xl"
       p={6}
-      bg="whiteAlpha.50"
-      backdropFilter="blur(6px)"
+      bg="white"
+      border="1px solid"
+      borderColor="ink.200"
+      boxShadow="soft"
       style={{ transformPerspective: 900 }}
     >
       <Heading as="h3" size="md" mb={3} letterSpacing="-0.01em">

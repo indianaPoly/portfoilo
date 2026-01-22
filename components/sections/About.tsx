@@ -23,7 +23,7 @@ export default function About() {
       >
         <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
           <AboutPanel title={aboutContent.panels.profile}>
-            <VStack align="start" spacing={3} color="whiteAlpha.800">
+            <VStack align="start" spacing={3} color="ink.600">
               {profileIntro.map((text) => (
                 <MotionBox key={text} variants={fadeRise}>
                   <Text>{text}</Text>
@@ -35,25 +35,25 @@ export default function About() {
             <Stack direction="row" wrap="wrap" gap={2} mb={4}>
               {techStack.map((stack) => (
                 <MotionBox key={stack} variants={fadeRise}>
-                  <Tag colorScheme="brand" variant="subtle" borderRadius="full">
+                  <Tag borderRadius="full" bg="ink.50" color="ink.700" px={3}>
                     {stack}
                   </Tag>
                 </MotionBox>
               ))}
             </Stack>
-            <Heading as="h4" size="sm" mb={2} color="whiteAlpha.800">
+            <Heading as="h4" size="sm" mb={2} color="ink.800">
               {aboutContent.educationTitle}
             </Heading>
-            <VStack align="start" spacing={2} color="whiteAlpha.800">
+            <VStack align="start" spacing={2} color="ink.600">
               <Text fontWeight="semibold">{education.school}</Text>
               {education.activities.map((activity) => (
                 <Text key={activity}>• {activity}</Text>
               ))}
             </VStack>
-            <Heading as="h4" size="sm" mt={4} mb={2} color="whiteAlpha.800">
+            <Heading as="h4" size="sm" mt={4} mb={2} color="ink.800">
               {aboutContent.awardsTitle}
             </Heading>
-            <VStack align="start" spacing={2} color="whiteAlpha.800">
+            <VStack align="start" spacing={2} color="ink.600">
               {awards.map((award) => (
                 <Text key={award}>• {award}</Text>
               ))}
