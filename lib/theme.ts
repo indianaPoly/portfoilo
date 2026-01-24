@@ -6,55 +6,67 @@ const theme = extendTheme({
     useSystemColorMode: false,
   },
   colors: {
-    brand: {
-      50: '#e7f0ff',
-      100: '#c9dcff',
-      200: '#a7c6ff',
-      300: '#7fa8ff',
-      400: '#5687ff',
-      500: '#3182f6',
-      600: '#2566d0',
-      700: '#1e4fa6',
-      800: '#163a7b',
-      900: '#0f2752',
+    paper: {
+      50: '#f4ead6',
+      100: '#eedfc3',
+      200: '#e3cfaa',
     },
     ink: {
-      50: '#f8fafc',
-      100: '#f1f5f9',
-      200: '#e2e8f0',
-      300: '#cbd5f5',
-      400: '#94a3b8',
-      500: '#64748b',
-      600: '#475569',
-      700: '#334155',
-      800: '#1e293b',
-      900: '#0f172a',
+      900: '#1a1712',
+      800: '#2a251d',
+      700: '#3f382c',
+      600: '#5b5243',
     },
   },
   fonts: {
-    heading: `Inter, ${base.fonts.heading}`,
-    body: `Inter, ${base.fonts.body}`,
+    heading: `Georgia, 'Times New Roman', Times, ${base.fonts.heading}`,
+    body: `Georgia, 'Times New Roman', Times, ${base.fonts.body}`,
   },
   styles: {
     global: {
+      '*': {
+        boxSizing: 'border-box',
+      },
       'html, body': {
-        background: '#f2f4f6',
-        color: '#0f172a',
-        minHeight: '100%',
+        maxWidth: '100vw',
+        backgroundColor: '#f4ead6',
+        backgroundImage:
+          'radial-gradient(circle at 20% 10%, rgba(90, 70, 30, 0.035), transparent 38%), radial-gradient(circle at 80% 40%, rgba(90, 70, 30, 0.02), transparent 50%)',
+        color: '#1a1712',
+        margin: 0,
+        padding: 0,
+        minHeight: '100vh',
+      },
+      a: {
+        color: 'inherit',
+        textDecoration: 'none',
+      },
+      'a:focus-visible, button:focus-visible': {
+        outline: '2px solid rgba(26, 23, 18, 0.75)',
+        outlineOffset: '3px',
+      },
+      main: {
+        display: 'block',
+      },
+      p: {
+        margin: 0,
+      },
+      ul: {
+        padding: 0,
+        margin: 0,
+      },
+      li: {
+        listStyle: 'none',
       },
       '::selection': {
-        background: '#3182f6',
-        color: '#ffffff',
+        background: 'rgba(26, 23, 18, 0.12)',
+        color: '#1a1712',
       },
     },
   },
   radii: {
-    lg: '16px',
-    xl: '20px',
-    full: '9999px',
-  },
-  shadows: {
-    soft: '0 8px 24px rgba(15, 23, 42, 0.08)',
+    lg: '0px',
+    xl: '0px',
   },
 });
 

@@ -1,14 +1,10 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
 import LenisProvider from '../components/layout/LenisProvider';
 import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
 import Providers from './providers';
 import { Box, Container } from '@chakra-ui/react';
 import { rootMetadata } from '../data/siteMetadata';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: rootMetadata.title,
@@ -21,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" className={inter.className}>
+    <html lang="ko">
       <body>
         <Providers>
           <LenisProvider>

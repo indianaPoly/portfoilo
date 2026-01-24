@@ -1,53 +1,57 @@
 'use client';
 
 import NextLink from 'next/link';
-import { motion, isValidMotionProp } from 'framer-motion';
-import { Button, chakra, Container, Flex, HStack, Link, Text, shouldForwardProp } from '@chakra-ui/react';
+import { Box, Flex, Grid, Text } from '@chakra-ui/react';
 import { navContent } from '../../data/siteContent';
-
-const MotionHeader = chakra(motion.header, {
-  shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
-});
 
 export default function NavBar() {
   return (
-    <MotionHeader
-      initial={{ opacity: 0, y: -6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      position="sticky"
-      top={0}
-      zIndex={10}
-      bg="rgba(242, 244, 246, 0.9)"
-      borderBottom="1px solid"
-      borderColor="ink.200"
-      backdropFilter="blur(10px)"
-    >
-      <Container maxW="960px" px={{ base: 4, md: 8 }} py={4}>
-        <Flex align="center" justify="space-between" gap={4}>
-          <Link as={NextLink} href="/" _hover={{ textDecoration: 'none' }}>
-            <Text fontWeight={700} letterSpacing="-0.02em" fontSize="lg">
+    <Box as="header" borderBottom="1px solid" borderColor="rgba(23, 22, 20, 0.25)">
+      <Box maxW="1200px" mx="auto" px={{ base: 5, md: 8 }} pt={6} pb={3}>
+        <Grid gap={3}>
+          <Flex justify="space-between" align="baseline" gap={4} flexWrap="wrap">
+            <Text fontSize="xs" letterSpacing="0.18em" textTransform="uppercase" color="ink.700">
+              Seoul Edition
+            </Text>
+            <Text fontSize="xs" letterSpacing="0.18em" textTransform="uppercase" color="ink.700">
+              Vol. 01 · Daily
+            </Text>
+          </Flex>
+
+          <Flex justify="center">
+            <Text
+              as={NextLink}
+              href="/"
+              fontSize={{ base: '28px', md: '34px' }}
+              fontWeight={800}
+              letterSpacing="-0.02em"
+              lineHeight={1}
+              _hover={{ textDecoration: 'none' }}
+            >
               {navContent.brand}
             </Text>
-          </Link>
-          <HStack spacing={2}>
+          </Flex>
+
+          <Box borderTop="1px solid" borderColor="rgba(23, 22, 20, 0.25)" />
+
+          <Flex justify="center" gap={{ base: 4, md: 6 }} flexWrap="wrap" pb={1}>
             {navContent.links.map((link) => (
-              <Button
+              <Text
                 key={link.href}
                 as={NextLink}
                 href={link.href}
-                size="sm"
-                variant="ghost"
-                borderRadius="full"
-                color="ink.700"
-                _hover={{ bg: 'white', boxShadow: 'soft' }}
+                fontSize="sm"
+                letterSpacing="0.16em"
+                textTransform="uppercase"
+                color="ink.800"
+                _hover={{ textDecoration: 'underline', textUnderlineOffset: '4px' }}
               >
                 {link.label}
-              </Button>
+              </Text>
             ))}
-          </HStack>
-        </Flex>
-      </Container>
-    </MotionHeader>
+          </Flex>
+        </Grid>
+      </Box>
+    </Box>
   );
 }
