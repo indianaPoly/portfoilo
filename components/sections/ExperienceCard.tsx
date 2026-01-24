@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Heading, Stack, Tag, VStack } from '@chakra-ui/react';
 import { MotionBox } from '../motion/MotionPrimitives';
@@ -36,7 +36,13 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
       gap={4}
       style={{ transformPerspective: 900 }}
     >
-      <Stack direction="row" justify="space-between" align="center" gap={4} flexWrap="wrap">
+      <Stack
+        direction="row"
+        justify="space-between"
+        align="center"
+        gap={4}
+        flexWrap="wrap"
+      >
         <Heading as="h3" size="md" letterSpacing="-0.01em">
           {experience.company}
         </Heading>

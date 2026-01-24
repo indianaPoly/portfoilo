@@ -7,13 +7,26 @@ export default function Hero() {
     <Box as="section" id="hero" pt={{ base: 10, md: 12 }}>
       <Box borderTop="2px solid" borderColor="rgba(23, 22, 20, 0.55)" mb={6} />
 
-      <Grid templateColumns={{ base: '1fr', md: '1.15fr 0.85fr' }} gap={{ base: 8, md: 10 }}>
+      <Grid
+        templateColumns={{ base: '1fr', md: '1.15fr 0.85fr' }}
+        gap={{ base: 8, md: 10 }}
+      >
         <VStack align="start" spacing={{ base: 4, md: 5 }}>
           <Flex gap={3} align="baseline" wrap="wrap">
-            <Text fontSize="xs" letterSpacing="0.2em" textTransform="uppercase" color="ink.700">
+            <Text
+              fontSize="xs"
+              letterSpacing="0.2em"
+              textTransform="uppercase"
+              color="ink.700"
+            >
               Front Page
             </Text>
-            <Text fontSize="xs" letterSpacing="0.2em" textTransform="uppercase" color="ink.700">
+            <Text
+              fontSize="xs"
+              letterSpacing="0.2em"
+              textTransform="uppercase"
+              color="ink.700"
+            >
               Feature Story
             </Text>
           </Flex>
@@ -31,8 +44,14 @@ export default function Hero() {
             Printed Like News
           </Text>
 
-          <Text fontSize={{ base: 'md', md: 'lg' }} lineHeight={1.7} color="ink.800" maxW="60ch">
-            A calm, paper-first layout with ink-heavy type, rule lines, and a front-page rhythm.
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight={1.7}
+            color="ink.800"
+            maxW="60ch"
+          >
+            A calm, paper-first layout with ink-heavy type, rule lines, and a
+            front-page rhythm.
           </Text>
 
           <Flex gap={3} wrap="wrap" align="baseline">
@@ -47,23 +66,43 @@ export default function Hero() {
             </Text>
           </Flex>
 
-          <Box borderTop="1px solid" borderColor="rgba(23, 22, 20, 0.25)" w="full" pt={4}>
-            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={6}>
+          <Box
+            borderTop="1px solid"
+            borderColor="rgba(23, 22, 20, 0.25)"
+            w="full"
+            pt={4}
+          >
+            <Grid
+              templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
+              gap={6}
+            >
               <VStack align="start" spacing={2}>
-                <Text fontSize="sm" fontWeight={800} letterSpacing="0.04em" color="ink.900">
+                <Text
+                  fontSize="sm"
+                  fontWeight={800}
+                  letterSpacing="0.04em"
+                  color="ink.900"
+                >
                   In This Issue
                 </Text>
                 <Text fontSize="sm" lineHeight={1.75} color="ink.800">
-                  Minimal components, strong hierarchy, and editorial spacing — a layout that reads.
+                  Minimal components, strong hierarchy, and editorial spacing —
+                  a layout that reads.
                 </Text>
               </VStack>
 
               <VStack align="start" spacing={2}>
-                <Text fontSize="sm" fontWeight={800} letterSpacing="0.04em" color="ink.900">
+                <Text
+                  fontSize="sm"
+                  fontWeight={800}
+                  letterSpacing="0.04em"
+                  color="ink.900"
+                >
                   Notes
                 </Text>
                 <Text fontSize="sm" lineHeight={1.75} color="ink.800">
-                  Built with Next.js + Chakra UI, tuned for clarity, and styled like paper.
+                  Built with Next.js + Chakra UI, tuned for clarity, and styled
+                  like paper.
                 </Text>
               </VStack>
             </Grid>
@@ -71,7 +110,12 @@ export default function Hero() {
         </VStack>
 
         <VStack align="stretch" spacing={4}>
-          <Box border="1px solid" borderColor="rgba(23, 22, 20, 0.25)" bg="rgba(255,255,255,0.35)" p={3}>
+          <Box
+            border="1px solid"
+            borderColor="rgba(23, 22, 20, 0.25)"
+            bg="rgba(255,255,255,0.35)"
+            p={3}
+          >
             <Center>
               <Box
                 w="full"
@@ -82,12 +126,23 @@ export default function Hero() {
                 display="grid"
                 placeItems="center"
               >
-                <Text fontSize="xs" letterSpacing="0.24em" textTransform="uppercase" color="ink.700">
+                <Text
+                  fontSize="xs"
+                  letterSpacing="0.24em"
+                  textTransform="uppercase"
+                  color="ink.700"
+                >
                   Photo
                 </Text>
               </Box>
             </Center>
-            <Text mt={3} fontSize="xs" color="ink.600" letterSpacing="0.12em" textTransform="uppercase">
+            <Text
+              mt={3}
+              fontSize="xs"
+              color="ink.600"
+              letterSpacing="0.12em"
+              textTransform="uppercase"
+            >
               Photo · Archive
             </Text>
           </Box>
@@ -95,11 +150,17 @@ export default function Hero() {
           <Box borderTop="2px solid" borderColor="rgba(23, 22, 20, 0.55)" />
 
           <VStack align="start" spacing={2}>
-            <Text fontSize="sm" fontWeight={800} letterSpacing="0.04em" color="ink.900">
+            <Text
+              fontSize="sm"
+              fontWeight={800}
+              letterSpacing="0.04em"
+              color="ink.900"
+            >
               Column
             </Text>
             <Text fontSize="sm" lineHeight={1.75} color="ink.800">
-              Good design feels inevitable. Paper makes the hierarchy obvious — and every word earns its place.
+              Good design feels inevitable. Paper makes the hierarchy obvious —
+              and every word earns its place.
             </Text>
           </VStack>
         </VStack>

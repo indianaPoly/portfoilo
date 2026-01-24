@@ -1,7 +1,19 @@
-"use client";
+'use client';
 
-import { Heading, SimpleGrid, Stack, Text, Tag, VStack } from '@chakra-ui/react';
-import { profileIntro, techStack, education, awards } from '../../data/portfolioContent';
+import {
+  Heading,
+  SimpleGrid,
+  Stack,
+  Text,
+  Tag,
+  VStack,
+} from '@chakra-ui/react';
+import {
+  profileIntro,
+  techStack,
+  education,
+  awards,
+} from '../../data/portfolioContent';
 import { aboutContent } from '../../data/siteContent';
 import AboutPanel from './AboutPanel';
 import { MotionBox } from '../motion/MotionPrimitives';
@@ -10,7 +22,12 @@ import { fadeRise, headingReveal, staggerContainer } from '../motion/variants';
 export default function About() {
   return (
     <Stack id="about" spacing={8} mt={{ base: 10, md: 16 }}>
-      <MotionBox variants={headingReveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }}>
+      <MotionBox
+        variants={headingReveal}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.6 }}
+      >
         <Heading as="h2" size="lg" letterSpacing="-0.02em">
           {aboutContent.sectionTitle}
         </Heading>

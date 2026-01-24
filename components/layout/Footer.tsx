@@ -5,7 +5,12 @@ import { footerContent } from '../../data/siteContent';
 
 export default function Footer() {
   return (
-    <Box as="footer" mt={12} borderTop="1px solid" borderColor="rgba(23, 22, 20, 0.25)">
+    <Box
+      as="footer"
+      mt={12}
+      borderTop="1px solid"
+      borderColor="rgba(23, 22, 20, 0.25)"
+    >
       <Box maxW="1200px" mx="auto" px={{ base: 5, md: 8 }} py={8}>
         <Flex justify="space-between" align="baseline" gap={4} flexWrap="wrap">
           <Text fontSize="sm" color="ink.700">

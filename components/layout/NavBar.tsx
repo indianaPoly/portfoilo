@@ -6,18 +6,13 @@ import { navContent } from '../../data/siteContent';
 
 export default function NavBar() {
   return (
-    <Box as="header" borderBottom="1px solid" borderColor="rgba(23, 22, 20, 0.25)">
+    <Box
+      as="header"
+      borderBottom="1px solid"
+      borderColor="rgba(23, 22, 20, 0.25)"
+    >
       <Box maxW="1200px" mx="auto" px={{ base: 5, md: 8 }} pt={6} pb={3}>
         <Grid gap={3}>
-          <Flex justify="space-between" align="baseline" gap={4} flexWrap="wrap">
-            <Text fontSize="xs" letterSpacing="0.18em" textTransform="uppercase" color="ink.700">
-              Seoul Edition
-            </Text>
-            <Text fontSize="xs" letterSpacing="0.18em" textTransform="uppercase" color="ink.700">
-              Vol. 01 · Daily
-            </Text>
-          </Flex>
-
           <Flex justify="center">
             <Text
               as={NextLink}
@@ -34,7 +29,12 @@ export default function NavBar() {
 
           <Box borderTop="1px solid" borderColor="rgba(23, 22, 20, 0.25)" />
 
-          <Flex justify="center" gap={{ base: 4, md: 6 }} flexWrap="wrap" pb={1}>
+          <Flex
+            justify="center"
+            gap={{ base: 4, md: 6 }}
+            flexWrap="wrap"
+            pb={1}
+          >
             {navContent.links.map((link) => (
               <Text
                 key={link.href}
@@ -44,7 +44,10 @@ export default function NavBar() {
                 letterSpacing="0.16em"
                 textTransform="uppercase"
                 color="ink.800"
-                _hover={{ textDecoration: 'underline', textUnderlineOffset: '4px' }}
+                _hover={{
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '4px',
+                }}
               >
                 {link.label}
               </Text>

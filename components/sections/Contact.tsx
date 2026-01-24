@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Badge, Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
 import { MotionBox } from '../motion/MotionPrimitives';
@@ -24,7 +24,14 @@ export default function Contact() {
         style={{ transformPerspective: 900 }}
       >
         <MotionBox variants={headingReveal}>
-          <Badge bg="brand.50" color="brand.600" borderRadius="full" px={3} py={1} mb={2}>
+          <Badge
+            bg="brand.50"
+            color="brand.600"
+            borderRadius="full"
+            px={3}
+            py={1}
+            mb={2}
+          >
             {contactContent.badge}
           </Badge>
           <Heading as="h3" size="md" letterSpacing="-0.01em" mb={3}>
@@ -37,7 +44,11 @@ export default function Contact() {
           </Text>
         </MotionBox>
         <MotionBox variants={headingReveal}>
-          <Stack direction={{ base: 'column', sm: 'row' }} justify="center" spacing={3}>
+          <Stack
+            direction={{ base: 'column', sm: 'row' }}
+            justify="center"
+            spacing={3}
+          >
             {contactContent.ctas.map((cta) => {
               const isSolid = cta.variant === 'solid';
               return (

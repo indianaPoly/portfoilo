@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Divider, Link, Stack, Text, VStack } from '@chakra-ui/react';
 import { memo } from 'react';
@@ -21,7 +21,9 @@ type ProjectEntryProps = {
   project: Project;
 };
 
-const ProjectEntry = memo(function ProjectEntry({ project }: ProjectEntryProps) {
+const ProjectEntry = memo(function ProjectEntry({
+  project,
+}: ProjectEntryProps) {
   return (
     <MotionBox variants={fadeRise} w="full">
       <Text fontWeight="semibold" mb={1}>
@@ -38,7 +40,13 @@ const ProjectEntry = memo(function ProjectEntry({ project }: ProjectEntryProps) 
       {project.links && project.links.length > 0 && (
         <Stack direction="row" spacing={3} mt={3} wrap="wrap">
           {project.links.map((link) => (
-            <Link key={link.url} href={link.url} isExternal color="brand.500" fontWeight="semibold">
+            <Link
+              key={link.url}
+              href={link.url}
+              isExternal
+              color="brand.500"
+              fontWeight="semibold"
+            >
               {link.label}
             </Link>
           ))}

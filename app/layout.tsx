@@ -22,7 +22,12 @@ export default function RootLayout({
         <Providers>
           <LenisProvider>
             <NavBar />
-            <Container as="main" maxW="960px" px={{ base: 4, md: 8 }} py={{ base: 8, md: 12 }}>
+            <Container
+              as="main"
+              maxW="960px"
+              px={{ base: 4, md: 8 }}
+              py={{ base: 8, md: 12 }}
+            >
               <Box
                 bg="white"
                 borderRadius={{ base: 'xl', md: '2xl' }}

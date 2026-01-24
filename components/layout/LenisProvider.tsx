@@ -3,7 +3,11 @@
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 
-export default function LenisProvider({ children }: { children: React.ReactNode }) {
+export default function LenisProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {

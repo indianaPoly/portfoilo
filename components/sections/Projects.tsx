@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Heading, SimpleGrid, Stack } from '@chakra-ui/react';
 import { experiences } from '../../data/portfolioContent';
@@ -10,7 +10,12 @@ import { projectsContent } from '../../data/siteContent';
 export default function Projects() {
   return (
     <Stack id="projects" spacing={8} mt={{ base: 10, md: 16 }}>
-      <MotionBox variants={headingReveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }}>
+      <MotionBox
+        variants={headingReveal}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.6 }}
+      >
         <Heading as="h2" size="lg" letterSpacing="-0.02em">
           {projectsContent.sectionTitle}
         </Heading>
