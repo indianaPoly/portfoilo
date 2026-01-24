@@ -5,12 +5,19 @@ import { footerContent } from '../../data/siteContent';
 
 export default function Footer() {
   return (
-    <Box as="footer" borderTop="1px solid" borderColor="whiteAlpha.200" mt={12} py={8} color="whiteAlpha.800">
-      <Container maxW="1200px" px={{ base: 5, md: 8 }}>
+    <Box as="footer" mt={12} py={10} color="ink.600">
+      <Container maxW="960px" px={{ base: 4, md: 8 }}>
         <HStack justify="space-between" align="center" spacing={6} flexWrap="wrap">
           <Text fontSize="sm">{footerContent.description}</Text>
           <HStack spacing={3}>
-            <Link as={NextLink} href={links.github} isExternal fontWeight="semibold" color="brand.200">
+            <Link
+              as={NextLink}
+              href={links.github}
+              isExternal
+              fontWeight="semibold"
+              color="brand.500"
+              _hover={{ textDecoration: 'underline' }}
+            >
               {footerContent.githubLabel}
             </Link>
           </HStack>

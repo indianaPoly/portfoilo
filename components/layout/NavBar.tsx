@@ -12,34 +12,35 @@ const MotionHeader = chakra(motion.header, {
 export default function NavBar() {
   return (
     <MotionHeader
-      initial={{ opacity: 0, y: -10 }}
+      initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.4 }}
       position="sticky"
       top={0}
       zIndex={10}
-      backdropFilter="blur(12px)"
-      bg="rgba(12,14,20,0.85)"
+      bg="rgba(242, 244, 246, 0.9)"
       borderBottom="1px solid"
-      borderColor="whiteAlpha.200"
+      borderColor="ink.200"
+      backdropFilter="blur(10px)"
     >
-      <Container maxW="1200px" px={{ base: 5, md: 8 }} py={4}>
+      <Container maxW="960px" px={{ base: 4, md: 8 }} py={4}>
         <Flex align="center" justify="space-between" gap={4}>
           <Link as={NextLink} href="/" _hover={{ textDecoration: 'none' }}>
-            <Text fontWeight={800} letterSpacing="-0.03em" fontSize="lg">
+            <Text fontWeight={700} letterSpacing="-0.02em" fontSize="lg">
               {navContent.brand}
             </Text>
           </Link>
-          <HStack spacing={3}>
+          <HStack spacing={2}>
             {navContent.links.map((link) => (
               <Button
                 key={link.href}
                 as={NextLink}
                 href={link.href}
                 size="sm"
-                colorScheme="brand"
-                variant="solid"
+                variant="ghost"
                 borderRadius="full"
+                color="ink.700"
+                _hover={{ bg: 'white', boxShadow: 'soft' }}
               >
                 {link.label}
               </Button>
