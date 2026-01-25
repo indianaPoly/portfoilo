@@ -1,8 +1,10 @@
 'use client';
 
 import NextLink from 'next/link';
+
 import { Box, Flex, Grid, Text } from '@chakra-ui/react';
-import { navContent } from '../../data/siteContent';
+
+import { navContent } from '@/data/siteContent';
 
 export default function NavBar() {
   return (

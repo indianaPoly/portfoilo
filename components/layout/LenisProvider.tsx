@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+
 import Lenis from 'lenis';
 
 export default function LenisProvider({

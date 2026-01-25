@@ -23,7 +23,8 @@ export const experiences = [
     projects: [
       {
         name: 'NH 올원뱅크 캐시백 쿠폰몰',
-        summary: '결제 정책을 지키면서 안정적인 흐름을 만드는 데 집중한 프로젝트',
+        summary:
+          '결제 정책을 지키면서 안정적인 흐름을 만드는 데 집중한 프로젝트',
         highlights: [
           'PG 결제 요청부터 승인·실패 처리까지 전체 흐름을 정리하고 화면 구조를 설계했습니다.',
           'Safari iOS 환경에서 앱 정책과 충돌하는 문제를 정책 변경 없이 해결 가능한 흐름으로 재구성했습니다.',
@@ -63,7 +64,10 @@ export const experiences = [
           'SWR 조건부 패칭과 캐싱으로 불필요한 요청과 상태 변경을 줄여 데이터 갱신 시점을 정리했습니다.',
         ],
         links: [
-          { label: '소스 코드', url: 'https://github.com/stock-condition-analysis/stock-condition-analysis-client' },
+          {
+            label: '소스 코드',
+            url: 'https://github.com/stock-condition-analysis/stock-condition-analysis-client',
+          },
           { label: '작동 영상', url: 'https://youtu.be/oyxFYajnHMU' },
         ],
       },
@@ -81,8 +85,14 @@ export const experiences = [
           '의료 데이터 프라이버시와 비용을 고려해 온체인에는 암호화된 데이터만 저장하도록 역할을 분리했습니다.',
         ],
         links: [
-          { label: '프론트엔드', url: 'https://github.com/PawPaw-proj/PawPaw-FE' },
-          { label: '스마트컨트랙트', url: 'https://github.com/indianaPoly/blockchain-vaccination_medicalHistory' },
+          {
+            label: '프론트엔드',
+            url: 'https://github.com/PawPaw-proj/PawPaw-FE',
+          },
+          {
+            label: '스마트컨트랙트',
+            url: 'https://github.com/indianaPoly/blockchain-vaccination_medicalHistory',
+          },
           { label: '작동 영상', url: 'https://youtu.be/Xl-nIOAJ-r0' },
         ],
       },
@@ -120,4 +130,5 @@ export const awards = [
 
 export const links = {
   github: 'https://github.com/indianaPoly',
+  emamil: 'mailto:hyeonlimgo5@gmail.com',
 };

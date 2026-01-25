@@ -30,5 +30,8 @@
     "errorLens.enabled": true,
     "errorLens.enabledDiagnosticLevels": ["error", "warning"],
     "errorLens.gutterIconsEnabled": true,
-    "errorLens.followCursor": "allLines"
+    "errorLens.followCursor": "allLines",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
 }
