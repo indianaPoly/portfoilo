@@ -2,7 +2,7 @@ import NextLink from 'next/link';
 
 import { Box, Flex, Text } from '@chakra-ui/react';
 
-import { links } from '@/data/portfolioContent';
+import { links } from '../../data/portfolioContent';
 
 export default function Footer() {
   return (

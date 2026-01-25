@@ -1,9 +1,9 @@
 import { HStack, VStack } from '@chakra-ui/react';
 
-import { Pagination } from '@/components/pages/blog/Pagination';
-import { JournalList } from '@/components/pages/main/cards/JournalList';
-import { Tab } from '@/components/pages/main/Tab';
-import { getAllCategories, getAllPosts } from '@/lib/posts';
+import { Pagination } from '../components/pages/blog/Pagination';
+import { JournalList } from '../components/pages/main/cards/JournalList';
+import { Tab } from '../components/pages/main/Tab';
+import { getAllCategories, getAllPosts } from '../lib/posts';
 
 const PAGE_SIZE = 5;
 const ALL_CATEGORY_LABEL = '전체';

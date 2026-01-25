@@ -1,11 +1,12 @@
 import { Container } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 
-import { Providers } from '@/app/Providers';
-import Footer from '@/components/layout/Footer';
-import LenisProvider from '@/components/layout/LenisProvider';
-import NavBar from '@/components/layout/NavBar';
-import { rootMetadata } from '@/data/siteMetadata';
+import Footer from '../components/layout/Footer';
+import LenisProvider from '../components/layout/LenisProvider';
+import NavBar from '../components/layout/NavBar';
+import { rootMetadata } from '../data/siteMetadata';
+
+import { Providers } from './Providers';
 
 export const metadata: Metadata = {
   title: rootMetadata.title,

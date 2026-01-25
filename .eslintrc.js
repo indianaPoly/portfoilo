@@ -59,12 +59,7 @@ module.exports = {
     'import/no-duplicates': 'warn',
     'import/no-unresolved': 'error',
     'import/no-relative-packages': 'warn',
-    'import/no-relative-parent-imports': [
-      'warn',
-      {
-        ignore: ['^@/'],
-      },
-    ],
+    'import/no-relative-parent-imports': 'off',
     'filename-export/match-named-export': 'off',
     'filename-export/match-default-export': 'off',
     'require-export/require-export': 'off',

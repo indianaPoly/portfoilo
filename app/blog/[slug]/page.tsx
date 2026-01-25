@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { compileMDX } from 'next-mdx-remote/rsc';
 
-import { getAllPosts, getPostBySlug } from '@/lib/posts';
+import { getAllPosts, getPostBySlug } from '../../../lib/posts';
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
