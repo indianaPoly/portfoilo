@@ -1,0 +1,314 @@
+---
+title: '테라폼 에러 핸들링'
+date: '2025-07-19'
+category: 'INFRA'
+summary: '테라폼 에러 핸들링을 하면서 배웠던 점을 기록했어요.'
+---
+
+
+## 🚨 문제 상황
+
+Terraform으로 EKS 클러스터를 배포하던 중 다음과 같은 오류들이 연속으로 발생했어요:
+
+```bash
+Error: creating EC2 EIP: operation error EC2: AllocateAddress,
+https response error StatusCode: 400, RequestID: <requiest id>,
+api error AddressLimitExceeded: The maximum number of addresses has been reached.
+
+Error: creating KMS Alias (alias/eks/cwave): operation error KMS: CreateAlias,
+https response error StatusCode: 400, RequestID: <requiest id>,
+AlreadyExistsException: An alias with the name arn:aws:kms:ap-northeast-2:368677659737:alias/eks/cwave already exists
+
+Error: creating EKS Cluster (cwave): operation error EKS: CreateCluster,
+https response error StatusCode: 409, RequestID: <requiest id>,
+ResourceInUseException: Cluster already exists with name: cwave
+
+Error: creating IAM Role (efs-csi): operation error IAM: CreateRole,
+https response error StatusCode: 409, RequestID: <requiest id>,
+EntityAlreadyExists: Role with name efs-csi already exists.
+```
+
+## 🔍 문제 원인 분석
+
+### 근본 원인: 개발 환경 혼동으로 인한 리소스 중복
+
+**실제 발생 과정:**
+
+1. 개발 환경에 `local`과 `aws` 두 개의 폴더가 존재
+2. 지금까지 local 환경과 aws 환경을 착각해서 개발을 진행
+3. local 환경에서 생성한 Terraform 리소스를 정확하게 삭제하지 않음
+4. aws 폴더로 이동해서 다시 `terraform apply`를 시도
+5. **결과**: 동일한 리소스명으로 인한 중복 생성 시도로 충돌 발생했어요
+
+**폴더 구조 예시:**
+
+```
+project/
+├── local/          # 로컬 개발용 (기존 리소스 잔존)
+│   ├── main.tf
+│   └── terraform.tfstate
+└── aws/            # AWS 환경용 (새로 배포 시도)
+    ├── main.tf
+    └── terraform.tfstate
+```
+
+### 세부 원인들
+
+#### 1. EIP 한도 초과 문제
+
+AWS 계정당 EIP(Elastic IP) 할당 한도가 있고 제가 확인했을 때는 5개가 할당 한도가 있었어요.
+
+```bash
+# 현재 EIP 사용량 확인
+aws ec2 describe-addresses --region ap-northeast-2
+```
+
+#### 2. 리소스 중복 문제
+
+EKS 클러스터를 삭제했지만 관련 리소스들(IAM 역할, KMS 별칭 등)은 자동으로 삭제되지 않았어요.
+
+**왜 이런 일이 발생하는가?**
+
+- EKS 클러스터 삭제 시 **IAM 역할은 자동으로 삭제되지 않아요.**
+- KMS 별칭도 마찬가지로 수동 삭제가 필요해요.
+
+#### 3. Terraform 상태 파일 분리로 인한 문제
+
+- `local/terraform.tfstate`와 `aws/terraform.tfstate`가 각각 관리돼요.
+- 실제 AWS 리소스는 동일하지만 Terraform 상태는 분리되어 있어요.
+- 새로운 폴더에서 배포 시 기존 리소스를 인식하지 못하는 문제가 있는 것을 파악했어요.
+
+## 🛠️ 해결 과정
+
+### 1단계: EIP 사용량 확인 및 분석
+
+```bash
+# EIP 목록과 연결 상태 확인
+aws ec2 describe-addresses --region ap-northeast-2 --output table
+
+# 각 EIP가 무엇에 연결되어 있는지 확인
+aws ec2 describe-network-interfaces --region ap-northeast-2 \
+  --network-interface-ids eni-xxxx eni-yyyy \
+  --query 'NetworkInterfaces[*].{NetworkInterfaceId:NetworkInterfaceId,Description:Description,Status:Status}'
+```
+
+**결과 분석:**
+
+```json
+[
+  {
+    "NetworkInterfaceId": "eni-id",
+    "Description": "Interface for NAT Gateway nat-id",
+    "Status": "in-use"
+  }
+  // ... 5개의 EIP가 모두 NAT Gateway에 연결됨
+]
+```
+
+### 2단계: Terraform 상태 확인
+
+```bash
+# 현재 Terraform에서 관리하는 EIP 확인
+terraform plan | grep eip
+```
+
+**결과:**
+
+```
+aws_eip.nat["c"]: Refreshing state... [id=eipalloc-id]
+aws_eip.nat["a"]: Refreshing state... [id=eipalloc-id]
+# aws_eip.nat["b"] will be created <- 이 부분이 문제!
+```
+
+**발견한 문제점:**
+
+- `nat["a"]`와 `nat["c"]`는 이미 Terraform 상태에 존재해요.
+- `nat["b"]`만 새로 생성하려고 해서 EIP 한도 초과 발생가 발생했어요.
+
+### 3단계: EIP 문제 해결
+
+**방법 1: 기존 EIP 재사용**
+
+```bash
+# 사용 가능한 EIP 확인 (a, c가 아닌 것들)
+# eipalloc-id
+# eipalloc-id
+# eipalloc-id
+
+# 특정 EIP가 어떤 NAT Gateway에 연결되어 있는지 확인
+aws ec2 describe-nat-gateways --region ap-northeast-2 \
+  --query 'NatGateways[?NatGatewayAddresses[0].AllocationId==`eipalloc-id`].{NatGatewayId:NatGatewayId,State:State}'
+```
+
+**결과:**
+
+```json
+[
+  {
+    "NatGatewayId": "nat-id",
+    "State": "deleted" // 이미 삭제됨
+  },
+  {
+    "NatGatewayId": "nat-id",
+    "State": "available" // 사용 중
+  }
+]
+```
+
+**해결 단계:**
+
+```bash
+# 1. 사용 중인 NAT Gateway 삭제
+aws ec2 delete-nat-gateway --nat-gateway-id nat-id --region ap-northeast-2
+
+# 2. 삭제 완료 대기
+aws ec2 describe-nat-gateways --region ap-northeast-2 --nat-gateway-ids nat-id --query 'NatGateways[0].State'
+
+# 3. 해제된 EIP를 Terraform으로 가져오기
+terraform import 'aws_eip.nat["b"]' eipalloc-id
+```
+
+### 4단계: 기존 리소스 Import
+
+```bash
+# EKS 클러스터 가져오기
+terraform import module.eks.aws_eks_cluster.this[0] cwave
+
+# KMS 별칭 가져오기 (따옴표 주의!)
+terraform import 'module.eks.module.kms.aws_kms_alias.this["cluster"]' alias/eks/cwave
+
+# IAM 역할들 가져오기
+terraform import module.attach_efs_csi_role.aws_iam_role.this[0] efs-csi
+terraform import module.ebs_csi_irsa.aws_iam_role.this[0] cwave-ebs-csi-controller
+terraform import module.lb_controller_role.aws_iam_role.this[0] eks-aws-lb-controller-role
+```
+
+**Import 시 주의사항:**
+
+- 인덱스가 있는 리소스는 따옴표로 감싸주는 것이 중요해요.
+- 정확한 리소스 이름과 ID 확인 필수입니다.
+
+### 5단계: Terraform 적용
+
+```bash
+# 계획 확인
+terraform plan
+
+# 문제없으면 적용
+terraform apply
+```
+
+## 🔧 kubectl 연결 문제 해결
+
+배포 완료 후 kubectl 명령어 실행 시 DNS 오류 발생:
+
+```bash
+kubectl get po
+# Error: dial tcp: lookup .gr7.ap-northeast-2.eks.amazonaws.com on 127.0.0.11:53: no such host
+```
+
+**해결 방법:**
+
+업데이터를 새로 해줌으로써 기존 context를 switch를 진행해주면 정상적으로 동작하는 것을 확인할 수 있어요.
+
+```bash
+# kubeconfig 업데이트
+aws eks update-kubeconfig --region ap-northeast-2 --name cwave
+
+# 연결 테스트
+kubectl get nodes
+kubectl get pods -A
+```
+
+## 📝 교훈 및 예방 방법
+
+### 1. 개발 환경 관리 원칙
+
+- **환경별 폴더 분리 시 명확한 네이밍 사용**
+- **현재 작업 중인 환경을 항상 확인**
+- **환경 전환 시 기존 리소스 정리 후 진행**
+
+```bash
+# 환경 확인 습관화
+pwd                    # 현재 작업 디렉터리 확인
+terraform workspace show  # Terraform 워크스페이스 확인
+aws sts get-caller-identity  # 현재 AWS 계정/역할 확인
+```
+
+### 2. 안전한 환경 전환 절차
+
+```bash
+# 기존 환경 정리
+terraform destroy -auto-approve
+
+# 상태 파일 백업
+cp terraform.tfstate terraform.tfstate.backup
+
+# 새 환경으로 이동
+cd ../aws
+
+# 리소스 확인 후 배포
+terraform plan
+terraform apply
+```
+
+### 3. 리소스 정리 시 주의점
+
+- EKS 클러스터 삭제 시 IAM 역할, KMS 별칭 등은 수동으로 삭제해주어야 해요.
+- 만약 삭제해주어야 하는게 많다면 Terraform import를 활용하여 기존 리소스 재사용할 수 있어요.
+
+### 4. EIP 관리
+
+- AWS 계정의 EIP 한도를 미리 확인하는 것이 중요해요.
+- 불필요한 EIP는 정기적으로 정리하고 필요시 AWS Support를 통해 한도 증가 요청해주어야 합니다.
+
+### 5. Terraform 상태 관리
+
+- `terraform plan`으로 생성될 리소스를 미리 확인하는 습관이 정말 중요합니다.
+- 기존 리소스와의 충돌 가능성 검토 및 Import를 활용한 기존 리소스 재사용을 고려할 수 있어요.
+
+### 6. 안전한 배포 전략
+
+```bash
+# 배포 전 체크리스트
+terraform plan                    # 생성될 리소스 확인
+aws ec2 describe-addresses        # EIP 사용량 확인
+aws iam list-roles               # 기존 IAM 역할 확인
+aws kms list-aliases             # 기존 KMS 별칭 확인
+```
+
+## 🎯 결론
+
+이번 문제의 근본 원인은 **개발 환경 혼동으로 인한 리소스 중복**이었습니다. local과 aws 환경을 명확히 구분하지 않고 개발하다가, 기존 리소스를 정리하지 않은 상태에서 새로운 환경에 배포를 시도한 것이 문제의 시작이었습니다.
+
+Terraform으로 AWS 리소스를 관리할 때는 다음 사항들을 반드시 고려해야 합니다:
+
+1. **환경 분리와 명확한 식별**
+2. **기존 리소스와의 충돌 가능성**
+3. **Terraform Import를 활용한 기존 리소스 재사용**
+
+특히 EKS와 같은 복잡한 서비스는 여러 AWS 서비스와 연동되어 있어, 삭제 시에도 일부 리소스가 남을 수 있습니다. 이런 상황에서는 **Terraform Import**를 활용하여 기존 리소스를 재사용하는 것이 가장 안전하고 효율적인 해결책입니다.
+
+---
+
+**관련 명령어 모음:**
+
+```bash
+# 환경 확인
+pwd
+terraform workspace show
+aws sts get-caller-identity
+
+# EIP 관련
+aws ec2 describe-addresses --region ap-northeast-2
+aws ec2 release-address --allocation-id eipalloc-xxx --region ap-northeast-2
+
+# Terraform Import
+terraform import 'resource_address' resource_id
+terraform state list
+terraform plan
+
+# EKS 관련
+aws eks update-kubeconfig --region ap-northeast-2 --name cluster-name
+kubectl config current-context
+```

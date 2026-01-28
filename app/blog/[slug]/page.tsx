@@ -41,9 +41,19 @@ const mdxComponents = {
   li: (props: React.ComponentProps<typeof ListItem>) => (
     <ListItem mb={1} {...props} />
   ),
-  code: (props: React.ComponentProps<typeof Code>) => (
-    <Code px="1" py="0.5" borderRadius="0px" {...props} />
-  ),
+  code: (props: React.ComponentProps<typeof Code>) => {
+    const isFencedCodeBlock =
+      typeof props.className === 'string' &&
+      props.className.includes('language-');
+
+    if (isFencedCodeBlock) {
+      return <Code bg="transparent" color="inherit" px={0} py={0} {...props} />;
+    }
+
+    return (
+      <Code px="1" py="0.5" borderRadius="0px" color="ink.900" {...props} />
+    );
+  },
   pre: (props: React.ComponentProps<typeof Box>) => (
     <Box
       as="pre"
@@ -52,6 +62,7 @@ const mdxComponents = {
       p={4}
       mb={4}
       bg="paper.100"
+      color="ink.900"
       borderWidth="1px"
       borderColor="ink.700"
       {...props}

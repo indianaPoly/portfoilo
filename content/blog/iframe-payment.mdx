@@ -1,0 +1,157 @@
+---
+title: 'iframe 결체창 구현'
+date: '2025-08-24'
+category: 'DEV'
+summary: '결제 마무리 화면이 마운트가 되면 신호를 iframe으로 전송해, iframe이 수신 후 스스로 닫히는 방식으로 결제 플로우를 제어했다.'
+---
+
+## 문제상황
+
+서비스의 결제 플로우에서는 항상 뒤로가기, 닫기와 같은 UI 제어가 필요해요. 보통은 앱 공통 Header를 활용해서 뒤로가기를 처리합니다. 하지만 PG 결제창은 외부 URL로 강제로 이동하기 떄문에, 이 경우 앱의 Header는 유지가 되지 않아요.
+
+이를 단순히 외부 링크로 열어버리는 서비스 UI와 결제 UI가 완전히 분리되면서 UX가 끊기게 돼요. 따라서 결제창을 앱 안에서 제어할 수 있는 방법이 필요했습니다.
+
+## iframe으로 결제창 띄우기
+
+제가 선택한 방법은 iframe에서 PG 결제창을 띄우는 것이었습니다. 이렇게 하면 앱의 Layer은 그대로 유지되고, 결제창만 iframe에서 열 수 있어요.
+
+```ts
+
+type PaymentIframeOptions = {
+  scriptUrl: string
+  payload: Record<string, string | number | boolean>
+}
+
+export function openPaymentInIframeDynamic(opts: PaymentIframeOptions) {
+  const { scriptUrl, payload } = opts
+
+  const iframe = document.getElementById(
+    'pg_pay_iframe',
+  ) as HTMLIFrameElement | null
+  const wrap = document.getElementById('pgPayWindow') as HTMLElement | null
+
+  if (!iframe) throw new Error('#pg_pay_iframe not found')
+  if (!wrap) throw new Error('#pgPayWindow not found')
+
+  wrap.style.display = 'block'
+  wrap.style.pointerEvents = 'none'
+
+  const inputs = Object.entries(payload || {})
+    .filter(([, v]) => v !== undefined && v !== null)
+    .map(
+      ([k, v]) =>
+        `<input type="hidden" name="${String(k)}" value="${String(v)}" />`,
+    )
+    .join('')
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  />
+  <title>Payment Frame</title>
+  <style>
+    html,body{margin:0;padding:0;height:100%;background:#fff;font:14px system-ui}
+    #boot{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  </style>
+</head>
+<body>
+  <form id="payForm" method="post">${inputs}</form>
+
+  <script>
+    function loadScript(src){
+      return new Promise(function(resolve, reject){
+        var s = document.createElement('script');
+        s.src = src; s.async = true; s.onload = function(){ resolve() };
+        s.onerror = function(e){ reject(new Error('Failed to load '+src)) };
+        document.head.appendChild(s);
+      });
+    }
+
+    (async function bootstrap(){
+      try{
+        await loadScript("${scriptUrl}");
+
+        var form = document.getElementById('payForm');
+        if(!form){ throw new Error('payForm not found'); }
+
+        // 외부 스크립트가 정의한 전역 함수 호출
+        if(typeof window.SendPay !== 'function'){
+          throw new Error('SendPay is not available');
+        }
+
+        // 결제 시작
+        document.getElementById('boot')?.remove();
+        window.SendPay(form)
+      }catch(err){
+        var boot = document.getElementById('boot');
+        if(boot){ boot.textContent = '결제 로딩 실패: ' + (err && err.message || err); }
+      }
+    })();
+  </script>
+</body>
+</html>`
+
+  iframe.srcdoc = html
+
+  return
+}
+```
+
+해당 코드와 같이 iframe을 열어서 처리할 수 있는 함수를 생성하면 정상적으로 코드가 열리는 것을 확인할 수 있어요. 이 때 중요한 점이 해당 iframe의 form에서는 결제가 성공하면 returnUrl을 클라이언트 주소로 작성을 하게되면 문제가 해결이 되지 않아요. 왜냐하면 returnUrl로 넘어오는 요청은 get이 아니라 post였기 때문이에요.
+
+물론 NextJS api 서버를 활용해 이를 처리할 수도 있지만 해당 프로젝트라 SSG가 불가능했고, 서버 측에서 리다이렉트 할 수 있는 api를 요청하여 해당 문제를 해결했습니다.
+
+하지만 iframe 만으로는 문제를 해결 할 수 없었습니다. 하지만 제일 큰 문제는 결제 완료 페이지가 iframe 내부가 이동했기 때문에 Header가 그대로 남아있는 문제가 있었어요.
+
+## iframe을 업애기 위해서 한 삽질과 해결
+
+처음에는 iframe의 onLoad 이벤트를 이용해 결제 완료 화면이 뜨면 iframe을 닫는 방식을 시도했어요. 하지만 기대대로 동작하지 않았습니다. 다음으로는 부모–자식 간 통신을 떠올려, 부모 컴포넌트와 메시지를 주고받도록 구현했지만, useEffect만으로는 변화를 안정적으로 감지할 수 없었어요.
+
+그래서 결제 완료 화면이 어디에 있든, 마운트 순간에는 반드시 useEffect가 실행된다는 점을 활용했어요. 결제 완료 시점에 iframe 내부에 있으면 postMessage를 부모에게 전송하도록 했고, 부모는 이를 받아 iframe을 닫고 앱의 결제 완료 화면으로 리다이렉트하도록 처리했습니다.
+
+### 부모가 데이터를 받았을 때
+```ts
+useEffect(() => {
+    function handleMessage(e: MessageEvent) {
+    if (e.data?.type === 'pay:finish') {
+        const wrap = document.getElementById(
+        'pgPayWindow',
+        ) as HTMLElement | null
+        if (wrap) wrap.style.display = 'none' // iframe 닫기
+
+        // 부모 라우터에서 finish 페이지 열기
+    }
+    }
+
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+}, [go])
+```
+
+### 결제창이 열렸을 때
+window.self는 현재 실행 중인 윈도우 자신을 가리켜요. window.top은 현재 창이 프레임 안에 있다면 최상위 객체를 가리켜요.
+
+즉 window.self와 window.top이 일치하지 않는다고 한다면 해당 창은 iframe 내부에서 실행하고 있다는 것을 알 수 있어요.
+```ts
+useEffect(() => {
+    const isInIframe = window.self !== window.top
+    if (isInIframe) {
+      window.parent.postMessage(
+          { type: 'pay:finish', payload: { 전송할 데이터 } },
+          '*',
+      )
+    }
+})
+```
+
+## 배운점
+
+이번 문제를 해결하면서 부모와 자식 간의 통신이 왜 필요한지 더 명확하게 이해할 수 있었어요.
+
+단순히 iframe 내부에서만 로직을 처리하는 것이 아니라, 부모 컴포넌트와 메시지를 주고받아야 전체 플로우를 안정적으로 제어할 수 있다는 점을 배웠습니다.
+
+또한 페이지가 렌더링되는 시점에 어떤 동작을 수행할 수 있는지를 이해하는 것도 중요한 포인트였습니다. 특히 useEffect와 같은 훅이 실행되는 순간을 활용해 원하는 이벤트를 트리거할 수 있다는 흐름을 이해하고, 이를 통해 화면 제어와 이벤트 설계에 대한 감각을 키울 수 있었습니다.
