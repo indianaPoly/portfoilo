@@ -1,0 +1,220 @@
+---
+title: '프론트엔드에서 API 20번 호출을 1번으로 최적화한 이야기'
+date: '2026-03-17'
+category: 'FRONTEND'
+summary: '경연곡 관리 기능에서 불필요한 API 호출을 하나로 통합하고, 트랜잭션으로 데이터 무결성을 보장한 과정을 소개합니다.'
+---
+
+## 문제 상황
+
+경연곡 관리 기능은 사이드바에서 라운드별로 곡을 추가/삭제/수정한 뒤 "저장하기" 버튼을 누르면 서버에 반영되는 구조였습니다.
+
+처음 구현한 저장 로직은 이랬습니다:
+
+```
+[저장 버튼 클릭]
+
+1. 기존 데이터 전부 삭제
+   DELETE /repertoire-group/1
+   DELETE /repertoire-group/2
+   DELETE /repertoire-group/3
+
+2. 새 데이터 하나씩 생성
+   POST /repertoire-group → 그룹A 생성 → id: 10
+   POST /repertoire-item  → 그룹A의 곡1
+   POST /repertoire-item  → 그룹A의 곡2
+   POST /repertoire-group → 그룹B 생성 → id: 11
+   POST /repertoire-item  → 그룹B의 곡1
+   ...
+
+3. 라운드 설명 저장
+   POST /repertoire-step (round1)
+   POST /repertoire-step (round2)
+   POST /repertoire-step (final)
+```
+
+악기 하나에 그룹 5개, 곡 20개면 **약 28번의 API 호출**이 순차적으로 발생했습니다.
+
+## 왜 문제인가
+
+### 문제 1: 데이터 유실 가능
+
+```
+DELETE 그룹1 → 성공 (DB에서 삭제됨)
+DELETE 그룹2 → 성공 (DB에서 삭제됨)
+DELETE 그룹3 → 성공 (DB에서 삭제됨)
+
+POST 그룹A → 성공 (DB에 생성됨)
+POST 그룹B → ❌ 네트워크 에러
+
+결과: 기존 3개는 삭제됐고, 새 데이터는 1개만 생성됨
+     → 사용자가 입력한 그룹B, C의 데이터가 사라짐
+```
+
+각 API 호출이 독립적이기 때문에, 삭제는 됐는데 생성이 실패하면 **중간 상태**가 됩니다.
+
+### 문제 2: 느리다
+
+28번의 순차 HTTP 요청. 각각 100ms라면 저장에 **2.8초**. 사용자는 저장 버튼을 누르고 3초 동안 기다려야 합니다.
+
+### 문제 3: 저장 중 조작 가능
+
+저장이 진행되는 2.8초 동안 사용자가:
+
+- 다른 악기를 클릭 → 사이드바 데이터가 바뀜
+- 사이드바를 닫음 → 진행 중인 API가 에러
+- 곡을 수정 → 저장 중인 데이터와 폼 데이터가 불일치
+
+## 어떻게 고쳤는가
+
+### 1. 백엔드에 bulk-save API 추가
+
+프론트에서 28번 호출하던 걸, 서버에서 한 번에 처리하는 API를 만들었습니다.
+
+```
+// Before: 프론트가 직접 삭제 + 생성을 순차 호출
+프론트 → DELETE /group/1
+프론트 → DELETE /group/2
+프론트 → POST /group (A)
+프론트 → POST /item (A-1)
+프론트 → POST /item (A-2)
+프론트 → POST /group (B)
+프론트 → POST /item (B-1)
+... (28번)
+
+// After: 프론트가 데이터를 한 번에 보냄
+프론트 → POST /repertoire-group/bulk-save
+         {
+           instrumentId: 1,
+           groups: [
+             { stepCode: "round1", repertoireType: "required", items: [...] },
+             { stepCode: "round1", repertoireType: "choice", items: [...] },
+             ...
+           ],
+           steps: [
+             { stepCode: "round1", description: "..." },
+             { stepCode: "final", description: "윈드 오케스트라 협연" },
+           ]
+         }
+```
+
+서버는 이 요청을 받으면 **트랜잭션** 안에서 처리합니다:
+
+```rust
+// Rust (서버)
+let txn = db.begin().await?;          // 트랜잭션 시작
+
+// 1. 기존 그룹 전부 삭제
+RepertoireGroup::delete_many()
+    .filter(Column::InstrumentId.eq(instrument_id))
+    .exec(&txn).await?;
+
+// 2. 새 그룹 + 아이템 생성
+for group in &req.groups {
+    let created = insert_group(&txn, group).await?;
+    for item in &group.items {
+        insert_item(&txn, created.id, item).await?;
+    }
+}
+
+// 3. 라운드 설명 upsert
+for step in &req.steps {
+    upsert_step(&txn, instrument_id, step).await?;
+}
+
+txn.commit().await?;                  // 전부 성공 → 확정
+// 어디서든 에러 → txn이 drop되면서 자동 롤백 → 아무것도 안 바뀜
+```
+
+**트랜잭션의 핵심:** `commit()`이 호출되기 전에 에러가 나면, 삭제도 생성도 전부 **없던 일**이 됩니다. 중간 상태가 존재할 수 없습니다.
+
+### 2. 프론트의 handleSave 단순화
+
+```tsx
+// Before — 28번의 순차 API 호출
+const handleSave = async () => {
+  // 기존 그룹 하나씩 삭제
+  for (const groupId of existingGroupIds) {
+    await deleteRepertoireGroup(groupId)
+  }
+  // 새 그룹 + 아이템 하나씩 생성
+  for (const group of allGroups) {
+    const created = await createRepertoireGroup(...)
+    for (const item of group.items) {
+      await createRepertoireItem(...)
+    }
+  }
+  // 라운드 설명 하나씩 저장
+  for (const step of steps) {
+    await upsertRepertoireStep(...)
+  }
+}
+```
+
+```tsx
+// After — 1번의 API 호출
+const handleSave = async () => {
+  // 폼 상태를 요청 바디로 변환
+  const groups = ROUND_ORDER.flatMap(roundCode =>
+    roundGroups[roundCode].map(group => ({
+      stepCode: roundCode,
+      repertoireType: group.repertoireType,
+      label: group.label || undefined,
+      items: group.items.filter(hasContent).map(item => ({
+        composerName: item.composer,
+        title: item.title,
+        ...
+      })),
+    }))
+  )
+
+  const steps = ROUND_ORDER.map(roundCode => ({
+    stepCode: roundCode,
+    description: stepDescriptions[roundCode].description || undefined,
+    ...
+  }))
+
+  // 단일 호출 — 서버가 트랜잭션으로 처리
+  await bulkSaveRepertoire({ instrumentId, groups, steps })
+}
+```
+
+더 이상 `existingGroupIds`를 추적할 필요도 없습니다. 서버가 "이 악기의 기존 데이터를 전부 지우고 새로 넣어줘"를 한 번에 처리니까요.
+
+### 3. 저장 중 조작 차단
+
+```tsx
+<VStack
+  opacity={isSaving ? '0.6' : '1'}       // 시각적 피드백
+  pointerEvents={isSaving ? 'none' : 'auto'}  // 클릭 차단
+>
+  {/* 전체 폼 내용 */}
+</VStack>
+
+<Sidebar
+  onClose={() => { if (!isSaving) onClose() }}  // 저장 중 닫기 차단
+>
+```
+
+저장 중에는:
+
+- 폼 전체가 반투명해지고 클릭 불가
+- 사이드바 닫기 버튼/배경 클릭이 무시됨
+- 저장 버튼은 이미 `disabled={isSaving}`
+
+## 결과
+
+| Before            | After                    |
+| ----------------- | ------------------------ |
+| 28번 API 호출     | 1번 API 호출             |
+| 2.8초 소요        | ~100ms                   |
+| 중간 상태 위험    | 트랜잭션으로 원자적 처리 |
+| 저장 중 조작 가능 | 저장 중 조작 차단        |
+
+## 배운 점
+
+1. **API 호출 횟수는 최소화할수록 좋다는 것**: 네트워크 요청은 비용입니다. 가능하다면 하나로 합치는 게 좋습니다.
+
+2. **트랜잭션은 데이터 무결성의Friend**: 여러 단계를 하나의 원자적 작업으로 묶어주면, 중간 상태로 인한 데이터 유실을 방지할 수 있습니다.
+
+3. **UX도 중요하다**: 저장 중 사용자가 다른 작업을 시도하면 예상치 못한 에러가 발생할 수 있습니다. 시각적 피드백과 조작 차단을 통해 더 좋은用户体验를 제공할 수 있습니다.
