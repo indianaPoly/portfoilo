@@ -16,33 +16,32 @@ summary: '결제 마무리 화면이 마운트가 되면 신호를 iframe으로 
 제가 선택한 방법은 iframe에서 PG 결제창을 띄우는 것이었습니다. 이렇게 하면 앱의 Layer은 그대로 유지되고, 결제창만 iframe에서 열 수 있어요.
 
 ```ts
-
 type PaymentIframeOptions = {
-  scriptUrl: string
-  payload: Record<string, string | number | boolean>
-}
+  scriptUrl: string;
+  payload: Record<string, string | number | boolean>;
+};
 
 export function openPaymentInIframeDynamic(opts: PaymentIframeOptions) {
-  const { scriptUrl, payload } = opts
+  const { scriptUrl, payload } = opts;
 
   const iframe = document.getElementById(
-    'pg_pay_iframe',
-  ) as HTMLIFrameElement | null
-  const wrap = document.getElementById('pgPayWindow') as HTMLElement | null
+    'pg_pay_iframe'
+  ) as HTMLIFrameElement | null;
+  const wrap = document.getElementById('pgPayWindow') as HTMLElement | null;
 
-  if (!iframe) throw new Error('#pg_pay_iframe not found')
-  if (!wrap) throw new Error('#pgPayWindow not found')
+  if (!iframe) throw new Error('#pg_pay_iframe not found');
+  if (!wrap) throw new Error('#pgPayWindow not found');
 
-  wrap.style.display = 'block'
-  wrap.style.pointerEvents = 'none'
+  wrap.style.display = 'block';
+  wrap.style.pointerEvents = 'none';
 
   const inputs = Object.entries(payload || {})
     .filter(([, v]) => v !== undefined && v !== null)
     .map(
       ([k, v]) =>
-        `<input type="hidden" name="${String(k)}" value="${String(v)}" />`,
+        `<input type="hidden" name="${String(k)}" value="${String(v)}" />`
     )
-    .join('')
+    .join('');
 
   const html = `<!DOCTYPE html>
 <html>
@@ -93,11 +92,11 @@ export function openPaymentInIframeDynamic(opts: PaymentIframeOptions) {
     })();
   </script>
 </body>
-</html>`
+</html>`;
 
-  iframe.srcdoc = html
+  iframe.srcdoc = html;
 
-  return
+  return;
 }
 ```
 
@@ -114,28 +113,29 @@ export function openPaymentInIframeDynamic(opts: PaymentIframeOptions) {
 그래서 결제 완료 화면이 어디에 있든, 마운트 순간에는 반드시 useEffect가 실행된다는 점을 활용했어요. 결제 완료 시점에 iframe 내부에 있으면 postMessage를 부모에게 전송하도록 했고, 부모는 이를 받아 iframe을 닫고 앱의 결제 완료 화면으로 리다이렉트하도록 처리했습니다.
 
 ### 부모가 데이터를 받았을 때
+
 ```ts
 useEffect(() => {
-    function handleMessage(e: MessageEvent) {
+  function handleMessage(e: MessageEvent) {
     if (e.data?.type === 'pay:finish') {
-        const wrap = document.getElementById(
-        'pgPayWindow',
-        ) as HTMLElement | null
-        if (wrap) wrap.style.display = 'none' // iframe 닫기
+      const wrap = document.getElementById('pgPayWindow') as HTMLElement | null;
+      if (wrap) wrap.style.display = 'none'; // iframe 닫기
 
-        // 부모 라우터에서 finish 페이지 열기
+      // 부모 라우터에서 finish 페이지 열기
     }
-    }
+  }
 
-    window.addEventListener('message', handleMessage)
-    return () => window.removeEventListener('message', handleMessage)
-}, [go])
+  window.addEventListener('message', handleMessage);
+  return () => window.removeEventListener('message', handleMessage);
+}, [go]);
 ```
 
 ### 결제창이 열렸을 때
+
 window.self는 현재 실행 중인 윈도우 자신을 가리켜요. window.top은 현재 창이 프레임 안에 있다면 최상위 객체를 가리켜요.
 
 즉 window.self와 window.top이 일치하지 않는다고 한다면 해당 창은 iframe 내부에서 실행하고 있다는 것을 알 수 있어요.
+
 ```ts
 useEffect(() => {
     const isInIframe = window.self !== window.top
