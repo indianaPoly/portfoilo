@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 
 import {
   Box,
-  Code,
   Heading,
   Link,
   ListItem,
@@ -41,17 +40,18 @@ const mdxComponents = {
   li: (props: React.ComponentProps<typeof ListItem>) => (
     <ListItem mb={1} {...props} />
   ),
-  code: (props: React.ComponentProps<typeof Code>) => {
-    const isFencedCodeBlock =
-      typeof props.className === 'string' &&
-      props.className.includes('language-');
-
-    if (isFencedCodeBlock) {
-      return <Code bg="transparent" color="inherit" px={0} py={0} {...props} />;
-    }
-
+  code: (props: React.ComponentProps<typeof Box>) => {
     return (
-      <Code px="1" py="0.5" borderRadius="0px" color="ink.900" {...props} />
+      <Box
+        as="code"
+        px="1"
+        py="0.5"
+        borderRadius="0px"
+        bg="rgba(26, 23, 18, 0.08)"
+        color="ink.900"
+        fontSize="0.95em"
+        {...props}
+      />
     );
   },
   pre: (props: React.ComponentProps<typeof Box>) => (
@@ -65,6 +65,17 @@ const mdxComponents = {
       color="ink.900"
       borderWidth="1px"
       borderColor="ink.700"
+      sx={{
+        '& > code': {
+          display: 'block',
+          px: '0 !important',
+          py: '0 !important',
+          borderRadius: '0 !important',
+          bg: 'transparent !important',
+          color: 'inherit',
+          whiteSpace: 'pre',
+        },
+      }}
       {...props}
     />
   ),
