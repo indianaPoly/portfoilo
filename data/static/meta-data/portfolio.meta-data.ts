@@ -1,5 +1,5 @@
 export const portfolioMetadata = {
-  title: 'Portfolio | Next.js 16 ready',
+  title: 'Portfolio | Poly Journal',
   description:
-    'Minimal yet polished portfolio with motion and smooth scrolling.',
+    '참여한 프로젝트와 작업 경험, 그리고 기술적으로 고민한 결과물을 정리한 포트폴리오입니다.',
 };

@@ -1,4 +1,9 @@
 import { Heading, Text, VStack } from '@chakra-ui/react';
+import type { Metadata } from 'next';
+
+import { portfolioMetadata } from '../../data/static/meta-data/portfolio.meta-data';
+
+export const metadata: Metadata = portfolioMetadata;
 
 export default function PortfolioPage() {
   return (

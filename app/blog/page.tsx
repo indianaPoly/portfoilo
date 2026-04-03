@@ -1,6 +1,12 @@
 import { redirect } from 'next/navigation';
 
+import type { Metadata } from 'next';
+
+import { blogMetadata } from '../../data/static/meta-data/blog.meta-data';
+
 type SearchParams = Record<string, string | string[] | undefined>;
+
+export const metadata: Metadata = blogMetadata;
 
 export default function BlogRedirectPage({
   searchParams,

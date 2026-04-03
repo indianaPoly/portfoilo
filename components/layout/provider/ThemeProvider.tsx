@@ -2,9 +2,9 @@
 
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 
-import theme from '../lib/theme';
+import theme from '@/lib/theme';
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ColorModeScript initialColorMode={theme.config?.initialColorMode} />

@@ -1,12 +1,11 @@
 import { Container } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 
-import Footer from '../components/layout/Footer';
-import LenisProvider from '../components/layout/LenisProvider';
-import NavBar from '../components/layout/NavBar';
-import { rootMetadata } from '../data/siteMetadata';
+import Footer from '@/components/layout/footer/Footer';
+import NavBar from '@/components/layout/header/NavBar';
+import RootProvider from '@/components/layout/provider/RootProvider';
 
-import { Providers } from './Providers';
+import { rootMetadata } from '../data/siteMetadata';
 
 export const metadata: Metadata = {
   title: rootMetadata.title,
@@ -21,20 +20,18 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Providers>
-          <LenisProvider>
-            <NavBar />
-            <Container
-              as="main"
-              maxW="960px"
-              px={{ base: 4, md: 8 }}
-              py={{ base: 8, md: 12 }}
-            >
-              {children}
-            </Container>
-            <Footer />
-          </LenisProvider>
-        </Providers>
+        <RootProvider>
+          <NavBar />
+          <Container
+            as="main"
+            maxW="960px"
+            px={{ base: 4, md: 8 }}
+            py={{ base: 8, md: 12 }}
+          >
+            {children}
+          </Container>
+          <Footer />
+        </RootProvider>
       </body>
     </html>
   );

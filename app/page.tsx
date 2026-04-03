@@ -1,14 +1,18 @@
 import { HStack, VStack } from '@chakra-ui/react';
+import type { Metadata } from 'next';
 
 import { Pagination } from '../components/pages/blog/Pagination';
 import { JournalList } from '../components/pages/main/cards/JournalList';
 import { Tab } from '../components/pages/main/Tab';
+import { mainMetadata } from '../data/static/meta-data/main.meta-data';
 import { getAllCategories, getAllPosts } from '../lib/posts';
 
 const PAGE_SIZE = 5;
 const ALL_CATEGORY_LABEL = '전체';
 
 type SearchParams = Record<string, string | string[] | undefined>;
+
+export const metadata: Metadata = mainMetadata;
 
 function asString(value: string | string[] | undefined): string | undefined {
   if (!value) return undefined;

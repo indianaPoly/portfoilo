@@ -1,5 +1,5 @@
 export const aboutMetadata = {
-  title: 'Portfolio | Next.js 16 ready',
+  title: 'About | Poly Journal',
   description:
-    'Minimal yet polished portfolio with motion and smooth scrolling.',
+    '개발자로서의 관심사, 협업 방식, 그리고 문제를 바라보는 관점을 소개합니다.',
 };

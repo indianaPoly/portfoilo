@@ -1,4 +1,9 @@
 import { Heading, Text, VStack } from '@chakra-ui/react';
+import type { Metadata } from 'next';
+
+import { aboutMetadata } from '../../data/static/meta-data/about.meta-data';
+
+export const metadata: Metadata = aboutMetadata;
 
 export default function AboutPage() {
   return (
