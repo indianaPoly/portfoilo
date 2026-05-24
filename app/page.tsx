@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@chakra-ui/react';
+import { Box, Text, VStack } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 
 import { Pagination } from '../components/pages/blog/Pagination';
@@ -50,47 +50,43 @@ export default function HomePage({
   const items = filtered.slice(startIndex, startIndex + PAGE_SIZE);
 
   return (
-    <VStack align="stretch" gap={{ base: 6, md: 10 }}>
-      <VStack align="stretch" display={{ base: 'flex', md: 'none' }}>
-        <Tab
-          categories={categories}
-          selectedCategory={selectedCategory}
-          variant="mobile"
-        />
+    <VStack align="stretch" gap={{ base: 10, md: 14 }}>
+      <Box pt={{ base: 4, md: 5 }}>
+        <Text
+          as="h1"
+          fontSize={{ base: '18px', md: '22px' }}
+          fontWeight="600"
+          color="ink.600"
+          letterSpacing="-0.03em"
+        >
+          개발 과정에서 얻은 기술과 문화를 공유합니다
+        </Text>
+      </Box>
+
+      <Tab
+        categories={categories}
+        selectedCategory={selectedCategory}
+        variant="desktop"
+      />
+
+      <VStack align="stretch" gap={{ base: 12, md: 16 }}>
+        {items.map((item) => (
+          <JournalList
+            key={item.slug}
+            title={item.title}
+            summary={item.summary}
+            date={item.date}
+            category={item.category ?? 'Uncategorized'}
+            href={`/blog/${item.slug}`}
+          />
+        ))}
       </VStack>
 
-      <HStack align="flex-start" gap={{ base: 0, md: 10 }}>
-        <VStack align="stretch" gap="10px" w="full">
-          {items.map((item, index) => (
-            <JournalList
-              key={item.slug}
-              jno={startIndex + index + 1}
-              title={item.title}
-              date={item.date}
-              category={item.category ?? 'Uncategorized'}
-              href={`/blog/${item.slug}`}
-            />
-          ))}
-
-          <Pagination
-            selectedCategory={selectedCategory}
-            page={safePage}
-            totalPages={totalPages}
-          />
-        </VStack>
-
-        <VStack
-          display={{ base: 'none', md: 'flex' }}
-          flex="0 0 auto"
-          align="stretch"
-        >
-          <Tab
-            categories={categories}
-            selectedCategory={selectedCategory}
-            variant="desktop"
-          />
-        </VStack>
-      </HStack>
+      <Pagination
+        selectedCategory={selectedCategory}
+        page={safePage}
+        totalPages={totalPages}
+      />
     </VStack>
   );
 }

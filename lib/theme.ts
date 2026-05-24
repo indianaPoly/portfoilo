@@ -7,20 +7,34 @@ const theme = extendTheme({
   },
   colors: {
     paper: {
-      50: '#f4ead6',
-      100: '#eedfc3',
-      200: '#e3cfaa',
+      50: '#ffffff',
+      100: '#ffffff',
+      200: '#f3f5f8',
+      300: '#eaedf2',
     },
     ink: {
-      900: '#1a1712',
-      800: '#2a251d',
-      700: '#3f382c',
-      600: '#5b5243',
+      900: '#202124',
+      800: '#2f3338',
+      700: '#4a5058',
+      600: '#6b7280',
+      500: '#7a828d',
+      400: '#9aa3af',
+      300: '#c5cbd3',
+    },
+    brand: {
+      50: '#eaf8ef',
+      100: '#d5f0de',
+      500: '#2f9e62',
+      700: '#157347',
+      800: '#0f5f3a',
+    },
+    line: {
+      100: '#e9edf2',
     },
   },
   fonts: {
-    heading: `Georgia, 'Times New Roman', Times, ${base.fonts.heading}`,
-    body: `Georgia, 'Times New Roman', Times, ${base.fonts.body}`,
+    heading: `-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif, ${base.fonts.heading}`,
+    body: `-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif, ${base.fonts.body}`,
   },
   styles: {
     global: {
@@ -29,20 +43,21 @@ const theme = extendTheme({
       },
       'html, body': {
         maxWidth: '100vw',
-        backgroundColor: '#f4ead6',
-        backgroundImage:
-          'radial-gradient(circle at 20% 10%, rgba(90, 70, 30, 0.035), transparent 38%), radial-gradient(circle at 80% 40%, rgba(90, 70, 30, 0.02), transparent 50%)',
-        color: '#1a1712',
+        backgroundColor: '#ffffff',
+        color: '#202124',
         margin: 0,
         padding: 0,
         minHeight: '100vh',
+      },
+      body: {
+        overflowX: 'hidden',
       },
       a: {
         color: 'inherit',
         textDecoration: 'none',
       },
       'a:focus-visible, button:focus-visible': {
-        outline: '2px solid rgba(26, 23, 18, 0.75)',
+        outline: '2px solid #157347',
         outlineOffset: '3px',
       },
       main: {
@@ -59,14 +74,14 @@ const theme = extendTheme({
         listStyle: 'none',
       },
       '::selection': {
-        background: 'rgba(26, 23, 18, 0.12)',
-        color: '#1a1712',
+        background: 'rgba(21, 115, 71, 0.16)',
+        color: '#202124',
       },
     },
   },
   radii: {
-    lg: '0px',
-    xl: '0px',
+    lg: '14px',
+    xl: '18px',
   },
 });
 

@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { compileMDX } from 'next-mdx-remote/rsc';
 
 import { mdxComponents } from '../../../components/pages/blog/MdxComponents';
+import { transformMarkdownTablesToJsx } from '../../../lib/mdxTable';
 import { getAllPosts, getPostBySlug } from '../../../lib/posts';
 
 type BlogDetailPageProps = {
@@ -38,7 +39,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   if (!post) notFound();
 
   const { content } = await compileMDX({
-    source: post.content,
+    source: transformMarkdownTablesToJsx(post.content),
     components: mdxComponents,
     options: {
       parseFrontmatter: false,

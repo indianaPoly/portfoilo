@@ -1,66 +1,104 @@
 import NextLink from 'next/link';
 
-import { HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 
 export interface JournalListProps {
-  jno: number;
   title: string;
+  summary?: string;
   date: string;
   category: string;
   href: string;
 }
 
+function formatKoreanDate(date: string): string {
+  const [year, month, day] = date.split('-');
+  if (!year || !month || !day) return date;
+
+  return `${year}년 ${month.padStart(2, '0')}월 ${day.padStart(2, '0')}일`;
+}
+
 export function JournalList({
-  jno,
   title,
+  summary,
   date,
   category,
   href,
 }: JournalListProps) {
   return (
-    <HStack
+    <VStack
       as={NextLink}
       href={href}
-      key={jno}
+      align="stretch"
+      gap={{ base: 4, md: 5 }}
       w="full"
-      align="flex-start"
-      justify="space-between"
-      gap="16px"
-      px="18px"
-      py="14px"
-      bg="paper.100"
-      borderWidth="1px"
-      borderStyle="solid"
-      borderColor="ink.700"
-      borderRadius="0px"
-      transition="background-color 140ms ease, border-color 140ms ease"
+      py={{ base: 1, md: 2 }}
+      transition="transform 160ms ease, opacity 160ms ease"
       _hover={{
-        bg: 'paper.200',
-        borderColor: 'ink.800',
+        textDecoration: 'none',
+        transform: 'translateX(3px)',
       }}
-      _active={{
-        bg: 'paper.200',
-        borderColor: 'ink.900',
-      }}
-      cursor="pointer"
+      _active={{ opacity: 0.72 }}
     >
-      <VStack align="flex-start" gap="6px" flex="1" minW="0">
+      <Text
+        as="h2"
+        fontSize={{ base: '23px', md: '30px' }}
+        fontWeight="800"
+        lineHeight="1.28"
+        letterSpacing="-0.055em"
+        color="ink.900"
+      >
+        {title}
+      </Text>
+
+      {summary ? (
         <Text
-          fontSize="xs"
-          color="ink.700"
-          textTransform="uppercase"
-          letterSpacing="0.08em"
+          fontSize={{ base: '16px', md: '22px' }}
+          lineHeight="1.48"
+          letterSpacing="-0.04em"
+          color="ink.600"
+          noOfLines={{ base: 3, md: 2 }}
+        >
+          {summary}
+        </Text>
+      ) : null}
+
+      <HStack gap={{ base: 3, md: 4 }} flexWrap="wrap">
+        <Box
+          as="span"
+          px="14px"
+          py="5px"
+          borderRadius="999px"
+          bg="brand.50"
+          color="brand.500"
+          fontSize={{ base: '14px', md: '16px' }}
+          fontWeight="800"
+          letterSpacing="-0.03em"
+          lineHeight="1"
         >
           {category}
+        </Box>
+        <Text
+          as="span"
+          fontSize={{ base: '15px', md: '17px' }}
+          fontWeight="600"
+          color="ink.500"
+          letterSpacing="-0.03em"
+        >
+          Poly
         </Text>
-        <Text fontSize="lg" fontWeight="600" color="ink.900" lineHeight="1.25">
-          {title}
+        <Text as="span" color="ink.300" fontSize="18px">
+          ·
         </Text>
-      </VStack>
-
-      <Text fontSize="sm" color="ink.600" whiteSpace="nowrap" pt="2px">
-        {date}
-      </Text>
-    </HStack>
+        <Text
+          as="span"
+          fontSize={{ base: '15px', md: '17px' }}
+          fontWeight="600"
+          color="ink.500"
+          letterSpacing="-0.03em"
+        >
+          {formatKoreanDate(date)}
+        </Text>
+      </HStack>
+    </VStack>
   );
 }

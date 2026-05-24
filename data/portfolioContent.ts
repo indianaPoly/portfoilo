@@ -130,5 +130,5 @@ export const awards = [
 
 export const links = {
   github: 'https://github.com/indianaPoly',
-  emamil: 'mailto:hyeonlimgo5@gmail.com',
+  email: 'mailto:hyeonlimgo5@gmail.com',
 };

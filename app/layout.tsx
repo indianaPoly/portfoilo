@@ -1,4 +1,4 @@
-import { Container } from '@chakra-ui/react';
+import { Container, Flex } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 
 import Footer from '@/components/layout/footer/Footer';
@@ -21,16 +21,19 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <RootProvider>
-          <NavBar />
-          <Container
-            as="main"
-            maxW="960px"
-            px={{ base: 4, md: 8 }}
-            py={{ base: 8, md: 12 }}
-          >
-            {children}
-          </Container>
-          <Footer />
+          <Flex minH="100dvh" direction="column">
+            <NavBar />
+            <Container
+              as="main"
+              flex="1"
+              maxW="1460px"
+              px={{ base: 6, md: 10, xl: 12 }}
+              py={{ base: 9, md: 12 }}
+            >
+              {children}
+            </Container>
+            <Footer />
+          </Flex>
         </RootProvider>
       </body>
     </html>

@@ -1,49 +1,49 @@
 import NextLink from 'next/link';
 
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 
 import { links } from '../../../data/portfolioContent';
 
 export default function Footer() {
   return (
-    <Box
-      as="footer"
-      mt={12}
-      borderTop="1px solid"
-      borderColor="rgba(23, 22, 20, 0.25)"
-    >
-      <Box maxW="1200px" mx="auto" px={{ base: 5, md: 8 }} py={8}>
-        <Flex justify="space-between" align="baseline" gap={4} flexWrap="wrap">
-          <Text fontSize="sm" color="ink.700">
-            ⓒ 2026. Poly All rights reserved.
-          </Text>
-          <Flex gap="10px">
-            {Object.entries(links).map((link) => (
-              <Text
-                key={link[0]}
-                as={NextLink}
-                href={link[1]}
-                target="_blank"
-                rel="noreferrer"
-                fontSize="xs"
-                letterSpacing="0.14em"
-                textTransform="uppercase"
-                color="ink.800"
-                _hover={{
-                  textDecoration: 'underline',
-                  textUnderlineOffset: '4px',
-                }}
-                _active={{
-                  scale: 0.95,
-                }}
-                transition="all 0.3s ease"
-              >
-                {link[0]}
-              </Text>
-            ))}
-          </Flex>
-        </Flex>
-      </Box>
+    <Box as="footer" mt={{ base: 12, md: 16 }} bg="paper.200">
+      <HStack
+        maxW="1460px"
+        mx="auto"
+        px={{ base: 6, md: 10, xl: 12 }}
+        h={{ base: '76px', md: '92px' }}
+        justify="center"
+        gap={{ base: 4, md: 7 }}
+        flexWrap="wrap"
+      >
+        {Object.entries(links).map(([label, href], index) => (
+          <HStack key={label} gap={{ base: 4, md: 7 }}>
+            {index > 0 ? <Text color="ink.300">|</Text> : null}
+            <Text
+              as={NextLink}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              fontSize={{ base: '14px', md: '17px' }}
+              fontWeight="600"
+              color="ink.400"
+              letterSpacing="-0.03em"
+              _hover={{ color: 'ink.700', textDecoration: 'none' }}
+            >
+              {label}
+            </Text>
+          </HStack>
+        ))}
+        <Text color="ink.300">|</Text>
+        <Text
+          fontSize={{ base: '14px', md: '17px' }}
+          fontWeight="600"
+          color="ink.400"
+          letterSpacing="-0.03em"
+        >
+          © POLY. ALL RIGHTS RESERVED
+        </Text>
+      </HStack>
     </Box>
   );
 }

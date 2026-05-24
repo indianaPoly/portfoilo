@@ -1,8 +1,6 @@
-'use client';
+import NextLink from 'next/link';
 
-import { usePathname, useRouter } from 'next/navigation';
-
-import { Button, ButtonGroup, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 
 export interface PaginationProps {
   selectedCategory: string;
@@ -10,80 +8,153 @@ export interface PaginationProps {
   totalPages: number;
 }
 
+function getVisiblePages(
+  page: number,
+  totalPages: number
+): Array<number | 'ellipsis'> {
+  if (totalPages <= 5)
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  if (page <= 3) return [1, 2, 3, 'ellipsis', totalPages];
+  if (page >= totalPages - 2) {
+    return [1, 'ellipsis', totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  return [1, 'ellipsis', page, 'ellipsis', totalPages];
+}
+
+function getPageHref(selectedCategory: string, nextPage: number): string {
+  const params = new URLSearchParams();
+  if (selectedCategory && selectedCategory !== '전체') {
+    params.set('category', selectedCategory);
+  }
+  if (nextPage > 1) params.set('page', String(nextPage));
+
+  const query = params.toString();
+  return query ? `/?${query}` : '/';
+}
+
+function PageLink({
+  href,
+  children,
+  isActive = false,
+  ariaLabel,
+}: {
+  href: string;
+  children: React.ReactNode;
+  isActive?: boolean;
+  ariaLabel?: string;
+}) {
+  return (
+    <Box
+      as={NextLink}
+      href={href}
+      minW={{ base: '42px', md: '54px' }}
+      h={{ base: '42px', md: '54px' }}
+      px={2}
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      borderRadius="16px"
+      bg={isActive ? 'paper.200' : 'transparent'}
+      color="ink.900"
+      fontSize={{ base: '18px', md: '22px' }}
+      fontWeight={isActive ? '800' : '500'}
+      aria-current={isActive ? 'page' : undefined}
+      aria-label={ariaLabel}
+      _hover={{ bg: 'paper.200', textDecoration: 'none' }}
+      _focusVisible={{
+        outline: '2px solid',
+        outlineColor: 'brand.500',
+        outlineOffset: '2px',
+      }}
+    >
+      {children}
+    </Box>
+  );
+}
+
+function DisabledArrow({ children }: { children: React.ReactNode }) {
+  return (
+    <Box
+      minW={{ base: '36px', md: '44px' }}
+      h={{ base: '36px', md: '44px' }}
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      borderRadius="14px"
+      color="ink.300"
+      fontSize="24px"
+      opacity={0.45}
+      aria-disabled="true"
+    >
+      {children}
+    </Box>
+  );
+}
+
 export function Pagination({
   selectedCategory,
   page,
   totalPages,
 }: PaginationProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const push = (params: URLSearchParams) => {
-    const query = params.toString();
-    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
-  };
-
-  const onPrev = () => {
-    if (page <= 1) return;
-
-    const params = new URLSearchParams();
-    if (selectedCategory && selectedCategory !== '전체') {
-      params.set('category', selectedCategory);
-    }
-
-    if (page - 1 > 1) params.set('page', String(page - 1));
-    push(params);
-  };
-
-  const onNext = () => {
-    if (page >= totalPages) return;
-
-    const params = new URLSearchParams();
-    if (selectedCategory && selectedCategory !== '전체') {
-      params.set('category', selectedCategory);
-    }
-
-    params.set('page', String(page + 1));
-    push(params);
-  };
-
   const canPrev = page > 1;
   const canNext = page < totalPages;
 
   return (
-    <HStack w="full" justify="space-between" align="center">
-      <Text fontSize="sm" color="ink.700">
-        Page {page} / {totalPages}
-      </Text>
+    <HStack
+      w="full"
+      justify="center"
+      align="center"
+      gap={{ base: 2, md: 4 }}
+      pt={{ base: 4, md: 8 }}
+    >
+      {canPrev ? (
+        <PageLink
+          href={getPageHref(selectedCategory, page - 1)}
+          ariaLabel="Previous page"
+        >
+          ‹
+        </PageLink>
+      ) : (
+        <DisabledArrow>‹</DisabledArrow>
+      )}
 
-      <ButtonGroup isAttached variant="outline">
-        <Button
-          onClick={onPrev}
-          isDisabled={!canPrev}
-          borderRadius="0px"
-          borderColor="ink.700"
-          bg="paper.100"
-          color="ink.800"
-          _hover={{ bg: 'paper.200', borderColor: 'ink.800' }}
-          _active={{ bg: 'paper.200', borderColor: 'ink.900' }}
-          aria-label="Previous page"
+      {getVisiblePages(page, totalPages).map((item, index) => {
+        if (item === 'ellipsis') {
+          return (
+            <Text
+              key={`ellipsis-${index}`}
+              color="ink.400"
+              px={{ base: 1, md: 2 }}
+            >
+              ...
+            </Text>
+          );
+        }
+
+        return (
+          <PageLink
+            key={item}
+            href={getPageHref(selectedCategory, item)}
+            isActive={item === page}
+            ariaLabel={`${item} page`}
+          >
+            {item}
+          </PageLink>
+        );
+      })}
+
+      {canNext ? (
+        <PageLink
+          href={getPageHref(selectedCategory, page + 1)}
+          ariaLabel="Next page"
         >
-          Prev
-        </Button>
-        <Button
-          onClick={onNext}
-          isDisabled={!canNext}
-          borderRadius="0px"
-          borderColor="ink.700"
-          bg="paper.100"
-          color="ink.800"
-          _hover={{ bg: 'paper.200', borderColor: 'ink.800' }}
-          _active={{ bg: 'paper.200', borderColor: 'ink.900' }}
-          aria-label="Next page"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
+          ›
+        </PageLink>
+      ) : (
+        <DisabledArrow>›</DisabledArrow>
+      )}
     </HStack>
   );
 }
