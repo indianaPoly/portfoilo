@@ -1,5 +1,5 @@
 import { Container, Flex } from '@chakra-ui/react';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import Footer from '@/components/layout/footer/Footer';
 import NavBar from '@/components/layout/header/NavBar';
@@ -7,9 +7,11 @@ import RootProvider from '@/components/layout/provider/RootProvider';
 
 import { rootMetadata } from '../data/siteMetadata';
 
-export const metadata: Metadata = {
-  title: rootMetadata.title,
-  description: rootMetadata.description,
+export const metadata: Metadata = rootMetadata;
+
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+  colorScheme: 'light',
 };
 
 export default function RootLayout({

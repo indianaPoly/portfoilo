@@ -1,5 +1,28 @@
-export const mainMetadata = {
-  title: 'Home | Poly Journal',
-  description:
-    '개발 과정에서 마주한 문제와 해결 방법, 그리고 작업 기록을 모아둔 메인 페이지입니다.',
+import type { Metadata } from 'next';
+
+import { defaultOgImage, siteName } from '../../siteMetadata';
+
+const title = 'Home';
+const description =
+  '개발 과정에서 얻은 기술과 문화를 공유하는 Poly Journal의 최신 글 목록입니다.';
+
+export const mainMetadata: Metadata = {
+  title,
+  description,
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    title: `${title} | ${siteName}`,
+    description,
+    url: '/',
+    images: [defaultOgImage],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${title} | ${siteName}`,
+    description,
+    images: [defaultOgImage.url],
+  },
 };
