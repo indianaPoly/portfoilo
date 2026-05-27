@@ -8,6 +8,36 @@ export const projectCategories = [
 
 export const projects = [
   {
+    name: 'AI 기반 HWP 문서 자동 작성 서비스 — 또박또박',
+    category: '외부 활동',
+    organization: 'AI Hack Camp 2026',
+    period: '2026.05',
+    role: '프론트엔드 및 WebAssembly 개발',
+    summary:
+      '공공기관 HWP 문서 작성 과정의 접근성 문제를 해결하기 위해, AI 대화형 입력 기반 문서 자동 작성 서비스를 구현했습니다.',
+    techStack: [
+      'Next.js',
+      'TypeScript',
+      'Rust',
+      'WebAssembly',
+      'Web Audio API',
+      'Tesseract.js',
+    ],
+    highlights: [
+      'HWP Schema를 기반으로 질문 흐름이 동적으로 변하는 채팅형 입력 인터페이스를 설계해 문서 작성 과정을 단계형 UX로 단순화했습니다.',
+      'Rust 기반 WebAssembly 모듈을 구현해 브라우저에서 음성 데이터를 직접 전처리하도록 구성하고, 무음 기반 발화 분리(VAD), WAV 인코딩, RMS 계산을 클라이언트에서 처리했습니다.',
+      'AudioWorklet과 Web Audio API를 활용해 실시간 PCM 스트림 처리 및 음성 레벨 시각화를 구현하고, 분리된 음성 청크를 STT 서버와 연동했습니다.',
+      '손글씨 입력 기능과 OCR 전처리 파이프라인을 구현해 키보드 입력이 어려운 사용자도 문서를 작성할 수 있도록 접근성을 확장했습니다.',
+      '모바일 환경에서 발생한 file input·touch event·animation 충돌 문제를 해결하며 실제 시연 가능한 수준으로 UX를 안정화했습니다.',
+    ],
+    links: [
+      {
+        label: '뉴스 기사',
+        url: 'https://n.news.naver.com/mnews/article/016/0002645434?sid=105',
+      },
+    ],
+  },
+  {
     name: 'Moazip',
     category: '실무 및 인턴',
     organization: '(주)데브파이브',
