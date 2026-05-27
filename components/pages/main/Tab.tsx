@@ -46,10 +46,12 @@ export function Tab({ categories, selectedCategory }: TabProps) {
             borderColor={isActive ? 'ink.900' : 'transparent'}
             color={isActive ? 'ink.900' : 'ink.400'}
             fontSize={{ base: '18px', md: '22px' }}
-            fontWeight="800"
+            fontWeight={isActive ? '650' : '500'}
             letterSpacing="-0.045em"
+            transition="border-color 180ms ease, color 180ms ease, transform 180ms ease"
             aria-current={isActive ? 'page' : undefined}
             _hover={{ color: 'ink.900', textDecoration: 'none' }}
+            _active={{ transform: 'scale(0.8)' }}
             _focusVisible={{
               outline: '2px solid',
               outlineColor: 'brand.500',

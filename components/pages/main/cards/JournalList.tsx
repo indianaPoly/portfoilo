@@ -32,17 +32,17 @@ export function JournalList({
       gap={{ base: 4, md: 5 }}
       w="full"
       py={{ base: 1, md: 2 }}
-      transition="transform 160ms ease, opacity 160ms ease"
+      transition="transform 180ms ease, opacity 180ms ease"
       _hover={{
         textDecoration: 'none',
         transform: 'translateX(3px)',
       }}
-      _active={{ opacity: 0.72 }}
+      _active={{ opacity: 0.72, transform: 'scale(0.8)' }}
     >
       <Text
         as="h2"
         fontSize={{ base: '23px', md: '30px' }}
-        fontWeight="800"
+        fontWeight="700"
         lineHeight="1.28"
         letterSpacing="-0.055em"
         color="ink.900"
@@ -71,7 +71,7 @@ export function JournalList({
           bg="brand.50"
           color="brand.500"
           fontSize={{ base: '14px', md: '16px' }}
-          fontWeight="800"
+          fontWeight="650"
           letterSpacing="-0.03em"
           lineHeight="1"
         >
@@ -80,7 +80,7 @@ export function JournalList({
         <Text
           as="span"
           fontSize={{ base: '15px', md: '17px' }}
-          fontWeight="600"
+          fontWeight="500"
           color="ink.500"
           letterSpacing="-0.03em"
         >
@@ -92,7 +92,7 @@ export function JournalList({
         <Text
           as="span"
           fontSize={{ base: '15px', md: '17px' }}
-          fontWeight="600"
+          fontWeight="500"
           color="ink.500"
           letterSpacing="-0.03em"
         >

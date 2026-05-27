@@ -1,3 +1,6 @@
+import { isValidElement } from 'react';
+import type { ReactNode } from 'react';
+
 import {
   Box,
   Heading,
@@ -14,6 +17,29 @@ import {
   Tr,
   UnorderedList,
 } from '@chakra-ui/react';
+
+import { slugifyHeading } from '../../../lib/markdownHeadings';
+
+function getTextFromNode(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') {
+    return String(node);
+  }
+
+  if (Array.isArray(node)) {
+    return node.map(getTextFromNode).join('');
+  }
+
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return getTextFromNode(node.props.children);
+  }
+
+  return '';
+}
+
+function getHeadingId(children: ReactNode): string | undefined {
+  const text = getTextFromNode(children).trim();
+  return text ? slugifyHeading(text) : undefined;
+}
 
 function MdxTable(props: React.ComponentProps<typeof Table>) {
   return (
@@ -50,7 +76,7 @@ function MdxTh(props: React.ComponentProps<typeof Th>) {
       py={4}
       color="ink.900"
       fontSize="14px"
-      fontWeight="800"
+      fontWeight="700"
       letterSpacing="-0.03em"
       textTransform="none"
       whiteSpace="nowrap"
@@ -78,16 +104,55 @@ function MdxTd(props: React.ComponentProps<typeof Td>) {
 
 export const mdxComponents = {
   h1: (props: React.ComponentProps<typeof Heading>) => (
-    <Heading as="h1" size="lg" letterSpacing="-0.02em" {...props} />
+    <Heading
+      as="h1"
+      id={getHeadingId(props.children)}
+      size="lg"
+      fontWeight="700"
+      letterSpacing="-0.02em"
+      scrollMarginTop="32px"
+      {...props}
+    />
   ),
   h2: (props: React.ComponentProps<typeof Heading>) => (
-    <Heading as="h2" size="md" mt={8} mb={3} {...props} />
+    <Heading
+      as="h2"
+      id={getHeadingId(props.children)}
+      size="md"
+      mt={8}
+      mb={3}
+      fontWeight="700"
+      letterSpacing="-0.02em"
+      scrollMarginTop="32px"
+      {...props}
+    />
+  ),
+  h3: (props: React.ComponentProps<typeof Heading>) => (
+    <Heading
+      as="h3"
+      id={getHeadingId(props.children)}
+      size="sm"
+      mt={6}
+      mb={3}
+      fontWeight="650"
+      letterSpacing="-0.02em"
+      scrollMarginTop="32px"
+      {...props}
+    />
   ),
   p: (props: React.ComponentProps<typeof Text>) => (
     <Text fontSize="md" color="ink.800" lineHeight="1.85" mb={4} {...props} />
   ),
   a: (props: React.ComponentProps<typeof Link>) => (
-    <Link color="brand.700" textDecoration="underline" {...props} />
+    <Link
+      display="inline-block"
+      color="brand.700"
+      textDecoration="underline"
+      transition="color 180ms ease, transform 180ms ease"
+      _hover={{ color: 'brand.800' }}
+      _active={{ transform: 'scale(0.8)' }}
+      {...props}
+    />
   ),
   ul: (props: React.ComponentProps<typeof UnorderedList>) => (
     <UnorderedList pl={5} mb={4} {...props} />

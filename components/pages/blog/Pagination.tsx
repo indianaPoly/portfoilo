@@ -59,10 +59,12 @@ function PageLink({
       bg={isActive ? 'paper.200' : 'transparent'}
       color="ink.900"
       fontSize={{ base: '18px', md: '22px' }}
-      fontWeight={isActive ? '800' : '500'}
+      fontWeight={isActive ? '650' : '500'}
       aria-current={isActive ? 'page' : undefined}
       aria-label={ariaLabel}
+      transition="background-color 180ms ease, color 180ms ease, transform 180ms ease"
       _hover={{ bg: 'paper.200', textDecoration: 'none' }}
+      _active={{ transform: 'scale(0.8)' }}
       _focusVisible={{
         outline: '2px solid',
         outlineColor: 'brand.500',

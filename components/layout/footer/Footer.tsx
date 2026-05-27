@@ -24,11 +24,14 @@ export default function Footer() {
               href={href}
               target="_blank"
               rel="noreferrer"
+              display="inline-block"
               fontSize={{ base: '14px', md: '17px' }}
-              fontWeight="600"
+              fontWeight="500"
               color="ink.400"
               letterSpacing="-0.03em"
+              transition="color 180ms ease, transform 180ms ease"
               _hover={{ color: 'ink.700', textDecoration: 'none' }}
+              _active={{ transform: 'scale(0.8)' }}
             >
               {label}
             </Text>
@@ -37,7 +40,7 @@ export default function Footer() {
         <Text color="ink.300">|</Text>
         <Text
           fontSize={{ base: '14px', md: '17px' }}
-          fontWeight="600"
+          fontWeight="500"
           color="ink.400"
           letterSpacing="-0.03em"
         >

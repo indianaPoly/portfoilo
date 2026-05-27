@@ -55,7 +55,7 @@ export default function HomePage({
         <Text
           as="h1"
           fontSize={{ base: '18px', md: '22px' }}
-          fontWeight="600"
+          fontWeight="500"
           color="ink.600"
           letterSpacing="-0.03em"
         >

@@ -4,8 +4,10 @@ import { Box, Heading, Text, VStack } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 import { compileMDX } from 'next-mdx-remote/rsc';
 
+import { BlogTableOfContents } from '../../../components/pages/blog/BlogTableOfContents';
 import { mdxComponents } from '../../../components/pages/blog/MdxComponents';
 import { defaultOgImage, siteName } from '../../../data/siteMetadata';
+import { extractMarkdownHeadings } from '../../../lib/markdownHeadings';
 import { transformMarkdownTablesToJsx } from '../../../lib/mdxTable';
 import { getAllPosts, getPostBySlug } from '../../../lib/posts';
 
@@ -67,6 +69,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const post = getPostBySlug(params.slug);
   if (!post) notFound();
 
+  const headings = extractMarkdownHeadings(post.content);
   const { content } = await compileMDX({
     source: transformMarkdownTablesToJsx(post.content),
     components: mdxComponents,
@@ -76,25 +79,35 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   });
 
   return (
-    <VStack align="stretch" gap={8}>
-      <VStack align="stretch" gap={2}>
-        <Heading as="h1" size="lg" letterSpacing="-0.02em">
-          {post.frontmatter.title}
-        </Heading>
+    <Box
+      display={{ base: 'block', xl: 'grid' }}
+      gridTemplateColumns={{ xl: 'minmax(0, 880px) 240px' }}
+      justifyContent="center"
+      alignItems="start"
+      gap={{ xl: 14 }}
+    >
+      <VStack as="article" align="stretch" gap={8} minW={0}>
+        <VStack align="stretch" gap={2}>
+          <Heading as="h1" size="lg" fontWeight="700" letterSpacing="-0.02em">
+            {post.frontmatter.title}
+          </Heading>
 
-        <Text fontSize="sm" color="ink.700">
-          {post.frontmatter.date}
-          {post.frontmatter.category ? ` · ${post.frontmatter.category}` : ''}
-        </Text>
-
-        {post.frontmatter.summary ? (
-          <Text fontSize="md" color="ink.800" pt={2}>
-            {post.frontmatter.summary}
+          <Text fontSize="sm" color="ink.700">
+            {post.frontmatter.date}
+            {post.frontmatter.category ? ` · ${post.frontmatter.category}` : ''}
           </Text>
-        ) : null}
+
+          {post.frontmatter.summary ? (
+            <Text fontSize="md" color="ink.800" pt={2}>
+              {post.frontmatter.summary}
+            </Text>
+          ) : null}
+        </VStack>
+
+        <Box>{content}</Box>
       </VStack>
 
-      <Box>{content}</Box>
-    </VStack>
+      <BlogTableOfContents headings={headings} />
+    </Box>
   );
 }
