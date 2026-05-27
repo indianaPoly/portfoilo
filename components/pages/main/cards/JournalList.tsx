@@ -7,6 +7,7 @@ export interface JournalListProps {
   summary?: string;
   date: string;
   category: string;
+  readingMinutes: number;
   href: string;
 }
 
@@ -22,6 +23,7 @@ export function JournalList({
   summary,
   date,
   category,
+  readingMinutes,
   href,
 }: JournalListProps) {
   return (
@@ -37,7 +39,7 @@ export function JournalList({
         textDecoration: 'none',
         transform: 'translateX(3px)',
       }}
-      _active={{ opacity: 0.72, transform: 'scale(0.8)' }}
+      _active={{ opacity: 0.72, transform: 'scale(0.95)' }}
     >
       <Text
         as="h2"
@@ -97,6 +99,18 @@ export function JournalList({
           letterSpacing="-0.03em"
         >
           {formatKoreanDate(date)}
+        </Text>
+        <Text as="span" color="ink.300" fontSize="18px">
+          ·
+        </Text>
+        <Text
+          as="span"
+          fontSize={{ base: '15px', md: '17px' }}
+          fontWeight="500"
+          color="ink.500"
+          letterSpacing="-0.03em"
+        >
+          약 {readingMinutes}분 읽기
         </Text>
       </HStack>
     </VStack>

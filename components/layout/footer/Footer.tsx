@@ -31,7 +31,7 @@ export default function Footer() {
               letterSpacing="-0.03em"
               transition="color 180ms ease, transform 180ms ease"
               _hover={{ color: 'ink.700', textDecoration: 'none' }}
-              _active={{ transform: 'scale(0.8)' }}
+              _active={{ transform: 'scale(0.95)' }}
             >
               {label}
             </Text>

@@ -150,7 +150,7 @@ export const mdxComponents = {
       textDecoration="underline"
       transition="color 180ms ease, transform 180ms ease"
       _hover={{ color: 'brand.800' }}
-      _active={{ transform: 'scale(0.8)' }}
+      _active={{ transform: 'scale(0.95)' }}
       {...props}
     />
   ),

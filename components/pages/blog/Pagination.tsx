@@ -64,7 +64,7 @@ function PageLink({
       aria-label={ariaLabel}
       transition="background-color 180ms ease, color 180ms ease, transform 180ms ease"
       _hover={{ bg: 'paper.200', textDecoration: 'none' }}
-      _active={{ transform: 'scale(0.8)' }}
+      _active={{ transform: 'scale(0.95)' }}
       _focusVisible={{
         outline: '2px solid',
         outlineColor: 'brand.500',

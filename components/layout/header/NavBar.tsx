@@ -22,7 +22,7 @@ export default function NavBar() {
           gap={{ base: 3, md: 5 }}
           transition="transform 180ms ease, color 180ms ease"
           _hover={{ textDecoration: 'none' }}
-          _active={{ transform: 'scale(0.8)' }}
+          _active={{ transform: 'scale(0.95)' }}
         >
           <Text
             as="span"
@@ -67,7 +67,7 @@ export default function NavBar() {
               letterSpacing="-0.04em"
               transition="background-color 180ms ease, color 180ms ease, transform 180ms ease"
               _hover={{ bg: 'paper.300', textDecoration: 'none' }}
-              _active={{ bg: 'paper.300', transform: 'scale(0.8)' }}
+              _active={{ bg: 'paper.300', transform: 'scale(0.95)' }}
               _focusVisible={{
                 outline: '2px solid',
                 outlineColor: 'brand.500',

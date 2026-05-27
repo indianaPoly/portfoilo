@@ -51,7 +51,7 @@ export function Tab({ categories, selectedCategory }: TabProps) {
             transition="border-color 180ms ease, color 180ms ease, transform 180ms ease"
             aria-current={isActive ? 'page' : undefined}
             _hover={{ color: 'ink.900', textDecoration: 'none' }}
-            _active={{ transform: 'scale(0.8)' }}
+            _active={{ transform: 'scale(0.95)' }}
             _focusVisible={{
               outline: '2px solid',
               outlineColor: 'brand.500',

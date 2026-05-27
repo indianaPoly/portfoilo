@@ -77,6 +77,7 @@ export default function HomePage({
             summary={item.summary}
             date={item.date}
             category={item.category ?? 'Uncategorized'}
+            readingMinutes={item.readingMinutes}
             href={`/blog/${item.slug}`}
           />
         ))}

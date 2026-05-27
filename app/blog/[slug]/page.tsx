@@ -6,10 +6,15 @@ import { compileMDX } from 'next-mdx-remote/rsc';
 
 import { BlogTableOfContents } from '../../../components/pages/blog/BlogTableOfContents';
 import { mdxComponents } from '../../../components/pages/blog/MdxComponents';
+import { RelatedPostNavigation } from '../../../components/pages/blog/RelatedPostNavigation';
 import { defaultOgImage, siteName } from '../../../data/siteMetadata';
 import { extractMarkdownHeadings } from '../../../lib/markdownHeadings';
 import { transformMarkdownTablesToJsx } from '../../../lib/mdxTable';
-import { getAllPosts, getPostBySlug } from '../../../lib/posts';
+import {
+  getAdjacentPostsByCategory,
+  getAllPosts,
+  getPostBySlug,
+} from '../../../lib/posts';
 
 type BlogDetailPageProps = {
   params: { slug: string };
@@ -70,6 +75,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   if (!post) notFound();
 
   const headings = extractMarkdownHeadings(post.content);
+  const adjacentPosts = getAdjacentPostsByCategory(post.slug);
   const { content } = await compileMDX({
     source: transformMarkdownTablesToJsx(post.content),
     components: mdxComponents,
@@ -95,6 +101,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           <Text fontSize="sm" color="ink.700">
             {post.frontmatter.date}
             {post.frontmatter.category ? ` · ${post.frontmatter.category}` : ''}
+            {` · 약 ${post.readingMinutes}분 읽기`}
           </Text>
 
           {post.frontmatter.summary ? (
@@ -105,6 +112,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         </VStack>
 
         <Box>{content}</Box>
+
+        <RelatedPostNavigation
+          category={post.frontmatter.category}
+          previous={adjacentPosts.previous}
+          next={adjacentPosts.next}
+        />
       </VStack>
 
       <BlogTableOfContents headings={headings} />

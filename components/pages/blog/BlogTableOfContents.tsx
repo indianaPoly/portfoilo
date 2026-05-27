@@ -74,7 +74,7 @@ export function BlogTableOfContents({ headings }: BlogTableOfContentsProps) {
               letterSpacing="-0.03em"
               transition="color 180ms ease, transform 180ms ease"
               _hover={{ color: 'brand.700', textDecoration: 'none' }}
-              _active={{ transform: 'scale(0.8)' }}
+              _active={{ transform: 'scale(0.95)' }}
               _focusVisible={{
                 outline: '2px solid',
                 outlineColor: 'brand.500',
