@@ -51,6 +51,8 @@ const theme = extendTheme({
       },
       body: {
         overflowX: 'hidden',
+        wordBreak: 'keep-all',
+        overflowWrap: 'break-word',
       },
       a: {
         color: 'inherit',
