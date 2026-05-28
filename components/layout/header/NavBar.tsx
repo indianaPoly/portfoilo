@@ -10,16 +10,19 @@ export default function NavBar() {
       <Flex
         maxW="1460px"
         mx="auto"
-        px={{ base: 6, md: 10, xl: 12 }}
-        h={{ base: '74px', md: '92px' }}
-        align="center"
+        px={{ base: 5, sm: 6, md: 10, xl: 12 }}
+        py={{ base: 4, sm: 0 }}
+        h={{ base: 'auto', sm: '74px', md: '92px' }}
+        align={{ base: 'stretch', sm: 'center' }}
         justify="space-between"
-        gap={6}
+        direction={{ base: 'column', sm: 'row' }}
+        gap={{ base: 4, sm: 6 }}
       >
         <HStack
           as={NextLink}
           href="/"
           gap={{ base: 3, md: 5 }}
+          alignSelf={{ base: 'center', sm: 'auto' }}
           transition="transform 180ms ease, color 180ms ease"
           _hover={{ textDecoration: 'none' }}
           _active={{ transform: 'scale(0.95)' }}
@@ -27,7 +30,7 @@ export default function NavBar() {
           <Text
             as="span"
             fontFamily="'Brush Script MT', 'Segoe Script', cursive"
-            fontSize={{ base: '35px', md: '48px' }}
+            fontSize={{ base: '32px', md: '48px' }}
             fontWeight="600"
             lineHeight="1"
             color="brand.700"
@@ -37,7 +40,7 @@ export default function NavBar() {
           </Text>
           <Text
             as="span"
-            fontSize={{ base: '22px', md: '28px' }}
+            fontSize={{ base: '20px', md: '28px' }}
             fontWeight="650"
             lineHeight="1"
             color="ink.900"
@@ -48,14 +51,20 @@ export default function NavBar() {
           </Text>
         </HStack>
 
-        <HStack gap={3} display={{ base: 'none', sm: 'flex' }}>
+        <HStack
+          gap={{ base: 2, sm: 3 }}
+          display="flex"
+          w={{ base: 'full', sm: 'auto' }}
+          justify={{ base: 'center', sm: 'flex-start' }}
+        >
           {navContent.links.map((link) => (
             <Box
               key={link.href}
               as={NextLink}
               href={link.href}
-              h={{ base: '40px', md: '52px' }}
-              px={{ base: 4, md: 6 }}
+              h={{ base: '38px', md: '52px' }}
+              px={{ base: 3, md: 6 }}
+              flex={{ base: '1 1 0', sm: '0 0 auto' }}
               display="inline-flex"
               alignItems="center"
               justifyContent="center"

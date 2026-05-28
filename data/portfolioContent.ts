@@ -8,6 +8,33 @@ export const projectCategories = [
 
 export const projects = [
   {
+    name: '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
+    category: '사이드 프로젝트',
+    organization: '개인 프로젝트',
+    period: '2026.05',
+    role: '프론트엔드 및 서버리스 풀스택 개발',
+    summary:
+      '팀 내 아이디어, 회의 주제, 회고 내용을 하나의 흐름으로 모으고 논의할 수 있는 실시간 협업 플랫폼을 개발했습니다.',
+    techStack: [
+      'React',
+      'TypeScript',
+      'TanStack Start',
+      'TanStack Router',
+      'Server-Sent Events',
+      'Tauri',
+      'Playwright',
+      'SCSS Module',
+    ],
+    highlights: [
+      '주제 작성, 댓글 참여, 실시간 세션, 결과 아카이브로 이어지는 협업 흐름을 설계해 단순 게시판이 아닌 지속적인 지식 공유 경험을 구현했습니다.',
+      'TanStack Start 기반 서버 함수 구조를 활용해 인증, 주제 작성, 세션 제어, 댓글·인사이트 저장 등 주요 동작을 타입 안정성이 있는 API 흐름으로 구성했습니다.',
+      'Server-Sent Events를 도입해 여러 사용자가 동시에 참여하는 세션에서 상태, 댓글, 인사이트가 실시간에 가깝게 반영되도록 구현했습니다.',
+      '프로젝트 단위로 관련 주제와 결과를 묶어 볼 수 있는 작업공간을 구현해 논의가 일회성으로 끝나지 않고 이후 참고 가능한 지식 자산으로 남도록 구성했습니다.',
+      'Tauri 기반 데스크탑 실행 환경과 알림 기능을 연동해 웹 기반 서비스를 데스크탑 사용 흐름까지 확장했습니다.',
+      'Playwright E2E 테스트로 주제 작성, 권한별 세션 참여, 실시간 동기화, 결과 확인, 삭제 흐름까지 주요 사용자 시나리오를 검증했습니다.',
+    ],
+  },
+  {
     name: 'AI 기반 HWP 문서 자동 작성 서비스 — 또박또박',
     category: '외부 활동',
     organization: 'AI Hack Camp 2026',
@@ -253,5 +280,5 @@ export const projects = [
 
 export const links = {
   github: 'https://github.com/indianaPoly',
-  "hyeonlimgo5@gmail.com": 'mailto:hyeonlimgo5@gmail.com',
+  'hyeonlimgo5@gmail.com': 'mailto:hyeonlimgo5@gmail.com',
 };
