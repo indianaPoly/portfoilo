@@ -6,6 +6,13 @@ export interface ProfileTimelineItem {
   items: string[];
 }
 
+export interface WorkExperienceItem {
+  period: string;
+  organization: string;
+  role: string;
+  items: string[];
+}
+
 export const profile = {
   name: '고현림',
   headline: '프론트엔드와 제품 문제 해결을 함께 다루는 개발자',
@@ -16,6 +23,27 @@ export const profile = {
   website: 'https://www.poly-journal.xyz',
   skills: ['React', 'TypeScript', 'Next.js', 'Rust'],
 };
+
+export const workExperiences: WorkExperienceItem[] = [
+  {
+    period: '2025.09 - 2026.05',
+    organization: '(주)데브파이브',
+    role: '웹 풀스택 / 프론트엔드 / macOS 앱 개발',
+    items: [
+      '공공·금융·교육·문화 도메인의 웹 서비스와 관리자 시스템을 개발했습니다.',
+      'Tauri·Rust 기반 macOS 앱 Moazip 개발과 스토어 배포를 경험했습니다.',
+    ],
+  },
+  {
+    period: '2024.06 - 2024.08',
+    organization: 'BlockwaveLabs',
+    role: 'Node.js 개발자',
+    items: [
+      '탈중앙화 거래소 차익거래 모니터링 시스템을 개발했습니다.',
+      '차익거래 사이클링 알고리즘을 최적화하고 네트워크별 모듈 구조를 정리했습니다.',
+    ],
+  },
+];
 
 export const timelineItems: ProfileTimelineItem[] = [
   {

@@ -11,7 +11,7 @@ import {
   pdf,
 } from '@react-pdf/renderer';
 
-import { profile, timelineItems } from '@/data/aboutContent';
+import { profile, timelineItems, workExperiences } from '@/data/aboutContent';
 import { projects } from '@/data/portfolioContent';
 
 export const pdfDocuments = 'pdf-documents';
@@ -533,6 +533,24 @@ function ResumeDocument() {
           </View>
 
           <View style={styles.resumeAside}>
+            <View style={styles.resumeAsideSection}>
+              <Text style={styles.resumeSectionTitle}>WORK EXPERIENCE</Text>
+              {workExperiences.map((experience) => (
+                <View
+                  key={`${experience.period}-${experience.organization}`}
+                  style={styles.resumeAsideItem}
+                >
+                  <Text style={styles.resumeAsideTitle}>
+                    {experience.organization}
+                  </Text>
+                  <Text style={styles.resumeAsideMeta}>
+                    {experience.period} · {experience.role}
+                  </Text>
+                  <BulletList items={experience.items} />
+                </View>
+              ))}
+            </View>
+
             <View style={styles.resumeAsideSection}>
               <Text style={styles.resumeSectionTitle}>EDUCATION</Text>
               {education.map((item) => (
