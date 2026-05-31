@@ -95,7 +95,7 @@ function DownloadMenu() {
           _hover={{ bg: 'paper.200', color: 'brand.700' }}
           _focus={{ bg: 'paper.200', color: 'brand.700' }}
         >
-          {navContent.downloads.resumeLabel} · One-page PDF
+          {navContent.downloads.resumeLabel} · A4 PDF
         </MenuItem>
 
         <MenuDivider borderColor="line.100" />
