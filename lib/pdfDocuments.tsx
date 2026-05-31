@@ -46,6 +46,11 @@ const colors = {
   line: '#e9edf2',
 };
 
+const resumeHiddenProjectNames = new Set([
+  '숭실대학교 인공지능 프로젝트 — TSP 최적화',
+  '숭실대학교 운영체제 과제 — xv6 커널 수정',
+]);
+
 const styles = StyleSheet.create({
   resumePage: {
     padding: 30,
@@ -485,6 +490,9 @@ function ResumeDocument() {
     (item) => item.category === 'Activity'
   );
   const website = profile.website ?? 'https://www.poly-journal.xyz';
+  const resumeProjects = projects.filter(
+    (project) => !resumeHiddenProjectNames.has(project.name)
+  );
 
   return (
     <Document title={`${profile.name} Resume`} author="Poly Journal">
@@ -516,7 +524,7 @@ function ResumeDocument() {
         <View style={styles.resumeBody}>
           <View style={styles.resumeMain}>
             <Text style={styles.resumeSectionTitle}>PROJECT EXPERIENCE</Text>
-            {projects.map((project) => (
+            {resumeProjects.map((project) => (
               <View key={project.name} style={styles.resumeProject}>
                 <Text style={styles.resumeProjectTitle}>{project.name}</Text>
                 <Text style={styles.resumeProjectMeta}>
@@ -596,17 +604,12 @@ function ResumeDocument() {
                 >
                   <Text style={styles.resumeAsideTitle}>{item.title}</Text>
                   <Text style={styles.resumeAsideMeta}>{item.date}</Text>
-                  <BulletList items={item.items} limit={2} />
+                  <BulletList items={item.items} limit={1} />
                 </View>
               ))}
             </View>
           </View>
         </View>
-
-        <Text style={styles.footer}>
-          Poly Journal의 About/Portfolio 데이터를 기반으로 생성된 다운로드용
-          이력서입니다.
-        </Text>
       </Page>
     </Document>
   );
