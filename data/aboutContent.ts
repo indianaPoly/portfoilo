@@ -26,12 +26,19 @@ export const profile = {
 
 export const workExperiences: WorkExperienceItem[] = [
   {
-    period: '2025.09 - 2026.05',
+    period: '2026.02 - 현재',
     organization: '(주)데브파이브',
-    role: '웹 풀스택 / 프론트엔드 / macOS 앱 개발',
+    role: '정규직 · 웹 풀스택 개발자',
     items: [
-      '공공·금융·교육·문화 도메인의 웹 서비스와 관리자 시스템을 개발했습니다.',
-      'Tauri·Rust 기반 macOS 앱 Moazip 개발과 스토어 배포를 경험했습니다.',
+      '공공·교육·문화 도메인의 웹 서비스와 관리자 시스템을 개발했습니다.',
+    ],
+  },
+  {
+    period: '2025.08 - 2026.01',
+    organization: '(주)데브파이브',
+    role: '프리랜서 · 웹 프론트엔드 개발자',
+    items: [
+      '금융·공공 서비스의 랜딩 페이지와 결제·프로모션 화면을 개발했습니다.',
     ],
   },
   {
