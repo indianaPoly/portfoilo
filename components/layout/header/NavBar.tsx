@@ -1,8 +1,126 @@
+'use client';
+
 import NextLink from 'next/link';
 
-import { Box, Flex, HStack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Text,
+} from '@chakra-ui/react';
 
 import { navContent } from '../../../data/siteContent';
+import {
+  getPortfolioDownloadHref,
+  getResumeDownloadHref,
+} from '../../../lib/downloadLinks';
+
+const navPillStyles = {
+  h: { base: '38px', md: '52px' },
+  px: { base: 3, md: 6 },
+  flex: { base: '1 1 0', sm: '0 0 auto' },
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '14px',
+  bg: 'paper.200',
+  color: 'ink.900',
+  fontSize: { base: '15px', md: '18px' },
+  fontWeight: '600',
+  letterSpacing: '-0.04em',
+  transition:
+    'background-color 180ms ease, color 180ms ease, transform 180ms ease',
+  _hover: { bg: 'paper.300', textDecoration: 'none' },
+  _active: { bg: 'paper.300', transform: 'scale(0.95)' },
+  _focusVisible: {
+    outline: '2px solid',
+    outlineColor: 'brand.500',
+    outlineOffset: '2px',
+  },
+} as const;
+
+function DownloadMenu() {
+  return (
+    <Menu placement="bottom-end" gutter={10} strategy="fixed">
+      <MenuButton
+        as={Button}
+        {...navPillStyles}
+        border="0"
+        boxShadow="none"
+        cursor="pointer"
+        _hover={{ bg: 'paper.300', textDecoration: 'none' }}
+        _active={{ bg: 'paper.300', transform: 'scale(0.95)' }}
+      >
+        <HStack as="span" gap={1.5} justify="center">
+          <Text as="span">{navContent.downloads.label}</Text>
+          <Text
+            as="span"
+            color="ink.600"
+            fontSize="0.9em"
+            fontWeight="700"
+            aria-hidden="true"
+          >
+            ▾
+          </Text>
+        </HStack>
+      </MenuButton>
+
+      <MenuList
+        minW={{ base: 'min(88vw, 320px)', md: '360px' }}
+        maxH="min(72vh, 560px)"
+        overflowY="auto"
+        p={2}
+        border="1px solid"
+        borderColor="line.100"
+        borderRadius="20px"
+        bg="white"
+        boxShadow="0 18px 48px rgba(32, 33, 36, 0.1)"
+      >
+        <MenuItem
+          as="a"
+          href={getResumeDownloadHref()}
+          download
+          borderRadius="14px"
+          color="ink.900"
+          fontSize="14px"
+          fontWeight="600"
+          letterSpacing="-0.035em"
+          bg="white"
+          _hover={{ bg: 'paper.200', color: 'brand.700' }}
+          _focus={{ bg: 'paper.200', color: 'brand.700' }}
+        >
+          {navContent.downloads.resumeLabel} · One-page PDF
+        </MenuItem>
+
+        <MenuDivider borderColor="line.100" />
+
+        <MenuItem
+          as="a"
+          href={getPortfolioDownloadHref()}
+          download
+          borderRadius="14px"
+          color="ink.900"
+          fontSize="14px"
+          fontWeight="600"
+          letterSpacing="-0.035em"
+          lineHeight="1.45"
+          whiteSpace="normal"
+          bg="white"
+          _hover={{ bg: 'paper.200', color: 'brand.700' }}
+          _focus={{ bg: 'paper.200', color: 'brand.700' }}
+        >
+          {navContent.downloads.portfolioLabel} · 전체 프로젝트 PDF
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
 
 export default function NavBar() {
   return (
@@ -62,30 +180,12 @@ export default function NavBar() {
               key={link.href}
               as={NextLink}
               href={link.href}
-              h={{ base: '38px', md: '52px' }}
-              px={{ base: 3, md: 6 }}
-              flex={{ base: '1 1 0', sm: '0 0 auto' }}
-              display="inline-flex"
-              alignItems="center"
-              justifyContent="center"
-              borderRadius="14px"
-              bg="paper.200"
-              color="ink.900"
-              fontSize={{ base: '15px', md: '18px' }}
-              fontWeight="600"
-              letterSpacing="-0.04em"
-              transition="background-color 180ms ease, color 180ms ease, transform 180ms ease"
-              _hover={{ bg: 'paper.300', textDecoration: 'none' }}
-              _active={{ bg: 'paper.300', transform: 'scale(0.95)' }}
-              _focusVisible={{
-                outline: '2px solid',
-                outlineColor: 'brand.500',
-                outlineOffset: '2px',
-              }}
+              {...navPillStyles}
             >
               {link.label}
             </Box>
           ))}
+          <DownloadMenu />
         </HStack>
       </Flex>
     </Box>
