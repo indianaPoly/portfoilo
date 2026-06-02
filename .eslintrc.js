@@ -67,7 +67,14 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.tsx'],
-      excludedFiles: ['**/page.tsx', '**/layout.tsx'],
+      excludedFiles: [
+        '**/page.tsx',
+        '**/layout.tsx',
+        '**/not-found.tsx',
+        '**/error.tsx',
+        '**/loading.tsx',
+        '**/opengraph-image.tsx',
+      ],
       rules: {
         'filename-export/match-named-export': [
           'error',

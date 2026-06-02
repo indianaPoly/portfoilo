@@ -8,6 +8,7 @@ import { BlogTableOfContents } from '../../../components/pages/blog/BlogTableOfC
 import { mdxComponents } from '../../../components/pages/blog/MdxComponents';
 import { RelatedPostNavigation } from '../../../components/pages/blog/RelatedPostNavigation';
 import { defaultOgImage, siteName } from '../../../data/siteMetadata';
+import { generateBlogPostJsonLd } from '../../../lib/jsonLd';
 import { extractMarkdownHeadings } from '../../../lib/markdownHeadings';
 import { transformMarkdownTablesToJsx } from '../../../lib/mdxTable';
 import {
@@ -84,43 +85,53 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     },
   });
 
+  const jsonLd = generateBlogPostJsonLd(post);
+
   return (
-    <Box
-      display={{ base: 'block', xl: 'grid' }}
-      gridTemplateColumns={{ xl: 'minmax(0, 880px) 240px' }}
-      justifyContent="center"
-      alignItems="start"
-      gap={{ xl: 14 }}
-    >
-      <VStack as="article" align="stretch" gap={8} minW={0}>
-        <VStack align="stretch" gap={2}>
-          <Heading as="h1" size="lg" fontWeight="700" letterSpacing="-0.02em">
-            {post.frontmatter.title}
-          </Heading>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Box
+        display={{ base: 'block', xl: 'grid' }}
+        gridTemplateColumns={{ xl: 'minmax(0, 880px) 240px' }}
+        justifyContent="center"
+        alignItems="start"
+        gap={{ xl: 14 }}
+      >
+        <VStack as="article" align="stretch" gap={8} minW={0}>
+          <VStack align="stretch" gap={2}>
+            <Heading as="h1" size="lg" fontWeight="700" letterSpacing="-0.02em">
+              {post.frontmatter.title}
+            </Heading>
 
-          <Text fontSize="sm" color="ink.700">
-            {post.frontmatter.date}
-            {post.frontmatter.category ? ` · ${post.frontmatter.category}` : ''}
-            {` · 약 ${post.readingMinutes}분 읽기`}
-          </Text>
-
-          {post.frontmatter.summary ? (
-            <Text fontSize="md" color="ink.800" pt={2}>
-              {post.frontmatter.summary}
+            <Text fontSize="sm" color="ink.700">
+              {post.frontmatter.date}
+              {post.frontmatter.category
+                ? ` · ${post.frontmatter.category}`
+                : ''}
+              {` · 약 ${post.readingMinutes}분 읽기`}
             </Text>
-          ) : null}
+
+            {post.frontmatter.summary ? (
+              <Text fontSize="md" color="ink.800" pt={2}>
+                {post.frontmatter.summary}
+              </Text>
+            ) : null}
+          </VStack>
+
+          <Box>{content}</Box>
+
+          <RelatedPostNavigation
+            category={post.frontmatter.category}
+            previous={adjacentPosts.previous}
+            next={adjacentPosts.next}
+          />
         </VStack>
 
-        <Box>{content}</Box>
-
-        <RelatedPostNavigation
-          category={post.frontmatter.category}
-          previous={adjacentPosts.previous}
-          next={adjacentPosts.next}
-        />
-      </VStack>
-
-      <BlogTableOfContents headings={headings} />
-    </Box>
+        <BlogTableOfContents headings={headings} />
+      </Box>
+    </>
   );
 }

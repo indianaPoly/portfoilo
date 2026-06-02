@@ -1,6 +1,7 @@
 'use client';
 
 import type { MouseEvent } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Box, Link, Text, VStack } from '@chakra-ui/react';
 
@@ -11,9 +12,34 @@ export interface BlogTableOfContentsProps {
 }
 
 export function BlogTableOfContents({ headings }: BlogTableOfContentsProps) {
-  if (headings.length === 0) return null;
+  const [activeId, setActiveId] = useState<string>('');
 
-  const handleClick =
+  useEffect(() => {
+    if (headings.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries.filter((e) => e.isIntersecting);
+        if (visibleEntries.length > 0) {
+          setActiveId(visibleEntries[0].target.id);
+        }
+      },
+      {
+        rootMargin: '-80px 0px -60% 0px',
+        threshold: 0,
+      }
+    );
+
+    const headingElements = headings
+      .map((h) => document.getElementById(h.id))
+      .filter(Boolean) as HTMLElement[];
+
+    headingElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [headings]);
+
+  const handleClick = useCallback(
     (headingId: string) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
 
@@ -30,7 +56,11 @@ export function BlogTableOfContents({ headings }: BlogTableOfContentsProps) {
         '',
         `${window.location.pathname}${window.location.search}#${headingId}`
       );
-    };
+    },
+    []
+  );
+
+  if (headings.length === 0) return null;
 
   return (
     <Box
@@ -60,30 +90,34 @@ export function BlogTableOfContents({ headings }: BlogTableOfContentsProps) {
         </Text>
 
         <VStack as="nav" align="stretch" gap={2}>
-          {headings.map((heading) => (
-            <Link
-              key={heading.id}
-              href={`#${heading.id}`}
-              onClick={handleClick(heading.id)}
-              display="block"
-              pl={heading.depth > 1 ? 3 : 0}
-              color="ink.500"
-              fontSize="14px"
-              fontWeight="500"
-              lineHeight="1.45"
-              letterSpacing="-0.03em"
-              transition="color 180ms ease, transform 180ms ease"
-              _hover={{ color: 'brand.700', textDecoration: 'none' }}
-              _active={{ transform: 'scale(0.95)' }}
-              _focusVisible={{
-                outline: '2px solid',
-                outlineColor: 'brand.500',
-                outlineOffset: '3px',
-              }}
-            >
-              {heading.text}
-            </Link>
-          ))}
+          {headings.map((heading) => {
+            const isActive = activeId === heading.id;
+
+            return (
+              <Link
+                key={heading.id}
+                href={`#${heading.id}`}
+                onClick={handleClick(heading.id)}
+                display="block"
+                pl={heading.depth > 1 ? 3 : 0}
+                color={isActive ? 'brand.700' : 'ink.500'}
+                fontSize="14px"
+                fontWeight={isActive ? '700' : '500'}
+                lineHeight="1.45"
+                letterSpacing="-0.03em"
+                transition="color 180ms ease, font-weight 180ms ease, transform 180ms ease"
+                _hover={{ color: 'brand.700', textDecoration: 'none' }}
+                _active={{ transform: 'scale(0.95)' }}
+                _focusVisible={{
+                  outline: '2px solid',
+                  outlineColor: 'brand.500',
+                  outlineOffset: '3px',
+                }}
+              >
+                {heading.text}
+              </Link>
+            );
+          })}
         </VStack>
       </VStack>
     </Box>

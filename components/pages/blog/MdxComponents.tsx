@@ -20,6 +20,8 @@ import {
 
 import { slugifyHeading } from '../../../lib/markdownHeadings';
 
+import { ServerCodeBlock } from './ServerCodeBlock';
+
 function getTextFromNode(node: ReactNode): string {
   if (typeof node === 'string' || typeof node === 'number') {
     return String(node);
@@ -197,30 +199,44 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  pre: (props: React.ComponentProps<typeof Box>) => (
-    <Box
-      as="pre"
-      w="full"
-      overflowX="auto"
-      p={4}
-      mb={4}
-      bg="paper.200"
-      color="ink.900"
-      borderWidth="1px"
-      borderColor="line.100"
-      borderRadius="16px"
-      sx={{
-        '& > code': {
-          display: 'block',
-          px: '0 !important',
-          py: '0 !important',
-          borderRadius: '0 !important',
-          bg: 'transparent !important',
-          color: 'inherit',
-          whiteSpace: 'pre',
-        },
-      }}
-      {...props}
-    />
-  ),
+  pre: (
+    props: React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLPreElement>,
+      HTMLPreElement
+    >
+  ) => {
+    const child = props?.children;
+    const isCodeChild =
+      isValidElement<{ className?: string; children?: ReactNode }>(child) &&
+      (child as { type?: { displayName?: string } })?.type ===
+        mdxComponents.code;
+
+    if (!isCodeChild) {
+      return (
+        <Box
+          as="pre"
+          w="full"
+          overflowX="auto"
+          p={4}
+          mb={4}
+          bg="paper.200"
+          color="ink.900"
+          borderWidth="1px"
+          borderColor="line.100"
+          borderRadius="16px"
+          {...props}
+        />
+      );
+    }
+
+    const codeElement = child as React.ReactElement<{
+      className?: string;
+      children?: ReactNode;
+    }>;
+    const className = codeElement.props?.className ?? '';
+    const lang = className.replace(/^language-/, '') || 'text';
+    const codeText = getTextFromNode(codeElement.props?.children).trim();
+
+    return <ServerCodeBlock code={codeText} lang={lang} />;
+  },
 };

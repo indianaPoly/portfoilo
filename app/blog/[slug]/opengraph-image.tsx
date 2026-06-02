@@ -1,13 +1,20 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Poly Journal Tech Blog';
+import { getPostBySlug } from '../../../lib/posts';
+
+export const alt = 'Blog Post';
 export const size = {
   width: 1200,
   height: 630,
 };
 export const contentType = 'image/png';
 
-export default function OpengraphImage() {
+export default function BlogOgImage({ params }: { params: { slug: string } }) {
+  const post = getPostBySlug(params.slug);
+  const title = post?.frontmatter.title ?? 'Blog Post';
+  const category = post?.frontmatter.category ?? '';
+  const date = post?.frontmatter.date ?? '';
+
   return new ImageResponse(
     <div
       style={{
@@ -31,15 +38,15 @@ export default function OpengraphImage() {
       >
         <div
           style={{
-            width: '92px',
-            height: '92px',
+            width: '72px',
+            height: '72px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: '26px',
+            borderRadius: '20px',
             background: '#157347',
             color: '#ffffff',
-            fontSize: '58px',
+            fontSize: '44px',
             fontWeight: 900,
             letterSpacing: '-0.08em',
           }}
@@ -50,17 +57,17 @@ export default function OpengraphImage() {
           <div
             style={{
               color: '#157347',
-              fontSize: '42px',
+              fontSize: '32px',
               fontWeight: 900,
               letterSpacing: '-0.04em',
             }}
           >
-            Poly
+            Poly Journal
           </div>
           <div
             style={{
               color: '#6b7280',
-              fontSize: '24px',
+              fontSize: '20px',
               fontWeight: 700,
               letterSpacing: '-0.02em',
             }}
@@ -70,28 +77,19 @@ export default function OpengraphImage() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div
           style={{
-            fontSize: '82px',
+            fontSize: '56px',
             fontWeight: 900,
-            lineHeight: 1,
-            letterSpacing: '-0.06em',
-          }}
-        >
-          Poly Journal
-        </div>
-        <div
-          style={{
-            maxWidth: '880px',
-            color: '#4a5058',
-            fontSize: '36px',
-            fontWeight: 700,
-            lineHeight: 1.3,
+            lineHeight: 1.15,
             letterSpacing: '-0.04em',
+            maxWidth: '900px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
-          Tech notes about development, infrastructure, and engineering culture.
+          {title}
         </div>
       </div>
 
@@ -99,16 +97,24 @@ export default function OpengraphImage() {
         style={{
           display: 'flex',
           gap: '16px',
-          color: '#157347',
+          alignItems: 'center',
           fontSize: '24px',
-          fontWeight: 800,
+          fontWeight: 700,
         }}
       >
-        <span>DEV</span>
-        <span>·</span>
-        <span>INFRA</span>
-        <span>·</span>
-        <span>CULTURE</span>
+        {category ? (
+          <span
+            style={{
+              color: '#157347',
+              background: '#eaf8ef',
+              padding: '8px 20px',
+              borderRadius: '999px',
+            }}
+          >
+            {category}
+          </span>
+        ) : null}
+        {date ? <span style={{ color: '#6b7280' }}>{date}</span> : null}
       </div>
     </div>,
     size
