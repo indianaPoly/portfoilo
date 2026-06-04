@@ -37,6 +37,11 @@ export const rootMetadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  verification: {
+    other: {
+      'naver-site-verification': '84641f3eb4fb0be44c11736cc5a1f1934b20a14d',
+    },
+  },
   icons: {
     icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
     shortcut: [{ url: '/icon.svg', type: 'image/svg+xml' }],

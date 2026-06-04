@@ -52,67 +52,67 @@ function RelatedPostCard({
   }
 
   return (
-    <VStack
-      as={NextLink}
-      href={`/blog/${post.slug}`}
-      align={align}
-      justify="space-between"
-      minH="124px"
-      p={{ base: 5, md: 6 }}
-      border="1px solid"
-      borderColor="line.100"
-      borderRadius="20px"
-      bg="paper.50"
-      transition="background-color 180ms ease, border-color 180ms ease, transform 180ms ease"
-      _hover={{
-        bg: 'paper.200',
-        borderColor: 'paper.300',
-        textDecoration: 'none',
-      }}
-      _active={{ transform: 'scale(0.95)' }}
-      _focusVisible={{
-        outline: '2px solid',
-        outlineColor: 'brand.500',
-        outlineOffset: '3px',
-      }}
-    >
-      <Text
-        fontSize="13px"
-        fontWeight="500"
-        color="ink.500"
-        letterSpacing="-0.02em"
+    <NextLink href={`/blog/${post.slug}`}>
+      <VStack
+        align={align}
+        justify="space-between"
+        minH="124px"
+        p={{ base: 5, md: 6 }}
+        border="1px solid"
+        borderColor="line.100"
+        borderRadius="20px"
+        bg="paper.50"
+        transition="background-color 180ms ease, border-color 180ms ease, transform 180ms ease"
+        _hover={{
+          bg: 'paper.200',
+          borderColor: 'paper.300',
+          textDecoration: 'none',
+        }}
+        _active={{ transform: 'scale(0.95)' }}
+        _focusVisible={{
+          outline: '2px solid',
+          outlineColor: 'brand.500',
+          outlineOffset: '3px',
+        }}
       >
-        {label}
-      </Text>
+        <Text
+          fontSize="13px"
+          fontWeight="500"
+          color="ink.500"
+          letterSpacing="-0.02em"
+        >
+          {label}
+        </Text>
 
-      <Text
-        fontSize={{ base: '17px', md: '19px' }}
-        fontWeight="650"
-        color="ink.900"
-        lineHeight="1.45"
-        letterSpacing="-0.04em"
-        textAlign={align === 'end' ? 'right' : 'left'}
-        noOfLines={2}
-      >
-        {post.title}
-      </Text>
+        <Text
+          fontSize={{ base: '17px', md: '19px' }}
+          fontWeight="650"
+          color="ink.900"
+          lineHeight="1.45"
+          letterSpacing="-0.04em"
+          textAlign={align === 'end' ? 'right' : 'left'}
+          lineClamp={2}
+        >
+          {post.title}
+        </Text>
 
-      <HStack
-        gap={2}
-        color="ink.500"
-        alignSelf={align === 'end' ? 'end' : 'start'}
-      >
-        <Text as="span" fontSize="13px" fontWeight="500">
-          {post.date}
-        </Text>
-        <Text as="span" color="ink.300">
-          ·
-        </Text>
-        <Text as="span" fontSize="13px" fontWeight="500">
-          약 {post.readingMinutes}분 읽기
-        </Text>
-      </HStack>
-    </VStack>
+        <HStack
+          gap={2}
+          color="ink.500"
+          alignSelf={align === 'end' ? 'end' : 'start'}
+        >
+          <Text as="span" fontSize="13px" fontWeight="500">
+            {post.date}
+          </Text>
+          <Text as="span" color="ink.300">
+            ·
+          </Text>
+          <Text as="span" fontSize="13px" fontWeight="500">
+            약 {post.readingMinutes}분 읽기
+          </Text>
+        </HStack>
+      </VStack>
+    </NextLink>
   );
 }
 

@@ -282,3 +282,6 @@ export const links = {
   github: 'https://github.com/indianaPoly',
   'hyeonlimgo5@gmail.com': 'mailto:hyeonlimgo5@gmail.com',
 };
+
+export type Project = (typeof projects)[number];
+export type ProjectCategory = (typeof projectCategories)[number];

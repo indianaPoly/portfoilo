@@ -1,11 +1,10 @@
 'use client';
 
-import { Box } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/react';
 
 export function SkipNavigation() {
   return (
-    <Box
-      as="a"
+    <Link
       href="#main-content"
       position="fixed"
       top="-100px"
@@ -27,6 +26,6 @@ export function SkipNavigation() {
       }}
     >
       본문 바로가기
-    </Box>
+    </Link>
   );
 }

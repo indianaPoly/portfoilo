@@ -1,6 +1,4 @@
-import NextLink from 'next/link';
-
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Link, Text } from '@chakra-ui/react';
 
 import { links } from '../../../data/portfolioContent';
 
@@ -19,8 +17,7 @@ export default function Footer() {
         {Object.entries(links).map(([label, href], index) => (
           <HStack key={label} gap={{ base: 4, md: 7 }}>
             {index > 0 ? <Text color="ink.300">|</Text> : null}
-            <Text
-              as={NextLink}
+            <Link
               href={href}
               target="_blank"
               rel="noreferrer"
@@ -34,7 +31,7 @@ export default function Footer() {
               _active={{ transform: 'scale(0.95)' }}
             >
               {label}
-            </Text>
+            </Link>
           </HStack>
         ))}
         <Text color="ink.300">|</Text>

@@ -48,38 +48,40 @@ export function CodeBlock({ html, code, lang }: CodeBlockProps) {
         letterSpacing="-0.02em"
       >
         <Box as="span">{lang}</Box>
-        <Tooltip
-          label={copied ? '복사됨!' : '코드 복사'}
-          fontSize="xs"
-          hasArrow
-          placement="top"
-        >
-          <IconButton
-            aria-label="코드 복사"
-            size="xs"
-            variant="ghost"
-            color="ink.400"
-            opacity={0}
-            _groupHover={{ opacity: 1 }}
-            transition="opacity 200ms ease, color 180ms ease"
-            _hover={{ color: 'brand.700', bg: 'paper.300' }}
-            onClick={handleCopy}
-            icon={
-              copied ? (
+        <Tooltip.Root positioning={{ placement: 'top' }}>
+          <Tooltip.Trigger asChild>
+            <IconButton
+              aria-label="코드 복사"
+              size="xs"
+              variant="ghost"
+              color="ink.400"
+              opacity={0}
+              _groupHover={{ opacity: 1 }}
+              transition="opacity 200ms ease, color 180ms ease"
+              _hover={{ color: 'brand.700', bg: 'paper.300' }}
+              onClick={handleCopy}
+            >
+              {copied ? (
                 <CheckIcon boxSize="14px" />
               ) : (
                 <CopyIcon boxSize="14px" />
-              )
-            }
-          />
-        </Tooltip>
+              )}
+            </IconButton>
+          </Tooltip.Trigger>
+          <Tooltip.Positioner>
+            <Tooltip.Content fontSize="xs">
+              {copied ? '복사됨!' : '코드 복사'}
+              <Tooltip.Arrow />
+            </Tooltip.Content>
+          </Tooltip.Positioner>
+        </Tooltip.Root>
       </Box>
 
       <Box
         overflowX="auto"
         p={4}
         bg="white"
-        sx={{
+        css={{
           '& pre': {
             margin: '0 !important',
             padding: '0 !important',
@@ -112,10 +114,9 @@ export function CodeBlock({ html, code, lang }: CodeBlockProps) {
 
 function CopyIcon({ boxSize }: { boxSize: string }) {
   return (
-    <Box
-      as="svg"
-      w={boxSize}
-      h={boxSize}
+    <svg
+      width={boxSize}
+      height={boxSize}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -125,16 +126,15 @@ function CopyIcon({ boxSize }: { boxSize: string }) {
     >
       <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-    </Box>
+    </svg>
   );
 }
 
 function CheckIcon({ boxSize }: { boxSize: string }) {
   return (
-    <Box
-      as="svg"
-      w={boxSize}
-      h={boxSize}
+    <svg
+      width={boxSize}
+      height={boxSize}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -143,6 +143,6 @@ function CheckIcon({ boxSize }: { boxSize: string }) {
       strokeLinejoin="round"
     >
       <polyline points="20 6 9 17 4 12" />
-    </Box>
+    </svg>
   );
 }
