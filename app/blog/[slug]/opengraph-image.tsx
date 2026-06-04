@@ -9,8 +9,13 @@ export const size = {
 };
 export const contentType = 'image/png';
 
-export default function BlogOgImage({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug);
+export default async function BlogOgImage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
   const title = post?.frontmatter.title ?? 'Blog Post';
   const category = post?.frontmatter.category ?? '';
   const date = post?.frontmatter.date ?? '';

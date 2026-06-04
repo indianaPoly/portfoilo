@@ -79,8 +79,8 @@ function readPostBySlug(slug: string): PostDetail | null {
       category: data.category ? String(data.category) : undefined,
       summary: data.summary ? String(data.summary) : undefined,
     },
-    content: parsed.content,
-    readingMinutes: calculateReadingMinutes(parsed.content),
+    content: String(parsed.content ?? ''),
+    readingMinutes: calculateReadingMinutes(String(parsed.content ?? '')),
   };
 }
 

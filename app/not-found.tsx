@@ -43,30 +43,31 @@ export default function NotFound() {
         </Text>
       </VStack>
 
-      <Box
-        as={NextLink}
-        href="/"
-        display="inline-flex"
-        alignItems="center"
-        px="24px"
-        py="12px"
-        borderRadius="14px"
-        bg="brand.700"
-        color="white"
-        fontSize="16px"
-        fontWeight="600"
-        letterSpacing="-0.03em"
-        transition="background-color 180ms ease, transform 180ms ease"
-        _hover={{ bg: 'brand.800', textDecoration: 'none' }}
-        _active={{ transform: 'scale(0.95)' }}
-        _focusVisible={{
-          outline: '2px solid',
-          outlineColor: 'brand.500',
-          outlineOffset: '3px',
-        }}
-      >
-        홈으로 돌아가기
-      </Box>
+      <NextLink href="/">
+        <Box
+          as="span"
+          display="inline-flex"
+          alignItems="center"
+          px="24px"
+          py="12px"
+          borderRadius="14px"
+          bg="brand.700"
+          color="white"
+          fontSize="16px"
+          fontWeight="600"
+          letterSpacing="-0.03em"
+          transition="background-color 180ms ease, transform 180ms ease"
+          _hover={{ bg: 'brand.800', textDecoration: 'none' }}
+          _active={{ transform: 'scale(0.95)' }}
+          _focusVisible={{
+            outline: '2px solid',
+            outlineColor: 'brand.500',
+            outlineOffset: '3px',
+          }}
+        >
+          홈으로 돌아가기
+        </Box>
+      </NextLink>
     </VStack>
   );
 }

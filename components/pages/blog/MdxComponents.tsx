@@ -1,22 +1,7 @@
 import { isValidElement } from 'react';
 import type { ReactNode } from 'react';
 
-import {
-  Box,
-  Heading,
-  Link,
-  ListItem,
-  OrderedList,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  UnorderedList,
-} from '@chakra-ui/react';
+import { Box, Heading, Link, Table, Text } from '@chakra-ui/react';
 
 import { slugifyHeading } from '../../../lib/markdownHeadings';
 
@@ -43,9 +28,9 @@ function getHeadingId(children: ReactNode): string | undefined {
   return text ? slugifyHeading(text) : undefined;
 }
 
-function MdxTable(props: React.ComponentProps<typeof Table>) {
+function MdxTable({ children }: { children?: ReactNode }) {
   return (
-    <TableContainer
+    <Table.ScrollArea
       w="full"
       my={6}
       border="1px solid"
@@ -54,26 +39,28 @@ function MdxTable(props: React.ComponentProps<typeof Table>) {
       overflowX="auto"
       bg="white"
     >
-      <Table minW="720px" size="md" variant="simple" {...props} />
-    </TableContainer>
+      <Table.Root minW="720px" size="md">
+        {children}
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }
 
-function MdxThead(props: React.ComponentProps<typeof Thead>) {
-  return <Thead bg="paper.200" {...props} />;
+function MdxThead({ children }: { children?: ReactNode }) {
+  return <Table.Header bg="paper.200">{children}</Table.Header>;
 }
 
-function MdxTbody(props: React.ComponentProps<typeof Tbody>) {
-  return <Tbody {...props} />;
+function MdxTbody({ children }: { children?: ReactNode }) {
+  return <Table.Body>{children}</Table.Body>;
 }
 
-function MdxTr(props: React.ComponentProps<typeof Tr>) {
-  return <Tr {...props} />;
+function MdxTr({ children }: { children?: ReactNode }) {
+  return <Table.Row>{children}</Table.Row>;
 }
 
-function MdxTh(props: React.ComponentProps<typeof Th>) {
+function MdxTh({ children }: { children?: ReactNode }) {
   return (
-    <Th
+    <Table.ColumnHeader
       px={5}
       py={4}
       color="ink.900"
@@ -83,14 +70,15 @@ function MdxTh(props: React.ComponentProps<typeof Th>) {
       textTransform="none"
       whiteSpace="nowrap"
       borderColor="line.100"
-      {...props}
-    />
+    >
+      {children}
+    </Table.ColumnHeader>
   );
 }
 
-function MdxTd(props: React.ComponentProps<typeof Td>) {
+function MdxTd({ children }: { children?: ReactNode }) {
   return (
-    <Td
+    <Table.Cell
       px={5}
       py={4}
       color="ink.700"
@@ -99,8 +87,9 @@ function MdxTd(props: React.ComponentProps<typeof Td>) {
       letterSpacing="-0.03em"
       borderColor="line.100"
       verticalAlign="top"
-      {...props}
-    />
+    >
+      {children}
+    </Table.Cell>
   );
 }
 
@@ -156,14 +145,20 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  ul: (props: React.ComponentProps<typeof UnorderedList>) => (
-    <UnorderedList pl={5} mb={4} {...props} />
+  ul: ({ children }: { children?: ReactNode }) => (
+    <Box as="ul" pl={5} mb={4}>
+      {children}
+    </Box>
   ),
-  ol: (props: React.ComponentProps<typeof OrderedList>) => (
-    <OrderedList pl={5} mb={4} {...props} />
+  ol: ({ children }: { children?: ReactNode }) => (
+    <Box as="ol" pl={5} mb={4}>
+      {children}
+    </Box>
   ),
-  li: (props: React.ComponentProps<typeof ListItem>) => (
-    <ListItem mb={1} {...props} />
+  li: ({ children }: { children?: ReactNode }) => (
+    <Box as="li" mb={1}>
+      {children}
+    </Box>
   ),
   hr: (props: React.ComponentProps<typeof Box>) => (
     <Box
@@ -224,8 +219,9 @@ export const mdxComponents = {
           borderWidth="1px"
           borderColor="line.100"
           borderRadius="16px"
-          {...props}
-        />
+        >
+          {props.children}
+        </Box>
       );
     }
 

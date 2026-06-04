@@ -1,9 +1,6 @@
 'use client';
 
 import { Box, Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import type { Variants } from 'framer-motion';
-
-import { MotionBox } from '../../motion/MotionPrimitives';
 
 export interface AboutTimelineItem {
   date: string;
@@ -16,23 +13,6 @@ export interface AboutTimelineItem {
 export interface AboutTimelineProps {
   items: AboutTimelineItem[];
 }
-
-const itemVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 28,
-    filter: 'blur(8px)',
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 0.58,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
 
 function TimelineContent({
   item,
@@ -154,12 +134,8 @@ export function AboutTimeline({ items }: AboutTimelineProps) {
           const isLeft = index % 2 === 0;
 
           return (
-            <MotionBox
+            <Box
               key={`${item.date}-${item.title}`}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.28 }}
-              variants={itemVariants}
               display={{ base: 'grid', md: 'grid' }}
               gridTemplateColumns={{
                 base: '22px minmax(0, 1fr)',
@@ -195,7 +171,7 @@ export function AboutTimeline({ items }: AboutTimelineProps) {
               <Box display={{ base: 'block', md: isLeft ? 'none' : 'block' }}>
                 <TimelineContent item={item} placement="right" />
               </Box>
-            </MotionBox>
+            </Box>
           );
         })}
       </VStack>

@@ -6,30 +6,25 @@ import { JournalList } from '../components/pages/main/cards/JournalList';
 import { Tab } from '../components/pages/main/Tab';
 import { mainMetadata } from '../data/static/meta-data/main.meta-data';
 import { getAllCategories, getAllPosts } from '../lib/posts';
+import { getSearchParamValue, resolveSearchParams } from '../lib/searchParams';
 
 const PAGE_SIZE = 5;
 const ALL_CATEGORY_LABEL = '전체';
 
-type SearchParams = Record<string, string | string[] | undefined>;
-
 export const metadata: Metadata = mainMetadata;
 
-function asString(value: string | string[] | undefined): string | undefined {
-  if (!value) return undefined;
-  return Array.isArray(value) ? value[0] : value;
-}
-
-export default function HomePage({
+export default async function HomePage({
   searchParams,
 }: {
-  searchParams?: SearchParams;
+  searchParams?: Parameters<typeof resolveSearchParams>[0];
 }) {
-  const rawCategory = asString(searchParams?.category);
+  const resolvedSearchParams = await resolveSearchParams(searchParams);
+  const rawCategory = getSearchParamValue(resolvedSearchParams.category);
   const selectedCategory = rawCategory?.trim()
     ? rawCategory
     : ALL_CATEGORY_LABEL;
 
-  const rawPage = asString(searchParams?.page);
+  const rawPage = getSearchParamValue(resolvedSearchParams.page);
   const pageNumber = Math.max(1, Number(rawPage ?? '1') || 1);
 
   const allPosts = getAllPosts();

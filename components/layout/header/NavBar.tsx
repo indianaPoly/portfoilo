@@ -2,18 +2,7 @@
 
 import NextLink from 'next/link';
 
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Flex, HStack, Link, Text, VStack } from '@chakra-ui/react';
 
 import { navContent } from '../../../data/siteContent';
 import {
@@ -47,78 +36,85 @@ const navPillStyles = {
 
 function DownloadMenu() {
   return (
-    <Menu placement="bottom-end" gutter={10} strategy="fixed">
-      <MenuButton
-        as={Button}
-        {...navPillStyles}
-        border="0"
-        boxShadow="none"
-        cursor="pointer"
-        _hover={{ bg: 'paper.300', textDecoration: 'none' }}
-        _active={{ bg: 'paper.300', transform: 'scale(0.95)' }}
-      >
-        <HStack as="span" gap={1.5} justify="center">
-          <Text as="span">{navContent.downloads.label}</Text>
-          <Text
-            as="span"
-            color="ink.600"
-            fontSize="0.9em"
-            fontWeight="700"
-            aria-hidden="true"
+    <Box as="span" position="relative">
+      <Box as="details">
+        <Box
+          as="summary"
+          {...navPillStyles}
+          listStyle="none"
+          border="0"
+          boxShadow="none"
+          cursor="pointer"
+        >
+          <HStack as="span" gap={1.5} justify="center">
+            <Text as="span">{navContent.downloads.label}</Text>
+            <Text
+              as="span"
+              color="ink.600"
+              fontSize="0.9em"
+              fontWeight="700"
+              aria-hidden="true"
+            >
+              ▾
+            </Text>
+          </HStack>
+        </Box>
+
+        <VStack
+          align="stretch"
+          position="absolute"
+          top="calc(100% + 10px)"
+          right={0}
+          zIndex={20}
+          minW={{ base: 'min(88vw, 320px)', md: '360px' }}
+          maxH="min(72vh, 560px)"
+          overflowY="auto"
+          p={2}
+          border="1px solid"
+          borderColor="line.100"
+          borderRadius="20px"
+          bg="white"
+          boxShadow="0 18px 48px rgba(32, 33, 36, 0.1)"
+        >
+          <Link
+            href={getResumeDownloadHref()}
+            download
+            borderRadius="14px"
+            color="ink.900"
+            fontSize="14px"
+            fontWeight="600"
+            letterSpacing="-0.035em"
+            bg="white"
+            px={3}
+            py={2}
+            _hover={{ bg: 'paper.200', color: 'brand.700' }}
+            _focus={{ bg: 'paper.200', color: 'brand.700' }}
           >
-            ▾
-          </Text>
-        </HStack>
-      </MenuButton>
+            {navContent.downloads.resumeLabel} · One-page PDF
+          </Link>
 
-      <MenuList
-        minW={{ base: 'min(88vw, 320px)', md: '360px' }}
-        maxH="min(72vh, 560px)"
-        overflowY="auto"
-        p={2}
-        border="1px solid"
-        borderColor="line.100"
-        borderRadius="20px"
-        bg="white"
-        boxShadow="0 18px 48px rgba(32, 33, 36, 0.1)"
-      >
-        <MenuItem
-          as="a"
-          href={getResumeDownloadHref()}
-          download
-          borderRadius="14px"
-          color="ink.900"
-          fontSize="14px"
-          fontWeight="600"
-          letterSpacing="-0.035em"
-          bg="white"
-          _hover={{ bg: 'paper.200', color: 'brand.700' }}
-          _focus={{ bg: 'paper.200', color: 'brand.700' }}
-        >
-          {navContent.downloads.resumeLabel} · One-page PDF
-        </MenuItem>
+          <Box borderTop="1px solid" borderColor="line.100" />
 
-        <MenuDivider borderColor="line.100" />
-
-        <MenuItem
-          as="a"
-          href={getPortfolioDownloadHref()}
-          download
-          borderRadius="14px"
-          color="ink.900"
-          fontSize="14px"
-          fontWeight="600"
-          letterSpacing="-0.035em"
-          lineHeight="1.45"
-          whiteSpace="normal"
-          bg="white"
-          _hover={{ bg: 'paper.200', color: 'brand.700' }}
-          _focus={{ bg: 'paper.200', color: 'brand.700' }}
-        >
-          {navContent.downloads.portfolioLabel} · 전체 프로젝트 PDF
-        </MenuItem>
-      </MenuList>
-    </Menu>
+          <Link
+            href={getPortfolioDownloadHref()}
+            download
+            borderRadius="14px"
+            color="ink.900"
+            fontSize="14px"
+            fontWeight="600"
+            letterSpacing="-0.035em"
+            lineHeight="1.45"
+            bg="white"
+            px={3}
+            py={2}
+            _hover={{ bg: 'paper.200', color: 'brand.700' }}
+            _focus={{ bg: 'paper.200', color: 'brand.700' }}
+          >
+            {navContent.downloads.portfolioLabel} · 전체 프로젝트 PDF
+          </Link>
+        </VStack>
+      </Box>
+    </Box>
   );
 }
 
@@ -136,38 +132,38 @@ export default function NavBar() {
         direction={{ base: 'column', sm: 'row' }}
         gap={{ base: 4, sm: 6 }}
       >
-        <HStack
-          as={NextLink}
-          href="/"
-          gap={{ base: 3, md: 5 }}
-          alignSelf={{ base: 'center', sm: 'auto' }}
-          transition="transform 180ms ease, color 180ms ease"
-          _hover={{ textDecoration: 'none' }}
-          _active={{ transform: 'scale(0.95)' }}
-        >
-          <Text
-            as="span"
-            fontFamily="'Brush Script MT', 'Segoe Script', cursive"
-            fontSize={{ base: '32px', md: '48px' }}
-            fontWeight="600"
-            lineHeight="1"
-            color="brand.700"
-            letterSpacing="-0.05em"
+        <NextLink href="/">
+          <HStack
+            gap={{ base: 3, md: 5 }}
+            alignSelf={{ base: 'center', sm: 'auto' }}
+            transition="transform 180ms ease, color 180ms ease"
+            _hover={{ textDecoration: 'none' }}
+            _active={{ transform: 'scale(0.95)' }}
           >
-            Poly
-          </Text>
-          <Text
-            as="span"
-            fontSize={{ base: '20px', md: '28px' }}
-            fontWeight="650"
-            lineHeight="1"
-            color="ink.900"
-            letterSpacing="-0.04em"
-            whiteSpace="nowrap"
-          >
-            Tech Blog
-          </Text>
-        </HStack>
+            <Text
+              as="span"
+              fontFamily="'Brush Script MT', 'Segoe Script', cursive"
+              fontSize={{ base: '32px', md: '48px' }}
+              fontWeight="600"
+              lineHeight="1"
+              color="brand.700"
+              letterSpacing="-0.05em"
+            >
+              Poly
+            </Text>
+            <Text
+              as="span"
+              fontSize={{ base: '20px', md: '28px' }}
+              fontWeight="650"
+              lineHeight="1"
+              color="ink.900"
+              letterSpacing="-0.04em"
+              whiteSpace="nowrap"
+            >
+              Tech Blog
+            </Text>
+          </HStack>
+        </NextLink>
 
         <HStack
           gap={{ base: 2, sm: 3 }}
@@ -176,14 +172,11 @@ export default function NavBar() {
           justify={{ base: 'center', sm: 'flex-start' }}
         >
           {navContent.links.map((link) => (
-            <Box
-              key={link.href}
-              as={NextLink}
-              href={link.href}
-              {...navPillStyles}
-            >
-              {link.label}
-            </Box>
+            <NextLink key={link.href} href={link.href}>
+              <Box as="span" {...navPillStyles}>
+                {link.label}
+              </Box>
+            </NextLink>
           ))}
           <DownloadMenu />
         </HStack>

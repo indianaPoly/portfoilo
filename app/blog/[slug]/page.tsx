@@ -18,15 +18,18 @@ import {
 } from '../../../lib/posts';
 
 type BlogDetailPageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
-export function generateMetadata({ params }: BlogDetailPageProps): Metadata {
-  const post = getPostBySlug(params.slug);
+export async function generateMetadata({
+  params,
+}: BlogDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -72,7 +75,8 @@ export function generateMetadata({ params }: BlogDetailPageProps): Metadata {
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const post = getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
   if (!post) notFound();
 
   const headings = extractMarkdownHeadings(post.content);

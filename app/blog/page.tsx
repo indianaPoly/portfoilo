@@ -3,19 +3,19 @@ import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { blogMetadata } from '../../data/static/meta-data/blog.meta-data';
-
-type SearchParams = Record<string, string | string[] | undefined>;
+import { resolveSearchParams } from '../../lib/searchParams';
 
 export const metadata: Metadata = blogMetadata;
 
-export default function BlogRedirectPage({
+export default async function BlogRedirectPage({
   searchParams,
 }: {
-  searchParams?: SearchParams;
+  searchParams?: Parameters<typeof resolveSearchParams>[0];
 }) {
   const params = new URLSearchParams();
+  const resolvedSearchParams = await resolveSearchParams(searchParams);
 
-  Object.entries(searchParams ?? {}).forEach(([key, value]) => {
+  Object.entries(resolvedSearchParams).forEach(([key, value]) => {
     if (value === undefined) return;
     if (Array.isArray(value)) {
       value.forEach((v) => params.append(key, v));

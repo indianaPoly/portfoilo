@@ -1,5 +1,3 @@
-import NextLink from 'next/link';
-
 import {
   Box,
   Heading,
@@ -150,7 +148,6 @@ export default function AboutPage() {
 
         <HStack gap={4} flexWrap="wrap">
           <Link
-            as={NextLink}
             href={`mailto:${profile.email}`}
             display="inline-block"
             color="brand.700"
@@ -165,7 +162,7 @@ export default function AboutPage() {
           </Link>
         </HStack>
 
-        <Wrap spacing={2} pt={1}>
+        <Wrap gap={2} pt={1}>
           {profile.skills.map((skill) => (
             <SkillPill key={skill}>{skill}</SkillPill>
           ))}

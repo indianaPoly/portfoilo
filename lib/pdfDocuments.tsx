@@ -719,7 +719,9 @@ function ProjectPortfolioDocument() {
   );
 }
 
-async function renderPdfBuffer(document: React.ReactElement): Promise<Buffer> {
+async function renderPdfBuffer(
+  document: Parameters<typeof pdf>[0]
+): Promise<Buffer> {
   const stream = await pdf(document).toBuffer();
   const chunks: Buffer[] = [];
 
