@@ -1,0 +1,596 @@
+---
+title: 'React Hook Form을 이해하기 위한 Input Ownership과 useRef'
+date: '2026-06-30'
+category: 'DEV'
+summary: 'Controlled input, uncontrolled input, React rendering, Fiber, useRef를 기준으로 React Hook Form이 왜 렌더링 비용을 줄일 수 있는지 정리합니다.'
+---
+
+React Hook Form을 처음 공부할 때 가장 헷갈렸던 지점은 이것이었습니다.
+
+```text
+input 값은 어디에 저장되는 걸까?
+useForm이 모든 값을 들고 있는 걸까?
+아니면 React state처럼 매번 렌더링되면서 관리되는 걸까?
+```
+
+처음에는 `useForm`이 모든 값을 직접 저장한다고 생각하기 쉽습니다. 하지만 정확히는 조금 다릅니다. HTML input은 브라우저 DOM 레벨에서 자기 자신의 값을 가질 수 있고, React는 그 값을 state로 끌어올릴 수도 있으며, React Hook Form은 이 둘 사이에서 다른 trade-off를 선택합니다.
+
+이 글에서는 React Hook Form을 이해하기 위해 먼저 **input value의 ownership**을 정리하고, 그다음 **React rendering, Fiber, useRef** 관점에서 왜 React Hook Form이 렌더링 비용을 줄일 수 있는지 정리해보려고 합니다.
+
+---
+
+## Input의 값은 누가 관리하는가
+
+React Hook Form을 이해하기 전에 먼저 던져야 하는 질문이 있습니다.
+
+> 화면에 보이는 input 값의 최종 결정권은 누구에게 있는가?
+
+예를 들어 화면에 `hello`라는 값이 보인다고 해보겠습니다. 그러면 이 값은 누가 결정했을까요?
+
+가능한 후보는 크게 세 가지입니다.
+
+1. DOM
+2. React state
+3. React Hook Form의 internal store
+
+여기서 중요한 점은 **값이 어딘가에 존재한다는 것**과 **그 값의 source of truth가 누구인지**는 다르다는 것입니다.
+
+HTML input은 실제로 값을 저장할 수 있습니다. 사용자가 `a`, `b`, `c`를 입력하면 브라우저 내부에서는 개념적으로 이런 일이 일어납니다.
+
+```text
+input.value = "abc"
+```
+
+즉 input은 값을 가지고 있습니다. 하지만 값을 가지고 있다고 해서 항상 input이 값의 주인이라는 뜻은 아닙니다. 최종적으로 화면에 어떤 값이 보여야 하는지 결정하는 주체가 따로 있을 수 있기 때문입니다.
+
+이 최종 결정권을 여기서는 **ownership**이라고 부르겠습니다.
+
+---
+
+## DOM이 값을 소유하는 경우: Uncontrolled Input
+
+가장 기본적인 HTML input은 DOM이 값을 관리합니다.
+
+```tsx
+function App() {
+  return <input />;
+}
+```
+
+이 경우 사용자가 `hello`를 입력하면 브라우저가 직접 input의 값을 바꿉니다.
+
+```text
+User Input
+  ↓
+Browser DOM
+  ↓
+input.value 변경
+```
+
+React는 사용자가 지금 어떤 값을 입력했는지 모를 수도 있습니다. 물론 ref로 나중에 읽을 수는 있지만, 매 입력마다 React state가 갱신되는 구조는 아닙니다.
+
+이런 input을 **uncontrolled input**이라고 부릅니다. React가 value를 직접 control하지 않기 때문입니다.
+
+정리하면 이 경우의 value owner는 DOM입니다.
+
+```text
+Value Owner = DOM
+```
+
+DOM이 값을 소유한다는 말은 React가 전혀 관여하지 않는다는 뜻은 아닙니다. React는 input element를 만들고, event handler를 붙이고, ref를 연결할 수 있습니다. 다만 **입력 중인 value의 최종 source of truth가 React state가 아니라 DOM**이라는 뜻입니다.
+
+---
+
+## React state가 값을 소유하는 경우: Controlled Input
+
+반대로 React state가 input 값을 결정하는 방식도 있습니다.
+
+```tsx
+function App() {
+  const [email, setEmail] = useState('');
+
+  return (
+    <input value={email} onChange={(event) => setEmail(event.target.value)} />
+  );
+}
+```
+
+이 경우 input의 최종 value는 DOM이 아니라 `email` state가 결정합니다. 사용자가 키보드로 값을 입력해도 그 값은 먼저 `onChange`를 거쳐 `setEmail`로 state에 반영되고, React가 다시 렌더링한 결과가 DOM에 적용됩니다.
+
+```text
+User Input
+  ↓
+onChange
+  ↓
+setState
+  ↓
+React Render
+  ↓
+DOM Update
+```
+
+이런 input을 **controlled input**이라고 부릅니다.
+
+```text
+Value Owner = React State
+```
+
+React가 controlled input을 중요하게 보는 이유는 React의 기본 철학과 연결됩니다.
+
+```text
+UI = f(state)
+```
+
+즉 state만 보면 UI가 어떤 상태인지 예측할 수 있어야 합니다. `email` state가 `"abc@gmail.com"`이라면 화면의 input도 그 값을 보여야 합니다. input 안에 React가 모르는 hidden state가 많아질수록 UI를 예측하기 어려워집니다.
+
+controlled input의 장점은 분명합니다.
+
+1. 값의 source of truth가 명확합니다.
+2. state만 보고 UI를 예측할 수 있습니다.
+3. DOM을 직접 조작하는 imperative한 코드를 줄일 수 있습니다.
+
+React 관점에서는 다음 방식이 더 선언적입니다.
+
+```tsx
+setEmail('');
+```
+
+반면 다음 방식은 DOM을 직접 수정하는 쪽에 가깝습니다.
+
+```tsx
+inputRef.current.value = '';
+```
+
+그래서 React를 처음 배울 때는 controlled input이 더 자연스럽고 권장되는 방식처럼 느껴집니다. 상태가 곧 UI를 결정한다는 React의 모델과 잘 맞기 때문입니다.
+
+---
+
+## Controlled Input의 비용
+
+하지만 controlled input은 공짜가 아닙니다.
+
+사용자가 한 글자를 입력할 때마다 대략 이런 흐름이 발생합니다.
+
+```text
+1. 브라우저가 입력을 감지한다.
+2. onChange가 실행된다.
+3. setState가 호출된다.
+4. React가 렌더링을 스케줄링한다.
+5. 컴포넌트 함수가 다시 호출된다.
+6. React가 이전 결과와 새 결과를 비교한다.
+7. 필요한 변경 사항을 DOM에 commit한다.
+```
+
+작은 form에서는 이 비용이 크게 느껴지지 않습니다. 하지만 입력 필드가 많고, form 주변에 무거운 컴포넌트가 함께 있다면 이야기가 달라집니다.
+
+```text
+Form
+├─ Header
+├─ Sidebar
+├─ HeavyChart
+└─ Inputs
+```
+
+input 하나에 한 글자를 입력했을 뿐인데, 상태가 상위 컴포넌트에 있거나 렌더링 경계가 잘 나뉘어 있지 않다면 생각보다 넓은 subtree가 다시 계산될 수 있습니다.
+
+물론 React는 불필요한 DOM 변경을 최소화합니다. re-render가 곧바로 모든 DOM을 다시 그린다는 뜻은 아닙니다. 하지만 컴포넌트 함수를 다시 호출하고, 새 tree를 계산하고, diff를 수행하는 비용은 여전히 존재합니다.
+
+이 지점에서 React Hook Form의 설계 방향이 이해되기 시작합니다.
+
+---
+
+## React Hook Form은 값을 전부 소유할까?
+
+React Hook Form을 처음 보면 이런 식으로 생각할 수 있습니다.
+
+```text
+React state가 아니라 RHF가 값을 관리하는구나.
+그러면 value owner는 RHF store인가?
+```
+
+하지만 React Hook Form의 기본 방향은 조금 더 미묘합니다.
+
+React Hook Form은 input typing 자체를 매번 React state로 끌어올리지 않습니다. 기본적인 `register` 기반 사용에서는 브라우저 DOM이 input 값을 처리하도록 두고, React Hook Form은 form과 관련된 메타데이터를 효율적으로 추적합니다.
+
+예를 들면 이런 것들입니다.
+
+```text
+errors
+isDirty
+dirtyFields
+touchedFields
+isValid
+submitCount
+```
+
+즉 React Hook Form은 모든 value ownership을 가져간다기보다, **입력 중인 값의 처리는 DOM에 맡기고 form 상태 관리에 필요한 정보만 내부 store에서 추적하는 방식**에 가깝습니다.
+
+정리하면 이렇게 볼 수 있습니다.
+
+```text
+Input typing        → DOM이 담당
+Form metadata       → RHF internal store가 담당
+UI 반영이 필요한 값 → 구독한 컴포넌트만 갱신
+```
+
+이 설계의 핵심은 렌더링 비용을 줄이는 것입니다.
+
+브라우저는 원래 input 처리를 잘합니다.
+
+- `input.value` 변경
+- 커서 위치 유지
+- selection 유지
+- IME composition 처리
+
+이런 일은 브라우저가 매우 잘하고 이미 최적화되어 있습니다. React Hook Form은 이 부분을 굳이 매 keypress마다 React 렌더링 파이프라인에 태우지 않는 선택을 합니다.
+
+---
+
+## React와 React Hook Form의 철학 차이
+
+React의 기본 철학은 예측 가능성에 가깝습니다.
+
+```text
+Predictability > Performance
+```
+
+조금 느려지더라도 state를 기준으로 UI를 예측할 수 있는 구조를 선호합니다.
+
+반면 React Hook Form은 form이라는 도메인 안에서 다른 trade-off를 선택합니다.
+
+```text
+Form domain에서는 Performance + Ergonomics도 중요하다
+```
+
+form은 input 개수가 많고, 사용자의 입력이 매우 자주 발생하는 영역입니다. 모든 입력을 React state로 관리하면 구조는 예측하기 쉬워지지만, 렌더링 비용이 커질 수 있습니다.
+
+그래서 React Hook Form은 input typing은 DOM에게 맡기고, validation, error, dirty state, submit 같은 form domain의 중요한 상태를 효율적으로 관리합니다.
+
+이 차이를 단순히 “controlled가 좋다” 또는 “uncontrolled가 좋다”로 볼 필요는 없습니다. 둘은 서로 다른 문제를 해결하기 위한 선택입니다.
+
+---
+
+## React rendering을 다시 보기
+
+이제 두 번째 질문으로 넘어가 보겠습니다.
+
+> 왜 ref에 값을 저장하면 렌더링이 발생하지 않을까?
+
+React Hook Form이 렌더링을 줄일 수 있는 이유를 이해하려면 React rendering lifecycle과 `useRef`를 같이 봐야 합니다.
+
+React 컴포넌트의 lifecycle은 크게 세 가지로 볼 수 있습니다.
+
+1. Mount
+2. Re-render
+3. Unmount
+
+### Mount
+
+mount는 컴포넌트가 처음 화면에 올라오는 순간입니다.
+
+```tsx
+function App() {
+  return <div>Hello</div>;
+}
+```
+
+처음 렌더링될 때 React는 개념적으로 다음 일을 합니다.
+
+```text
+1. App 컴포넌트에 대한 Fiber를 만든다.
+2. Hook을 초기화한다.
+3. App()을 호출해서 initial render 결과를 만든다.
+4. 결과를 DOM에 반영한다.
+```
+
+여기서 Fiber는 React가 컴포넌트를 관리하기 위해 사용하는 내부 객체입니다. 공식 API로 직접 다루는 대상은 아니지만, 개념적으로는 컴포넌트의 런타임 메모리라고 볼 수 있습니다.
+
+```text
+Fiber
+└─ memoizedState
+   ├─ Hook 1
+   ├─ Hook 2
+   └─ Hook 3
+```
+
+React는 hook들을 호출 순서대로 저장합니다.
+
+```tsx
+function App() {
+  const [count, setCount] = useState(0);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    // ...
+  }, []);
+}
+```
+
+개념적으로는 이런 식입니다.
+
+```text
+Hook Slot 1 → useState
+Hook Slot 2 → useRef
+Hook Slot 3 → useEffect
+```
+
+그래서 hook은 조건문 안에서 호출하면 안 됩니다. 렌더링마다 hook 호출 순서가 달라지면 React가 어떤 hook slot을 어떤 상태와 연결해야 하는지 알 수 없기 때문입니다.
+
+### Re-render
+
+re-render는 컴포넌트 함수가 다시 호출되는 것입니다.
+
+여기서 자주 하는 착각이 있습니다.
+
+```text
+Re-render = DOM이 다시 그려지는 것
+```
+
+정확히는 아닙니다. re-render는 먼저 컴포넌트 함수가 다시 호출되어 새로운 React tree를 계산하는 과정입니다. 실제 DOM 수정은 이후 commit 단계에서 필요한 부분만 일어납니다.
+
+대표적인 re-render trigger는 다음과 같습니다.
+
+1. `setState`
+2. parent component re-render
+3. context update
+
+예를 들어 `setCount(1)`이 호출되면 React는 이 컴포넌트를 다시 렌더링해야 한다고 판단하고 컴포넌트 함수를 다시 호출합니다.
+
+### Unmount
+
+unmount는 컴포넌트가 화면에서 제거되는 순간입니다.
+
+이때 React는 해당 Fiber와 hook 상태를 더 이상 유지하지 않습니다. 연결이 끊긴 객체들은 이후 가비지 컬렉션 대상이 됩니다.
+
+mount부터 unmount까지가 컴포넌트가 살아 있는 시간이고, 그 사이에서 state와 ref 같은 hook 값들이 Fiber에 연결되어 유지됩니다.
+
+---
+
+## useState와 useRef의 차이
+
+`useState`는 값을 저장하고, 값이 바뀌면 렌더링을 요청합니다.
+
+```tsx
+const [count, setCount] = useState(0);
+
+setCount(1); // render trigger
+```
+
+반면 `useRef`는 값을 저장하지만, `.current`를 바꾼다고 렌더링을 요청하지 않습니다.
+
+```tsx
+const countRef = useRef(0);
+
+countRef.current += 1; // render trigger 아님
+```
+
+왜 그럴까요?
+
+React가 ref mutation을 렌더링 트리거로 추적하지 않기 때문입니다.
+
+```text
+ref.current 변경 ∉ render trigger
+```
+
+`useRef`가 반환하는 객체는 대략 이런 형태입니다.
+
+```tsx
+{
+  current: 0;
+}
+```
+
+이 객체의 `.current`를 바꾸는 것은 일반 JavaScript 객체의 property를 바꾸는 것과 비슷합니다. React에게 “이제 화면을 다시 계산해야 해”라고 알려주는 신호가 아닙니다.
+
+---
+
+## ref는 값을 기억하지만 화면을 갱신하지 않는다
+
+예를 들어 다음 컴포넌트를 보겠습니다.
+
+```tsx
+function App() {
+  const countRef = useRef(0);
+
+  console.log('render');
+
+  return (
+    <button
+      onClick={() => {
+        countRef.current += 1;
+        console.log(countRef.current);
+      }}
+    >
+      Click
+    </button>
+  );
+}
+```
+
+버튼을 세 번 클릭하면 콘솔은 개념적으로 이렇게 찍힙니다.
+
+```text
+render
+1
+2
+3
+```
+
+처음 mount 때 `render`가 한 번 찍히고, 클릭할 때마다 `countRef.current`는 증가합니다. 하지만 `setState`가 없기 때문에 컴포넌트 함수는 다시 호출되지 않습니다.
+
+이번에는 ref 값을 화면에 직접 보여준다고 해보겠습니다.
+
+```tsx
+function App() {
+  const countRef = useRef(0);
+
+  return (
+    <>
+      <p>{countRef.current}</p>
+      <button
+        onClick={() => {
+          countRef.current += 1;
+        }}
+      >
+        Click
+      </button>
+    </>
+  );
+}
+```
+
+버튼을 세 번 클릭해도 화면은 계속 `0`으로 보일 수 있습니다. ref 값은 `0 → 1 → 2 → 3`으로 바뀌었지만, 렌더링이 다시 발생하지 않았기 때문입니다.
+
+그러면 ref 값이 화면에 반영되는 경우는 언제일까요?
+
+```tsx
+function App() {
+  const countRef = useRef(0);
+  const [renderCount, setRenderCount] = useState(0);
+
+  return (
+    <>
+      <p>{countRef.current}</p>
+      <button
+        onClick={() => {
+          countRef.current += 1;
+          setRenderCount((count) => count + 1);
+        }}
+      >
+        Click
+      </button>
+    </>
+  );
+}
+```
+
+이 경우에는 `setRenderCount`가 렌더링을 발생시킵니다. 그리고 새 렌더링 과정에서 React가 `countRef.current`를 다시 읽기 때문에 화면에 최신 ref 값이 보입니다.
+
+핵심은 이것입니다.
+
+```text
+ref는 reactive하지 않다.
+하지만 render 중에 읽히면 그 시점의 최신 값을 보여줄 수 있다.
+```
+
+---
+
+## 이 관점에서 React Hook Form 다시 보기
+
+React Hook Form의 내부 구현을 단순화해서 생각하면 이런 그림에 가깝습니다.
+
+```tsx
+function useForm() {
+  const storeRef = useRef(createFormStore());
+
+  return storeRef.current;
+}
+```
+
+실제 구현은 훨씬 복잡하지만, 핵심 아이디어를 이해하기에는 이 모델이 도움이 됩니다.
+
+form store는 개념적으로 이런 정보를 가질 수 있습니다.
+
+```ts
+const formStore = {
+  values: {},
+  errors: {},
+  touchedFields: {},
+  dirtyFields: {},
+};
+```
+
+사용자가 email input에 값을 입력하면, controlled input처럼 매번 React state를 업데이트하는 대신 DOM reference와 내부 store를 통해 필요한 값을 추적할 수 있습니다.
+
+```text
+email input에 "abc@gmail.com" 입력
+  ↓
+DOM input.value 변경
+  ↓
+RHF가 필요한 정보만 store에 반영
+  ↓
+불필요한 React re-render는 발생하지 않음
+```
+
+여기서 중요한 점은 **모든 변경이 곧 React 렌더링으로 이어지지 않는다**는 것입니다.
+
+React Hook Form은 필요한 컴포넌트만 form state를 구독하게 만들고, error나 dirty state처럼 UI에 반영해야 하는 변화가 있을 때만 관련 부분을 갱신하는 방향을 취합니다.
+
+그래서 input에 글자를 입력하는 행위 자체가 항상 전체 form의 re-render로 이어지지 않습니다.
+
+---
+
+## 그러면 언제 화면이 업데이트될까
+
+React Hook Form을 쓰더라도 화면이 전혀 업데이트되지 않는 것은 아닙니다. 예를 들어 validation error를 보여줘야 한다면 error UI는 바뀌어야 합니다.
+
+차이는 업데이트의 범위와 타이밍입니다.
+
+controlled input에서는 매 입력이 React state update로 이어지는 경우가 많습니다.
+
+```text
+keypress → setState → re-render
+```
+
+반면 React Hook Form은 입력 자체와 UI 업데이트를 분리합니다.
+
+```text
+keypress → DOM value 변경
+validation 필요 → form state 갱신
+구독 중인 UI가 있으면 해당 부분만 update
+```
+
+즉 React Hook Form의 목표는 “절대 렌더링하지 않기”가 아니라, **렌더링이 필요한 순간과 필요한 범위를 줄이는 것**에 가깝습니다.
+
+---
+
+## 그래서 무엇을 기준으로 선택해야 할까
+
+그렇다고 controlled input이 나쁘고, uncontrolled input이나 React Hook Form이 항상 좋다는 뜻은 아닙니다. 핵심은 trade-off입니다.
+
+controlled input은 다음 상황에 잘 맞습니다.
+
+- 입력값이 다른 UI와 즉시 강하게 연결되어야 할 때
+- 매 입력마다 상태를 기반으로 화면을 예측하고 싶을 때
+- 값 변환, masking, 동기화 로직이 React state 중심으로 움직일 때
+
+React Hook Form 같은 uncontrolled 기반 접근은 다음 상황에 잘 맞습니다.
+
+- input이 많은 form을 다룰 때
+- 매 keypress마다 전체 form이 렌더링되는 비용을 줄이고 싶을 때
+- validation, error, dirty state, submit 처리 중심으로 form을 관리하고 싶을 때
+
+결국 질문은 이것입니다.
+
+```text
+이 input의 source of truth가 꼭 React state여야 하는가?
+```
+
+그렇다면 controlled input이 자연스럽습니다. 반대로 브라우저가 이미 잘하는 input typing은 DOM에 맡기고, form domain의 상태만 효율적으로 관리하면 충분하다면 React Hook Form의 방식이 좋은 선택이 될 수 있습니다.
+
+---
+
+## 정리
+
+이번 내용을 한 문장으로 줄이면 이렇습니다.
+
+> React Hook Form은 input typing을 매번 React 렌더링으로 끌어올리지 않기 때문에 form에서 좋은 성능 특성을 가질 수 있다.
+
+조금 더 나누어 정리하면 다음과 같습니다.
+
+1. input value는 DOM, React state, form library store 중 어디에 ownership을 둘지 선택할 수 있습니다.
+2. uncontrolled input은 DOM이 value owner입니다.
+3. controlled input은 React state가 value owner입니다.
+4. controlled input은 예측 가능하지만, 매 입력마다 React 렌더링 비용이 발생할 수 있습니다.
+5. `useState`는 값 변경이 render trigger입니다.
+6. `useRef`는 값을 기억하지만 `.current` 변경만으로 렌더링을 발생시키지 않습니다.
+7. React Hook Form은 이 특성을 활용해 input typing과 form metadata 관리를 분리합니다.
+8. 그래서 form 전체를 매번 다시 렌더링하지 않고도 validation, error, dirty state 같은 form 상태를 다룰 수 있습니다.
+
+React Hook Form을 단순히 “빠른 form library”로만 이해하면 왜 빠른지 감이 잘 오지 않습니다. 하지만 input ownership과 `useRef`의 렌더링 특성을 함께 보면 설계 방향이 훨씬 선명해집니다.
+
+브라우저가 잘하는 일은 브라우저에게 맡기고, React는 화면 갱신이 필요한 순간에만 개입한다.
+
+React Hook Form의 핵심은 이 균형에 있는 것 같습니다.
+
+긴 글 읽어주셔서 감사합니다.
