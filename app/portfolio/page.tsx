@@ -29,18 +29,6 @@ export default async function PortfolioPage({
 
   return (
     <VStack align="stretch" gap={{ base: 10, md: 14 }}>
-      <Box pt={{ base: 4, md: 5 }}>
-        <Text
-          as="h1"
-          fontSize={{ base: '18px', md: '22px' }}
-          fontWeight="500"
-          color="ink.600"
-          letterSpacing="-0.03em"
-        >
-          진행했던 프로젝트를 문제와 구현 중심으로 정리합니다
-        </Text>
-      </Box>
-
       <ProjectCategoryTabs selectedCategory={selectedCategory} />
 
       <SimpleGrid columns={1} gap={{ base: 5, md: 6 }}>
