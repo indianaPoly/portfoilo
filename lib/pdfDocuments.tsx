@@ -12,7 +12,13 @@ import {
 } from '@react-pdf/renderer';
 
 import { profile, timelineItems, workExperiences } from '@/data/aboutContent';
-import { projects } from '@/data/portfolioContent';
+import type { ProfileTimelineItem } from '@/data/aboutContent';
+import {
+  portfolioProjectNames,
+  projects,
+  resumeProjectNames,
+} from '@/data/portfolioContent';
+import type { Project } from '@/data/portfolioContent';
 
 export const pdfDocuments = 'pdf-documents';
 
@@ -46,10 +52,10 @@ const colors = {
   line: '#e9edf2',
 };
 
-const resumeHiddenProjectNames = new Set([
-  '숭실대학교 인공지능 프로젝트 — TSP 최적화',
-  '숭실대학교 운영체제 과제 — xv6 커널 수정',
-]);
+const portfolioDisplayTitles: Partial<Record<Project['name'], string>> = {
+  '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study':
+    'Weekly Threads Study',
+};
 
 const styles = StyleSheet.create({
   resumePage: {
@@ -69,16 +75,14 @@ const styles = StyleSheet.create({
     lineHeight: 1.46,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: colors.line,
   },
-  headerMain: {
-    flexGrow: 1,
-    flexBasis: 390,
+  portfolioHeaderMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 16,
   },
   contact: {
     width: 148,
@@ -99,10 +103,10 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
   },
   projectTitle: {
-    fontSize: 21,
+    fontSize: 19,
     fontWeight: 700,
-    lineHeight: 1.18,
-    letterSpacing: -1.1,
+    lineHeight: 1.2,
+    letterSpacing: -0.8,
   },
   portfolioPageMark: {
     color: colors.inkMuted,
@@ -248,36 +252,36 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
   resumeProject: {
-    paddingTop: 5.5,
-    paddingBottom: 5.5,
-    paddingHorizontal: 5,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingHorizontal: 4,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.line,
   },
   resumeProjectTitle: {
-    fontSize: 8.1,
+    fontSize: 7.6,
     fontWeight: 700,
-    lineHeight: 1.24,
+    lineHeight: 1.2,
   },
   resumeProjectMeta: {
-    marginTop: 1.3,
+    marginTop: 1,
     color: colors.brand,
-    fontSize: 7.1,
+    fontSize: 6.6,
     fontWeight: 700,
-    lineHeight: 1.22,
+    lineHeight: 1.18,
     opacity: 0.75,
   },
   resumeProjectSummary: {
-    marginTop: 2,
+    marginTop: 1.4,
     color: colors.inkSoft,
-    fontSize: 7.1,
-    lineHeight: 1.3,
+    fontSize: 6.6,
+    lineHeight: 1.24,
   },
   resumeProjectStack: {
-    marginTop: 1.7,
+    marginTop: 1.2,
     color: colors.inkMuted,
-    fontSize: 6.8,
-    lineHeight: 1.24,
+    fontSize: 6.2,
+    lineHeight: 1.18,
   },
   resumeAsideItem: {
     marginBottom: 6.5,
@@ -301,15 +305,15 @@ const styles = StyleSheet.create({
     minHeight: 96,
   },
   reportSection: {
-    marginTop: 16,
-    paddingTop: 10,
+    marginTop: 12,
+    paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: colors.line,
   },
   reportIntro: {
     color: colors.inkSoft,
-    fontSize: 10.4,
-    lineHeight: 1.5,
+    fontSize: 9.8,
+    lineHeight: 1.42,
     marginTop: 3,
   },
   reportContextRow: {
@@ -369,7 +373,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.3,
   },
   reportBulletList: {
-    gap: 6,
+    gap: 4,
     marginTop: 0,
   },
   reportBulletItem: {
@@ -386,8 +390,8 @@ const styles = StyleSheet.create({
   reportBulletText: {
     flex: 1,
     color: colors.inkSoft,
-    fontSize: 9.3,
-    lineHeight: 1.38,
+    fontSize: 8.8,
+    lineHeight: 1.32,
   },
   reportLinksRow: {
     flexDirection: 'row',
@@ -479,20 +483,40 @@ function ReportBulletList({
   );
 }
 
+function getTimelineSortValue(date: string) {
+  const matches = [...date.matchAll(/(\d{4})(?:\.(\d{2}))?/g)];
+  const latest = matches.at(-1);
+
+  if (!latest) return 0;
+
+  const year = Number(latest[1]);
+  const month = latest[2] ? Number(latest[2]) : 12;
+
+  return year * 100 + month;
+}
+
+function sortTimelineByLatestDate(
+  items: ProfileTimelineItem[]
+): ProfileTimelineItem[] {
+  return [...items].sort(
+    (a, b) => getTimelineSortValue(b.date) - getTimelineSortValue(a.date)
+  );
+}
+
 function ResumeDocument() {
-  const education = timelineItems.filter(
-    (item) => item.category === 'Education'
+  const education = sortTimelineByLatestDate(
+    timelineItems.filter((item) => item.category === 'Education')
   );
-  const recognitions = timelineItems.filter((item) =>
-    ['Award', 'Certificate'].includes(item.category)
+  const recognitions = sortTimelineByLatestDate(
+    timelineItems.filter((item) =>
+      ['Award', 'Certificate'].includes(item.category)
+    )
   );
-  const activities = timelineItems.filter(
-    (item) => item.category === 'Activity'
+  const activities = sortTimelineByLatestDate(
+    timelineItems.filter((item) => item.category === 'Activity')
   );
   const website = profile.website ?? 'https://www.poly-journal.xyz';
-  const resumeProjects = projects.filter(
-    (project) => !resumeHiddenProjectNames.has(project.name)
-  );
+  const resumeProjects = getProjectsInOrder(resumeProjectNames);
 
   return (
     <Document title={`${profile.name} Resume`} author="Poly Journal">
@@ -616,24 +640,29 @@ function ResumeDocument() {
 }
 
 function ProjectPortfolioDocument() {
+  const portfolioProjects = getProjectsInOrder(portfolioProjectNames);
+  const website = profile.website ?? 'https://www.poly-journal.xyz';
+
   return (
     <Document title="Poly Project Portfolio" author="Poly Journal">
-      {projects.map((project, index) => (
+      {portfolioProjects.map((project, index) => (
         <Page key={project.name} size="A4" style={styles.portfolioPage}>
           <View style={styles.header}>
-            <View style={styles.headerMain}>
+            <View style={styles.portfolioHeaderMeta}>
               <Text style={styles.eyebrow}>
                 Project Portfolio {String(index + 1).padStart(2, '0')} · Poly
               </Text>
-              <Text style={styles.projectTitle}>{project.name}</Text>
+              <Text style={styles.portfolioPageMark}>
+                PAGE {String(index + 1).padStart(2, '0')}
+              </Text>
             </View>
-            <Text style={styles.portfolioPageMark}>
-              PAGE {String(index + 1).padStart(2, '0')}
+            <Text style={styles.projectTitle}>
+              {portfolioDisplayTitles[project.name] ?? project.name}
             </Text>
           </View>
 
           <View style={styles.reportSection}>
-            <Text style={styles.reportLabel}>PROJECT DESCRIPTION</Text>
+            <Text style={styles.reportLabel}>PROJECT OVERVIEW</Text>
             <Text style={styles.reportIntro}>{project.summary}</Text>
           </View>
 
@@ -662,11 +691,10 @@ function ProjectPortfolioDocument() {
           <View style={styles.reportSection}>
             <View style={styles.reportMetaRow}>
               <View style={styles.reportMetaBlock}>
-                <Text style={styles.reportLabel}>ROLE</Text>
+                <Text style={styles.reportLabel}>ROLE / CONTRIBUTION</Text>
                 <Text style={styles.reportValue}>{project.role}</Text>
                 <Text style={styles.reportSubValue}>
-                  {project.organization}에서 담당한 역할과 범위를 간결하게
-                  정리했습니다.
+                  {project.contribution}
                 </Text>
               </View>
 
@@ -684,15 +712,32 @@ function ProjectPortfolioDocument() {
           </View>
 
           <View style={styles.reportSection}>
-            <Text style={styles.reportLabel}>HIGHLIGHTS</Text>
+            <Text style={styles.reportLabel}>CORE IMPLEMENTATION</Text>
             <ReportBulletList items={project.highlights} />
           </View>
 
-          {project.links?.length ? (
+          <View style={styles.reportSection}>
+            <Text style={styles.reportLabel}>OUTCOME</Text>
+            <Text style={styles.reportIntro}>{project.outcome}</Text>
+          </View>
+
+          {('relatedPosts' in project && project.relatedPosts?.length) ||
+          project.links?.length ? (
             <View style={styles.reportSection}>
-              <Text style={styles.reportLabel}>LINKS</Text>
+              <Text style={styles.reportLabel}>EVIDENCE / RELATED WRITING</Text>
               <View style={styles.reportLinksRow}>
-                {project.links.map((link) => (
+                {'relatedPosts' in project
+                  ? project.relatedPosts?.map((post) => (
+                      <Link
+                        key={post.slug}
+                        src={`${website}/blog/${post.slug}`}
+                        style={styles.reportLink}
+                      >
+                        {post.label}
+                      </Link>
+                    ))
+                  : null}
+                {project.links?.map((link) => (
                   <Link key={link.url} src={link.url} style={styles.reportLink}>
                     {link.label}
                   </Link>
@@ -702,21 +747,23 @@ function ProjectPortfolioDocument() {
           ) : null}
 
           <Text style={styles.footer}>
-            Poly Journal의 공통 프로젝트 포트폴리오 템플릿으로 생성된 1-page
-            문서입니다.
+            Poly Journal의 전체 프로젝트 포트폴리오로 생성된 1-page 문서입니다.
           </Text>
-          <Text
-            style={styles.footerPageNumber}
-            render={({ pageNumber, totalPages }) =>
-              `Page ${String(pageNumber).padStart(2, '0')} / ${String(
-                totalPages
-              ).padStart(2, '0')}`
-            }
-          />
         </Page>
       ))}
     </Document>
   );
+}
+
+function getProjectsInOrder(names: readonly string[]) {
+  const projectsByName = new Map(
+    projects.map((project) => [project.name, project])
+  );
+
+  return names.flatMap((name) => {
+    const project = projectsByName.get(name);
+    return project ? [project] : [];
+  });
 }
 
 async function renderPdfBuffer(

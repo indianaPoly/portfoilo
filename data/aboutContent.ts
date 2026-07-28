@@ -17,11 +17,11 @@ export const profile = {
   name: '고현림',
   headline: '프론트엔드와 제품 문제 해결을 함께 다루는 개발자',
   summary:
-    '더 좋은 팀이 어떻게 만들어지는지 고민하고 있습니다.\n열린 커뮤니케이션과 협업을 추구하며 함께 성장하고자 합니다.',
+    '사용자 흐름과 운영 이슈를 함께 보며 화면, API, 배포 구조를 연결해 문제를 해결합니다.\n장애 원인과 구현 판단을 기록으로 남겨 팀이 재사용할 수 있는 기준을 만드는 개발을 지향합니다.',
   email: 'hyeonlimgo5@gmail.com',
   github: 'https://github.com/indianaPoly',
   website: 'https://www.poly-journal.xyz',
-  skills: ['React', 'TypeScript', 'Next.js', 'Rust'],
+  skills: ['React', 'TypeScript', 'Next.js', 'Rust', 'Python', 'AWS', 'Docker'],
 };
 
 export const workExperiences: WorkExperienceItem[] = [
@@ -30,7 +30,7 @@ export const workExperiences: WorkExperienceItem[] = [
     organization: '(주)데브파이브',
     role: '정규직 · 웹 풀스택 개발자',
     items: [
-      '공공·교육·문화 도메인의 웹 서비스와 관리자 시스템을 개발했습니다.',
+      'Full Stack 개발자로 프로젝트에 참여하며 신청·결제·문서 관리 흐름을 구현하고, 인프라 개선과 배포·협업 기준 정리를 함께 진행했습니다.',
     ],
   },
   {
@@ -38,7 +38,7 @@ export const workExperiences: WorkExperienceItem[] = [
     organization: '(주)데브파이브',
     role: '프리랜서 · 웹 프론트엔드 개발자',
     items: [
-      '금융·공공 서비스의 랜딩 페이지와 결제·프로모션 화면을 개발했습니다.',
+      'Next.js를 활용해 서비스 랜딩 페이지와 앱뷰 화면을 개발하고, 모바일 결제·프로모션 흐름에 맞춘 사용자 인터페이스를 구현했습니다.',
     ],
   },
   {
@@ -46,7 +46,6 @@ export const workExperiences: WorkExperienceItem[] = [
     organization: 'BlockwaveLabs',
     role: 'Node.js 개발자',
     items: [
-      '탈중앙화 거래소 차익거래 모니터링 시스템을 개발했습니다.',
       '차익거래 사이클링 알고리즘을 최적화하고 네트워크별 모듈 구조를 정리했습니다.',
     ],
   },
