@@ -6,7 +6,7 @@ export const navContent = {
   ],
   downloads: {
     label: 'Download',
-    resumeLabel: '이력서',
-    portfolioLabel: '프로젝트 포트폴리오',
+    resumeLabel: '이력서를 볼래요.',
+    portfolioLabel: '포트폴리오를 볼래요.',
   },
 };

@@ -90,7 +90,7 @@ function DownloadMenu() {
             _hover={{ bg: 'paper.200', color: 'brand.700' }}
             _focus={{ bg: 'paper.200', color: 'brand.700' }}
           >
-            {navContent.downloads.resumeLabel} · One-page PDF
+            {navContent.downloads.resumeLabel}
           </Link>
 
           <Box borderTop="1px solid" borderColor="line.100" />
@@ -110,7 +110,7 @@ function DownloadMenu() {
             _hover={{ bg: 'paper.200', color: 'brand.700' }}
             _focus={{ bg: 'paper.200', color: 'brand.700' }}
           >
-            {navContent.downloads.portfolioLabel} · 전체 프로젝트 PDF
+            {navContent.downloads.portfolioLabel}
           </Link>
         </VStack>
       </Box>
