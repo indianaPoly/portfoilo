@@ -62,8 +62,8 @@ describe('PDF documents', () => {
     expect(resumeProjectNames).toHaveLength(11);
     expect(resumeProjectNames).toEqual([
       '바시 필라테스',
-      'devfive-console',
-      'devfive-portal',
+      '사내 콘솔 웹페이지',
+      '사내 포털 서비스',
       'MYCMS',
       'AI 기반 HWP 문서 자동 작성 서비스 — 또박또박',
       '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
