@@ -61,14 +61,14 @@ VM은 완전한 격리 환경이라는 장점이 있지만, CPU와 RAM 사용량
 
 ### Project CT
 
-* App runtime
-* Database runtime
+- App runtime
+- Database runtime
 
 ### CI CT
 
-* Build
-* Artifact 생성
-* Deployment
+- Build
+- Artifact 생성
+- Deployment
 
 여기서 중요한 포인트는 CI와 Runtime 분리였습니다.
 
@@ -143,9 +143,9 @@ nameserver 1.1.1.1
 
 선택지는 세 가지였습니다.
 
-* 로컬 PC
-* 별도 CI CT
-* 별도 CI VM
+- 로컬 PC
+- 별도 CI CT
+- 별도 CI VM
 
 로컬 PC는 단순하지만 항상 켜져 있어야 했습니다.
 
@@ -194,10 +194,10 @@ X64
 
 Workflow는 아래 label을 요구했습니다.
 
-* self-hosted
-* linux
-* docker
-* ci
+- self-hosted
+- linux
+- docker
+- ci
 
 하지만 runner에는 docker와 ci label이 없었습니다.
 
@@ -205,8 +205,8 @@ GitHub Actions는 필요한 label이 모두 일치해야 job을 runner에 할당
 
 Runner에 custom label을 추가했습니다.
 
-* docker
-* ci
+- docker
+- ci
 
 추가 후 workflow가 정상적으로 실행되었습니다.
 
@@ -214,8 +214,8 @@ Runner에 custom label을 추가했습니다.
 
 기존 프로젝트는 Cloudflare 기반 구조였습니다.
 
-* Cloudflare Workers
-* Cloudflare D1
+- Cloudflare Workers
+- Cloudflare D1
 
 이 구조를 그대로 홈서버 runtime으로 가져오기는 어려웠습니다.
 
@@ -269,10 +269,10 @@ docker compose up
 
 선택지는 아래 네 가지였습니다.
 
-* LAN direct access
-* Port forwarding
-* Tailscale VPN Mesh
-* Cloudflare Tunnel
+- LAN direct access
+- Port forwarding
+- Tailscale VPN Mesh
+- Cloudflare Tunnel
 
 저는 Tailscale을 선택했습니다.
 
@@ -348,19 +348,19 @@ service running
 
 평소에는 쉽게 지나가던 요소들이 직접 구축 환경에서는 전부 고려 대상이 되었습니다.
 
-* DNS
-* Routing
-* Gateway
-* Build pipeline
-* Runtime isolation
+- DNS
+- Routing
+- Gateway
+- Build pipeline
+- Runtime isolation
 
 특히 이번 구축에서 발생했던 문제들은 대부분 거대한 시스템 장애가 아니었습니다.
 
 대부분 설정 하나의 문제였습니다.
 
-* DNS 설정
-* Runner label
-* Gateway
+- DNS 설정
+- Runner label
+- Gateway
 
 작아 보이는 설정이 전체 시스템 동작을 결정했습니다.
 
@@ -368,10 +368,10 @@ service running
 
 아직 남은 작업도 있습니다.
 
-* Custom Domain 연결
-* Reverse Proxy 구성
-* TLS 자동화
-* Monitoring Stack 구축
+- Custom Domain 연결
+- Reverse Proxy 구성
+- TLS 자동화
+- Monitoring Stack 구축
 
 하지만 최소한 원하는 구조의 기반은 만들었습니다.
 

@@ -1,3 +1,35 @@
+export interface ExternalLink {
+  label: string;
+  href: string;
+  icon?: 'github' | 'email' | 'external';
+  showInHeader?: boolean;
+  showInFooter?: boolean;
+}
+
+export const externalLinks: ExternalLink[] = [
+  {
+    label: 'GitHub',
+    href: 'https://github.com/indianaPoly',
+    icon: 'github',
+    showInHeader: false,
+    showInFooter: true,
+  },
+  {
+    label: 'Email',
+    href: 'mailto:hyeonlimgo5@gmail.com',
+    icon: 'email',
+    showInHeader: false,
+    showInFooter: true,
+  },
+  {
+    label: '블록체인 아티클',
+    href: 'https://lush-fireman-992.notion.site/3aae3758101a80458a98c40168abacf9',
+    icon: 'external',
+    showInHeader: false,
+    showInFooter: true,
+  },
+];
+
 export const navContent = {
   brand: 'Poly Journal',
   links: [

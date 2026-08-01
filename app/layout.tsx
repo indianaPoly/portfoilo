@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { Container, Flex } from '@chakra-ui/react';
 import type { Metadata, Viewport } from 'next';
 
+import FloatingContactWidget from '@/components/common/FloatingContactWidget';
 import Footer from '@/components/layout/footer/Footer';
 import NavBar from '@/components/layout/header/NavBar';
 import { SkipNavigation } from '@/components/layout/header/SkipNavigation';
@@ -62,6 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </Container>
             <Footer />
           </Flex>
+          <FloatingContactWidget />
         </RootProvider>
       </body>
     </html>
