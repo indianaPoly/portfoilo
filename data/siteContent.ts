@@ -22,6 +22,13 @@ export const externalLinks: ExternalLink[] = [
     showInFooter: true,
   },
   {
+    label: 'AX 학습',
+    href: 'https://lush-fireman-992.notion.site/AX-3b1e3758101a80ce8d01f81c21bd6f66',
+    icon: 'external',
+    showInHeader: false,
+    showInFooter: true,
+  },
+  {
     label: '블록체인 아티클',
     href: 'https://lush-fireman-992.notion.site/3aae3758101a80458a98c40168abacf9',
     icon: 'external',
