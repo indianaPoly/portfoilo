@@ -308,17 +308,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 96,
   },
+  reportSectionFirst: {
+    marginTop: 10,
+  },
   reportSection: {
-    marginTop: 12,
+    marginTop: 10,
     paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: colors.line,
+  },
+  reportMetaSub: {
+    color: colors.inkMuted,
+    fontSize: 8.8,
+    fontWeight: 700,
+    marginBottom: 4,
   },
   reportIntro: {
     color: colors.inkSoft,
     fontSize: 9.8,
     lineHeight: 1.42,
-    marginTop: 3,
+    marginTop: 2,
   },
   reportContextRow: {
     flexDirection: 'row',
@@ -703,53 +712,28 @@ function CategoryPortfolioDocument({
             </Text>
           </View>
 
-          <View style={styles.reportSection}>
+          <View style={styles.reportSectionFirst}>
             <Text style={styles.reportLabel}>PROJECT OVERVIEW</Text>
+            <Text style={styles.reportMetaSub}>
+              {project.organization} ({project.period})
+            </Text>
             <Text style={styles.reportIntro}>{project.summary}</Text>
           </View>
 
           <View style={styles.reportSection}>
-            <Text style={styles.reportLabel}>PROJECT CONTEXT</Text>
-            <View style={styles.reportContextRow}>
-              <View style={styles.reportContextBlock}>
-                <Text style={styles.reportLabel}>TYPE / DOMAIN</Text>
-                <Text style={styles.reportContextValue}>
-                  {project.domainCategories?.join(' / ') ?? meta.name}
-                </Text>
-              </View>
-              <View style={styles.reportContextBlock}>
-                <Text style={styles.reportLabel}>PERIOD</Text>
-                <Text style={styles.reportContextValue}>{project.period}</Text>
-              </View>
-              <View style={styles.reportContextBlock}>
-                <Text style={styles.reportLabel}>ORGANIZATION</Text>
-                <Text style={styles.reportContextValue}>
-                  {project.organization}
-                </Text>
-              </View>
-            </View>
+            <Text style={styles.reportLabel}>ROLE / CONTRIBUTION</Text>
+            <Text style={styles.reportValue}>{project.role}</Text>
+            <Text style={styles.reportSubValue}>{project.contribution}</Text>
           </View>
 
           <View style={styles.reportSection}>
-            <View style={styles.reportMetaRow}>
-              <View style={styles.reportMetaBlock}>
-                <Text style={styles.reportLabel}>ROLE / CONTRIBUTION</Text>
-                <Text style={styles.reportValue}>{project.role}</Text>
-                <Text style={styles.reportSubValue}>
-                  {project.contribution}
+            <Text style={styles.reportLabel}>TECH STACK</Text>
+            <View style={styles.pillRow}>
+              {project.techStack.map((stack) => (
+                <Text key={stack} style={styles.pill}>
+                  {stack}
                 </Text>
-              </View>
-
-              <View style={styles.reportMetaBlock}>
-                <Text style={styles.reportLabel}>TECH STACK</Text>
-                <View style={styles.reportStackRow}>
-                  {project.techStack.map((stack) => (
-                    <Text key={stack} style={styles.reportStackPill}>
-                      {stack}
-                    </Text>
-                  ))}
-                </View>
-              </View>
+              ))}
             </View>
           </View>
 
@@ -814,53 +798,28 @@ function ProjectPortfolioDocument() {
             </Text>
           </View>
 
-          <View style={styles.reportSection}>
+          <View style={styles.reportSectionFirst}>
             <Text style={styles.reportLabel}>PROJECT OVERVIEW</Text>
+            <Text style={styles.reportMetaSub}>
+              {project.organization} ({project.period})
+            </Text>
             <Text style={styles.reportIntro}>{project.summary}</Text>
           </View>
 
           <View style={styles.reportSection}>
-            <Text style={styles.reportLabel}>PROJECT CONTEXT</Text>
-            <View style={styles.reportContextRow}>
-              <View style={styles.reportContextBlock}>
-                <Text style={styles.reportLabel}>TYPE / DOMAIN</Text>
-                <Text style={styles.reportContextValue}>
-                  {project.domainCategories?.join(' / ') ?? project.category}
-                </Text>
-              </View>
-              <View style={styles.reportContextBlock}>
-                <Text style={styles.reportLabel}>PERIOD</Text>
-                <Text style={styles.reportContextValue}>{project.period}</Text>
-              </View>
-              <View style={styles.reportContextBlock}>
-                <Text style={styles.reportLabel}>ORGANIZATION</Text>
-                <Text style={styles.reportContextValue}>
-                  {project.organization}
-                </Text>
-              </View>
-            </View>
+            <Text style={styles.reportLabel}>ROLE / CONTRIBUTION</Text>
+            <Text style={styles.reportValue}>{project.role}</Text>
+            <Text style={styles.reportSubValue}>{project.contribution}</Text>
           </View>
 
           <View style={styles.reportSection}>
-            <View style={styles.reportMetaRow}>
-              <View style={styles.reportMetaBlock}>
-                <Text style={styles.reportLabel}>ROLE / CONTRIBUTION</Text>
-                <Text style={styles.reportValue}>{project.role}</Text>
-                <Text style={styles.reportSubValue}>
-                  {project.contribution}
+            <Text style={styles.reportLabel}>TECH STACK</Text>
+            <View style={styles.pillRow}>
+              {project.techStack.map((stack) => (
+                <Text key={stack} style={styles.pill}>
+                  {stack}
                 </Text>
-              </View>
-
-              <View style={styles.reportMetaBlock}>
-                <Text style={styles.reportLabel}>TECH STACK</Text>
-                <View style={styles.reportStackRow}>
-                  {project.techStack.map((stack) => (
-                    <Text key={stack} style={styles.reportStackPill}>
-                      {stack}
-                    </Text>
-                  ))}
-                </View>
-              </View>
+              ))}
             </View>
           </View>
 
@@ -895,7 +854,7 @@ function ProjectPortfolioDocument() {
           ) : null}
 
           <Text style={styles.footer}>
-            Poly Journal의 전체 프로젝트 포트폴리오로 생성된 1-page 문서입니다.
+            Poly Journal 프로젝트 1-page 포트폴리오 문서입니다.
           </Text>
         </Page>
       ))}
