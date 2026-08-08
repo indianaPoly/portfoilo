@@ -85,26 +85,6 @@ export function ProjectCard({ project }: { project: Project }) {
         >
           {project.summary}
         </Text>
-
-        {project.contribution ? (
-          <Box
-            borderLeft="3px solid"
-            borderColor="brand.500"
-            pl={3.5}
-            py={0.5}
-            my={1}
-          >
-            <Text
-              fontSize={{ base: '14px', md: '15px' }}
-              color="ink.800"
-              fontWeight="500"
-              lineHeight="1.65"
-              letterSpacing="-0.03em"
-            >
-              {project.contribution}
-            </Text>
-          </Box>
-        ) : null}
       </VStack>
 
       <Wrap gap={2}>
@@ -112,6 +92,26 @@ export function ProjectCard({ project }: { project: Project }) {
           <StackPill key={stack}>{stack}</StackPill>
         ))}
       </Wrap>
+
+      {project.contribution ? (
+        <Box
+          borderLeft="3px solid"
+          borderColor="brand.500"
+          pl={3.5}
+          py={0.5}
+          my={1}
+        >
+          <Text
+            fontSize={{ base: '14.5px', md: '15.5px' }}
+            color="ink.800"
+            fontWeight="500"
+            lineHeight="1.65"
+            letterSpacing="-0.03em"
+          >
+            {project.contribution}
+          </Text>
+        </Box>
+      ) : null}
 
       <VStack as="ul" align="stretch" gap={3} pl={0}>
         {project.highlights.map((highlight) => (
