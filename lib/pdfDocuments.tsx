@@ -736,10 +736,10 @@ function CategoryPortfolioDocument({
 
           <View style={styles.reportSectionFirst}>
             <Text style={styles.reportLabel}>PROJECT OVERVIEW</Text>
-            <Text style={styles.reportMetaSub}>
+            <Text style={styles.reportValue}>
               {project.organization} ({project.period})
             </Text>
-            <Text style={styles.reportIntro}>{project.summary}</Text>
+            <Text style={styles.reportSubValue}>{project.summary}</Text>
           </View>
 
           <View style={styles.reportSection}>
@@ -831,10 +831,10 @@ function ProjectPortfolioDocument() {
 
           <View style={styles.reportSectionFirst}>
             <Text style={styles.reportLabel}>PROJECT OVERVIEW</Text>
-            <Text style={styles.reportMetaSub}>
+            <Text style={styles.reportValue}>
               {project.organization} ({project.period})
             </Text>
-            <Text style={styles.reportIntro}>{project.summary}</Text>
+            <Text style={styles.reportSubValue}>{project.summary}</Text>
           </View>
 
           <View style={styles.reportSection}>
