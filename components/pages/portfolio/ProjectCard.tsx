@@ -1,3 +1,5 @@
+import NextLink from 'next/link';
+
 import {
   Box,
   Heading,
@@ -113,9 +115,44 @@ export function ProjectCard({ project }: { project: Project }) {
         ))}
       </VStack>
 
-      {project.links?.length ? (
+      {('relatedPosts' in project && project.relatedPosts?.length) ||
+      project.links?.length ? (
         <HStack gap={3} flexWrap="wrap">
-          {project.links.map((link) => (
+          {'relatedPosts' in project
+            ? project.relatedPosts?.map((post) => (
+                <Link
+                  key={post.slug}
+                  as={NextLink}
+                  href={`/blog/${post.slug}`}
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={1.5}
+                  px="14px"
+                  py="8px"
+                  borderRadius="999px"
+                  bg="brand.50"
+                  color="brand.700"
+                  fontSize="14px"
+                  fontWeight="600"
+                  letterSpacing="-0.03em"
+                  transition="background-color 180ms ease, color 180ms ease, transform 180ms ease"
+                  _hover={{ bg: 'brand.100', textDecoration: 'none' }}
+                  _active={{ transform: 'scale(0.95)' }}
+                  _focusVisible={{
+                    outline: '2px solid',
+                    outlineColor: 'brand.500',
+                    outlineOffset: '3px',
+                  }}
+                >
+                  <Box as="span" fontSize="13px">
+                    📝
+                  </Box>{' '}
+                  {post.label}
+                </Link>
+              ))
+            : null}
+
+          {project.links?.map((link) => (
             <Link
               key={link.url}
               href={link.url}
