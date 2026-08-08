@@ -275,14 +275,11 @@ export const projects: ProjectItem[] = [
     summary:
       '팀 내 아이디어, 회의 주제, 회고 내용을 하나의 흐름으로 모으고 논의할 수 있는 실시간 협업 플랫폼을 개발했습니다.',
     techStack: [
-      'React',
-      'TypeScript',
       'TanStack Start',
       'TanStack Router',
       'Server-Sent Events',
       'Tauri',
       'Playwright',
-      'SCSS Module',
     ],
     highlights: [
       '주제 작성, 댓글 참여, 실시간 세션, 결과 아카이브로 이어지는 협업 흐름을 설계해 단순 게시판이 아닌 지속적인 지식 공유 경험을 구현했습니다.',
@@ -353,14 +350,7 @@ export const projects: ProjectItem[] = [
       '925개 파일, 65,004 LOC 규모의 프론트엔드 코드베이스에서 기술 레이어 vs 도메인 구조 및 AGENTS.md 배치가 AI Agent의 토큰·비용·품질에 미치는 영향을 실험하고 분석했습니다.',
     summary:
       '동일한 프론트엔드 코드베이스를 대상으로 폴더 구조와 AGENTS.md 배치 방식을 독립적으로 다르게 적용하며 AI Agent의 탐색 비용, 토큰 소비량, 작업 품질을 벤치마킹한 연구 프로젝트입니다.',
-    techStack: [
-      'AI Agent',
-      'AGENTS.md',
-      'Next.js',
-      'TypeScript',
-      'Benchmark',
-      'Token Optimization',
-    ],
+    techStack: ['AI Agent', 'AGENTS.md', 'Next.js'],
     highlights: [
       '925개 파일, 65,004 LOC 규모의 프론트엔드 코드베이스를 대상으로 코드는 동일하게 유지하고 기술 레이어 구조 vs 도메인 구조 및 지침 배치를 변경하며 벤치마킹했습니다.',
       '초기 단일 측정에서 도메인 구조 비용이 56% 감소했으나 5회 반복 측정 후 평균 +1.8%(비용 +11.3%, 토큰 +13.6%)로 수렴하는 것을 관찰하여 단일 결과가 아닌 반복 측정의 필요성을 입증했습니다.',
@@ -501,7 +491,7 @@ export const projects: ProjectItem[] = [
       '어려운 문서를 쉽게 이해시키는 랜딩 경험을 구현하고, 체험형 비교 UI·다크 모드·튜토리얼을 통해 서비스 진입과 사용 흐름을 설계했습니다.',
     summary:
       '공공기관 안내문, 전문 문서처럼 이해하기 어려운 정보를 쉽게 변환해 정보 접근성을 높이기 위한 서비스의 랜딩 페이지입니다.',
-    techStack: ['Next.js 16', 'React', 'TypeScript', 'react-joyride', 'Vitest'],
+    techStack: ['Next.js', 'react-joyride', 'Vitest'],
     highlights: [
       '서비스 설명만으로는 쉬운 글 변환 효과를 전달하기 어렵다고 판단해, 사용자가 원문을 입력하고 변환 결과를 같은 화면에서 비교하는 체험형 인터페이스를 핵심 진입점으로 구현했습니다.',
       '원문·변환문 영역의 시각적 계층과 상태 표현을 분리해 입력 전, 변환 중, 완료와 오류 상태가 명확하게 드러나도록 구성했습니다.',
@@ -521,7 +511,7 @@ export const projects: ProjectItem[] = [
       '모바일 결제 제약을 고려해 프로모션과 결제 화면을 구현하고, 입력 단계가 긴 사용 흐름의 포커스 처리와 인터랙션 일관성을 개선했습니다.',
     summary:
       'NH 올원뱅크 캐시백 쿠폰몰의 결제 및 프로모션 페이지로, iOS Safari 환경 제약 극복, iframe 결제창 생명주기 및 postMessage 통신을 구성했습니다.',
-    techStack: ['Next.js', 'React', 'TypeScript', 'iframe', 'postMessage'],
+    techStack: ['Next.js', 'iframe'],
     highlights: [
       'Safari iOS 환경에서 PG 결제가 앱 정책과 충돌하는 문제를 마주했고, 정책을 변경하기보다 가능한 구현 범위를 중심으로 결제 플로우를 구성했습니다.',
       'PG 결제창을 iframe으로 열고 결제 완료 화면의 마운트 신호를 수신해 창을 닫는 메시지(postMessage) 통신 흐름을 구성하여 외부 결제 UI의 생명주기를 제어했습니다.',
@@ -564,7 +554,7 @@ export const projects: ProjectItem[] = [
       '실시간 주가·뉴스·AI 분석 결과를 전달하는 화면의 데이터 갱신과 차트 표현을 담당하며, 사용자에게 의미 있는 변화만 보여 주도록 렌더링 비용을 제어했습니다.',
     summary:
       '실시간 주가 데이터 환경에서 SWR 조건부 패칭/캐싱 및 불필요한 렌더링을 최적화한 분석 투자 솔루션 프론트엔드입니다.',
-    techStack: ['React', 'SWR', 'TypeScript'],
+    techStack: ['React', 'SWR'],
     highlights: [
       '불필요한 리렌더링을 줄이기 위해 Y축 범위를 현재 가격 기준 ±0.1%로 제한하고, 의미 있는 변화에만 차트가 갱신되도록 개선했습니다.',
       '실시간 데이터 갱신 과정에서 의미 없는 요청과 상태 변경이 반복되는 문제를 해결하기 위해, SWR의 조건부 패칭과 캐싱을 활용해 데이터 갱신 시점을 정리했습니다.',
