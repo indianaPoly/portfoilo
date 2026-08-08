@@ -45,7 +45,12 @@ export const navContent = {
   ],
   downloads: {
     label: 'Download',
-    resumeLabel: '이력서를 볼래요.',
-    portfolioLabel: '포트폴리오를 볼래요.',
+    resumeLabel: '이력서 PDF',
+    domainDownloads: [
+      { slug: 'frontend', label: 'Frontend 포트폴리오 PDF' },
+      { slug: 'fullstack', label: 'Full-stack 포트폴리오 PDF' },
+      { slug: 'devops', label: 'DevOps 포트폴리오 PDF' },
+      { slug: 'ai-ax', label: 'AI / AX 포트폴리오 PDF' },
+    ],
   },
 };

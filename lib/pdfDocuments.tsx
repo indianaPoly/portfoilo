@@ -14,11 +14,13 @@ import {
 import { profile, timelineItems, workExperiences } from '@/data/aboutContent';
 import type { ProfileTimelineItem } from '@/data/aboutContent';
 import {
+  domainMetadata,
+  domainSlugToCategory,
   portfolioProjectNames,
   projects,
   resumeProjectNames,
 } from '@/data/portfolioContent';
-import type { Project } from '@/data/portfolioContent';
+import type { DomainCategory, Project } from '@/data/portfolioContent';
 
 export const pdfDocuments = 'pdf-documents';
 
@@ -55,6 +57,8 @@ const colors = {
 const portfolioDisplayTitles: Partial<Record<Project['name'], string>> = {
   '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study':
     'Weekly Threads Study',
+  '도메인 주도 프론트엔드 구조와 AI Agent 개발 효율 실험':
+    'AI Agent 개발 효율 및 프론트엔드 구조 실험',
 };
 
 const styles = StyleSheet.create({
@@ -177,12 +181,12 @@ const styles = StyleSheet.create({
   pillRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 4,
-    marginTop: 4,
+    gap: 5,
+    marginTop: 6,
   },
   pill: {
-    paddingHorizontal: 6,
-    paddingVertical: 3,
+    paddingHorizontal: 7,
+    paddingVertical: 3.5,
     borderRadius: 999,
     backgroundColor: colors.brandSoft,
     color: colors.brand,
@@ -431,8 +435,8 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: 'absolute',
-    left: 30,
-    right: 30,
+    left: 36,
+    right: 36,
     bottom: 18,
     paddingTop: 5,
     borderTopWidth: 1,
@@ -440,14 +444,47 @@ const styles = StyleSheet.create({
     color: colors.inkMuted,
     fontSize: 7.2,
   },
-  footerPageNumber: {
-    position: 'absolute',
-    right: 28,
-    bottom: 18,
-    paddingTop: 5,
-    color: colors.inkMuted,
-    fontSize: 7,
-    textAlign: 'right',
+
+  // Category overview specific styles
+  competencyBox: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: colors.brandSoftAlt,
+    borderWidth: 1,
+    borderColor: colors.brandSoft,
+    marginTop: 4,
+  },
+  competencyText: {
+    color: colors.ink,
+    fontSize: 10,
+    fontWeight: 700,
+    lineHeight: 1.45,
+  },
+  csGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 4,
+  },
+  csCategoryBlock: {
+    width: '48%',
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: colors.paperSoft,
+    borderWidth: 1,
+    borderColor: colors.line,
+  },
+  csCategoryTitle: {
+    color: colors.brand,
+    fontSize: 8.8,
+    fontWeight: 700,
+    marginBottom: 4,
+  },
+  csItemText: {
+    flex: 1,
+    color: colors.inkSoft,
+    fontSize: 8,
+    lineHeight: 1.3,
   },
 });
 
@@ -639,21 +676,61 @@ function ResumeDocument() {
   );
 }
 
-function ProjectPortfolioDocument() {
-  const portfolioProjects = getProjectsInOrder(portfolioProjectNames);
+function CategoryPortfolioDocument({
+  category,
+}: {
+  category: Exclude<DomainCategory, '전체'>;
+}) {
+  const meta = domainMetadata[category];
+  const targetProjects = getProjectsInOrder(meta.representativeProjects);
   const website = profile.website ?? 'https://www.poly-journal.xyz';
 
   return (
-    <Document title="Poly Project Portfolio" author="Poly Journal">
-      {portfolioProjects.map((project, index) => (
+    <Document title={`Poly ${meta.name} Portfolio`} author="Poly Journal">
+      {/* Page 1: Domain Overview & Representative Projects */}
+      <Page size="A4" style={styles.portfolioPage}>
+        <View style={styles.header}>
+          <View style={styles.portfolioHeaderMeta}>
+            <Text style={styles.eyebrow}>Domain Portfolio · {meta.name}</Text>
+            <Text style={styles.portfolioPageMark}>PAGE 01</Text>
+          </View>
+          <Text style={styles.projectTitle}>{meta.name} Portfolio</Text>
+          <Text style={styles.summary}>{meta.subtitle}</Text>
+        </View>
+
+        <View style={styles.reportSection}>
+          <Text style={styles.reportLabel}>이 영역에서 보여줄 역량</Text>
+          <View style={styles.competencyBox}>
+            <Text style={styles.competencyText}>{meta.competency}</Text>
+          </View>
+        </View>
+
+        <View style={styles.reportSection}>
+          <Text style={styles.reportLabel}>REPRESENTATIVE PROJECTS</Text>
+          <View style={styles.pillRow}>
+            {meta.representativeProjects.map((pName) => (
+              <Text key={pName} style={styles.pill}>
+                {pName}
+              </Text>
+            ))}
+          </View>
+        </View>
+
+        <Text style={styles.footer}>
+          Poly Journal {meta.name} 영역 맞춤 포트폴리오 문서입니다.
+        </Text>
+      </Page>
+
+      {/* Page 2+: Representative Project Details */}
+      {targetProjects.map((project, index) => (
         <Page key={project.name} size="A4" style={styles.portfolioPage}>
           <View style={styles.header}>
             <View style={styles.portfolioHeaderMeta}>
               <Text style={styles.eyebrow}>
-                Project Portfolio {String(index + 1).padStart(2, '0')} · Poly
+                {meta.name} Project {String(index + 1).padStart(2, '0')} · Poly
               </Text>
               <Text style={styles.portfolioPageMark}>
-                PAGE {String(index + 1).padStart(2, '0')}
+                PAGE {String(index + 2).padStart(2, '0')}
               </Text>
             </View>
             <Text style={styles.projectTitle}>
@@ -670,9 +747,9 @@ function ProjectPortfolioDocument() {
             <Text style={styles.reportLabel}>PROJECT CONTEXT</Text>
             <View style={styles.reportContextRow}>
               <View style={styles.reportContextBlock}>
-                <Text style={styles.reportLabel}>TYPE</Text>
+                <Text style={styles.reportLabel}>TYPE / DOMAIN</Text>
                 <Text style={styles.reportContextValue}>
-                  {project.category}
+                  {project.domainCategories?.join(' / ') ?? meta.name}
                 </Text>
               </View>
               <View style={styles.reportContextBlock}>
@@ -716,9 +793,115 @@ function ProjectPortfolioDocument() {
             <ReportBulletList items={project.highlights} />
           </View>
 
+          {('relatedPosts' in project && project.relatedPosts?.length) ||
+          project.links?.length ? (
+            <View style={styles.reportSection}>
+              <Text style={styles.reportLabel}>EVIDENCE / RELATED WRITING</Text>
+              <View style={styles.reportLinksRow}>
+                {'relatedPosts' in project
+                  ? project.relatedPosts?.map((post) => (
+                      <Link
+                        key={post.slug}
+                        src={`${website}/blog/${post.slug}`}
+                        style={styles.reportLink}
+                      >
+                        {post.label}
+                      </Link>
+                    ))
+                  : null}
+                {project.links?.map((link) => (
+                  <Link key={link.url} src={link.url} style={styles.reportLink}>
+                    {link.label}
+                  </Link>
+                ))}
+              </View>
+            </View>
+          ) : null}
+
+          <Text style={styles.footer}>
+            Poly Journal {meta.name} 영역 맞춤 프로젝트 1-page 문서입니다.
+          </Text>
+        </Page>
+      ))}
+    </Document>
+  );
+}
+
+function ProjectPortfolioDocument() {
+  const portfolioProjects = getProjectsInOrder(portfolioProjectNames);
+  const website = profile.website ?? 'https://www.poly-journal.xyz';
+
+  return (
+    <Document title="Poly Project Portfolio" author="Poly Journal">
+      {portfolioProjects.map((project, index) => (
+        <Page key={project.name} size="A4" style={styles.portfolioPage}>
+          <View style={styles.header}>
+            <View style={styles.portfolioHeaderMeta}>
+              <Text style={styles.eyebrow}>
+                Project Portfolio {String(index + 1).padStart(2, '0')} · Poly
+              </Text>
+              <Text style={styles.portfolioPageMark}>
+                PAGE {String(index + 1).padStart(2, '0')}
+              </Text>
+            </View>
+            <Text style={styles.projectTitle}>
+              {portfolioDisplayTitles[project.name] ?? project.name}
+            </Text>
+          </View>
+
           <View style={styles.reportSection}>
-            <Text style={styles.reportLabel}>OUTCOME</Text>
-            <Text style={styles.reportIntro}>{project.outcome}</Text>
+            <Text style={styles.reportLabel}>PROJECT OVERVIEW</Text>
+            <Text style={styles.reportIntro}>{project.summary}</Text>
+          </View>
+
+          <View style={styles.reportSection}>
+            <Text style={styles.reportLabel}>PROJECT CONTEXT</Text>
+            <View style={styles.reportContextRow}>
+              <View style={styles.reportContextBlock}>
+                <Text style={styles.reportLabel}>TYPE / DOMAIN</Text>
+                <Text style={styles.reportContextValue}>
+                  {project.domainCategories?.join(' / ') ?? project.category}
+                </Text>
+              </View>
+              <View style={styles.reportContextBlock}>
+                <Text style={styles.reportLabel}>PERIOD</Text>
+                <Text style={styles.reportContextValue}>{project.period}</Text>
+              </View>
+              <View style={styles.reportContextBlock}>
+                <Text style={styles.reportLabel}>ORGANIZATION</Text>
+                <Text style={styles.reportContextValue}>
+                  {project.organization}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.reportSection}>
+            <View style={styles.reportMetaRow}>
+              <View style={styles.reportMetaBlock}>
+                <Text style={styles.reportLabel}>ROLE / CONTRIBUTION</Text>
+                <Text style={styles.reportValue}>{project.role}</Text>
+                <Text style={styles.reportSubValue}>
+                  {project.contribution}
+                </Text>
+              </View>
+
+              <View style={styles.reportMetaBlock}>
+                <Text style={styles.reportLabel}>TECH STACK</Text>
+                <View style={styles.reportStackRow}>
+                  {project.techStack.map((stack) => (
+                    <Text key={stack} style={styles.reportStackPill}>
+                      {stack}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.reportSection}>
+            <Text style={styles.reportLabel}>CORE IMPLEMENTATION</Text>
+            <ReportBulletList items={project.highlights} />
           </View>
 
           {('relatedPosts' in project && project.relatedPosts?.length) ||
@@ -783,7 +966,22 @@ export function renderResumePdf(): Promise<Buffer> {
   return renderPdfBuffer(<ResumeDocument />);
 }
 
-export function renderProjectPortfolioPdf(): Promise<Buffer> {
+export function renderCategoryPortfolioPdf(
+  category: Exclude<DomainCategory, '전체'>
+): Promise<Buffer> {
+  return renderPdfBuffer(<CategoryPortfolioDocument category={category} />);
+}
+
+export function renderProjectPortfolioPdf(
+  categorySlug?: string
+): Promise<Buffer> {
+  if (categorySlug) {
+    const matchedCategory = domainSlugToCategory[categorySlug.toLowerCase()];
+    if (matchedCategory && matchedCategory !== '전체') {
+      return renderCategoryPortfolioPdf(matchedCategory);
+    }
+  }
+
   return renderPdfBuffer(<ProjectPortfolioDocument />);
 }
 

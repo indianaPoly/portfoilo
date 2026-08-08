@@ -1,22 +1,131 @@
 export const projectCategories = [
   '전체',
-  '실무 및 인턴',
-  '학교',
-  '사이드 프로젝트',
-  '외부 활동',
+  'Frontend',
+  'Full-stack',
+  'DevOps',
+  'AI / AX',
 ] as const;
 
-export const projects = [
+export type ProjectCategory = (typeof projectCategories)[number];
+
+export const domainCategories = [
+  '전체',
+  'Frontend',
+  'Full-stack',
+  'DevOps',
+  'AI / AX',
+] as const;
+
+export type DomainCategory = (typeof domainCategories)[number];
+
+export const domainSlugMap: Record<Exclude<DomainCategory, '전체'>, string> = {
+  Frontend: 'frontend',
+  'Full-stack': 'fullstack',
+  DevOps: 'devops',
+  'AI / AX': 'ai-ax',
+};
+
+export const domainSlugToCategory: Record<string, DomainCategory> = {
+  frontend: 'Frontend',
+  fullstack: 'Full-stack',
+  devops: 'DevOps',
+  'ai-ax': 'AI / AX',
+  all: '전체',
+};
+
+export interface DomainMetadata {
+  name: Exclude<DomainCategory, '전체'>;
+  slug: string;
+  subtitle: string;
+  competency: string;
+  representativeProjects: string[];
+}
+
+export const domainMetadata: Record<
+  Exclude<DomainCategory, '전체'>,
+  DomainMetadata
+> = {
+  Frontend: {
+    name: 'Frontend',
+    slug: 'frontend',
+    subtitle: '프론트엔드 전문 역량',
+    competency:
+      '사용자의 화면에서 발생하는 상태와 데이터 흐름을 이해하고, 실시간 통신과 성능, 사용자 경험까지 고려해 구현할 수 있는 개발자',
+    representativeProjects: [
+      '도메인 주도 프론트엔드 구조와 AI Agent 개발 효율 실험',
+      '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
+      'NH 올원뱅크 캐시백 쿠폰몰 결제 및 프로모션 페이지',
+      '쉬운 글 작성 - 온글 landing 페이지',
+      'sLM(small language model)을 활용한 분석 투자 솔루션',
+    ],
+  },
+  'Full-stack': {
+    name: 'Full-stack',
+    slug: 'fullstack',
+    subtitle: '풀스택 전문 역량',
+    competency:
+      '사용자의 요구사항을 단순한 화면 구현에서 끝내지 않고, API와 데이터 구조, 비즈니스 로직까지 연결해 실제 시스템으로 구현할 수 있는 개발자',
+    representativeProjects: [
+      '사내 포털 서비스',
+      '동아·동서 글로컬 연합대학 홈페이지',
+      '제주국제관악제 홈페이지',
+      '사내 콘솔 웹페이지',
+      'MYCMS',
+    ],
+  },
+  DevOps: {
+    name: 'DevOps',
+    slug: 'devops',
+    subtitle: '데브옵스 전문 역량',
+    competency:
+      '코드를 작성하는 것에서 끝나지 않고, 네트워크와 컨테이너, 배포, 모니터링까지 실제 서비스가 사용자에게 전달되는 전체 흐름을 이해하는 개발자',
+    representativeProjects: [
+      '바시 필라테스',
+      'MYCMS',
+      '사내 콘솔 웹페이지',
+      '동아·동서 글로컬 연합대학 홈페이지',
+    ],
+  },
+  'AI / AX': {
+    name: 'AI / AX',
+    slug: 'ai-ax',
+    subtitle: 'AI / AX 전문 역량',
+    competency:
+      'AI 모델과 파이프라인, UX, Enterprise 시스템 및 알고리즘 구현을 결합해 단순한 AI 도입을 넘어 실제 서비스와 업무 혁신(AX)으로 연결할 수 있는 개발자',
+    representativeProjects: [
+      '도메인 주도 프론트엔드 구조와 AI Agent 개발 효율 실험',
+      'AI 기반 HWP 문서 자동 작성 서비스 — 또박또박',
+      'KB_NEWS_AI',
+      '숭실대학교 인공지능 프로젝트 — TSP 최적화',
+    ],
+  },
+};
+
+export interface ProjectItem {
+  name: string;
+  category: string;
+  domainCategories: Array<Exclude<DomainCategory, '전체'>>;
+  organization: string;
+  period: string;
+  role: string;
+  contribution: string;
+  summary: string;
+  techStack: string[];
+  highlights: string[];
+  relatedPosts?: Array<{ label: string; slug: string }>;
+  links?: Array<{ label: string; url: string }>;
+}
+
+export const projects: ProjectItem[] = [
   {
     name: '바시 필라테스',
     category: '실무 및 인턴',
+    domainCategories: ['DevOps'],
     organization: '(주)데브파이브',
     period: '진행 중',
     role: '클라우드 인프라 구축 및 배포 자동화',
     contribution:
       'OpenTofu로 AWS 인프라를 표준화하고 Docker 기반 CI/CD를 구성해, 제약이 있는 Free Tier 환경에서도 실제 서비스 배포와 장애 진단 과정을 완성했습니다.',
-    outcome:
-      'GitHub Actions 캐시 적용으로 반복 빌드 시간을 6~8분에서 1~2분으로 단축하고, 인프라·컨테이너·프록시 계층의 진단 절차를 재사용 가능한 Incident Log로 정리했습니다.',
     summary:
       '바시 필라테스 서비스의 AWS 인프라를 OpenTofu로 표준화하고 보안 취약점을 개선한 뒤, Docker 기반 CI/CD 파이프라인의 첫 배포까지 장애를 진단·해결한 프로젝트입니다.',
     techStack: [
@@ -36,13 +145,12 @@ export const projects = [
   {
     name: '사내 콘솔 웹페이지',
     category: '실무 및 인턴',
+    domainCategories: ['DevOps', 'Full-stack'],
     organization: '(주)데브파이브',
     period: '진행 중',
     role: '풀스택 개발',
     contribution:
       '공공조달 공고를 탐색·검토하는 운영 콘솔의 서비스 기능을 외부 솔루션에서도 쓸 수 있도록 개방하고, 발급된 서비스 키와 요청 시각·본문 해시 기반 HMAC-SHA256 서명 검증 구조를 정리했습니다.',
-    outcome:
-      '경영진과 실무자가 공고와 첨부문서를 안정적으로 확인할 수 있는 운영 콘솔을 제공하고, 발급된 서비스 키로 외부 솔루션도 동일 기능을 재사용할 수 있게 했습니다.',
     summary:
       'DevFive 경영진과 실무자가 공공조달 공고를 빠르게 탐색하고 상세 정보와 첨부문서를 안정적으로 확인할 수 있도록 구축한 사내 콘솔 웹페이지로, Docker 배포 중 서비스 중단을 줄이기 위해 Loki·Prometheus·Grafana 모니터링과 Blue-Green 배포를 적용했습니다.',
     techStack: [
@@ -54,6 +162,8 @@ export const projects = [
       'Loki',
       'Prometheus',
       'Grafana',
+      'cAdvisor',
+      'HMAC-SHA256',
     ],
     highlights: [
       '나라장터 목록은 Cron 기반으로 주기 수집하되 상세 정보는 사용자가 공고를 열 때 조회하는 on-demand 방식으로 분리해, 불필요한 외부 API 호출과 초기 적재 비용을 줄였습니다.',
@@ -67,20 +177,19 @@ export const projects = [
   {
     name: '사내 포털 서비스',
     category: '실무 및 인턴',
+    domainCategories: ['Full-stack'],
     organization: '(주)데브파이브',
     period: '진행 중',
     role: '풀스택 개발',
     contribution:
       '정기구독 로직을 4개 상태와 8개 이벤트의 상태 머신으로 정리하고, 판정 로직은 순수 함수로 분리했습니다.',
-    outcome:
-      '테스트를 47개에서 138개로 늘리고, 전체 테스트 138개를 0.91초에 실행하는 검증 체계를 마련했으며, 출시 전 환불 요청을 100% 거부하던 버그와 스케줄러 이중 청구 위험을 제거했습니다.',
     summary:
       '자체 소프트웨어 판매를 위한 사내 포털 서비스로, CMS 기반 강의 관리와 이수증 발급, 정기구독과 결제 운영을 한곳에서 관리합니다.',
-    techStack: ['Next.js', 'Rust', 'PostgreSQL'],
+    techStack: ['Next.js', 'Rust', 'PostgreSQL', 'State Machine'],
     highlights: [
       '자체 소프트웨어 판매를 위한 사내 포털 서비스로, CMS 기반 강의 관리와 이수증 발급, 정기구독과 결제 운영을 한 서비스에서 다루도록 구성했습니다.',
       '결제 성공을 즉시 권한으로 치환하지 않고 결제 처리와 라이선스 발급을 별도 도메인으로 분리해, 재처리나 오류가 발생해도 과금 기록과 사용자 권한이 서로 덮어쓰이지 않도록 구성했습니다.',
-      '정기결제 로직을 4개 상태와 8개 이벤트의 상태 머신으로 정리하고, 판정 로직은 순수 함수로 분리해 복잡한 분기를 줄였습니다.',
+      '정기결제 로직을 4개 상태와 8개 이벤트의 상태 머신(State Machine)으로 정리하고, 판정 로직은 순수 함수로 분리해 복잡한 분기를 줄였습니다.',
       '테스트를 47개에서 138개로 늘리고, 전체 테스트 138개를 0.91초에 실행하는 검증 체계로 결제와 권한 변경 흐름을 빠르게 확인할 수 있게 했습니다.',
       '출시 전 환불 요청을 100% 거부하던 버그와 스케줄러 이중 청구 위험을 제거해 운영 부담을 줄였습니다.',
     ],
@@ -94,52 +203,56 @@ export const projects = [
   {
     name: 'MYCMS',
     category: '사이드 프로젝트',
+    domainCategories: ['Full-stack', 'DevOps'],
     organization: '개인 프로젝트',
     period: '진행 중',
-    role: '풀스택 개발',
+    role: '풀스택 및 홈서버 인프라 개발',
     contribution:
       '커리어 활동·프로젝트·문서·학습 기록을 근거 단위로 관리하고, 지원 과정에서 재조합할 수 있도록 정보 구조와 Evidence Graph를 설계했습니다.',
-    outcome:
-      '분산된 커리어 기록을 재사용 가능한 근거 자산으로 축적하고, AI 출력도 출처와 연결해 검증할 수 있는 개인 Career Evidence OS의 기반을 만들었습니다.',
     summary:
-      '커리어 활동과 프로젝트·문서·학습 기록을 근거 중심으로 관리하고, 지원 과정에 재사용할 수 있도록 설계한 Career Evidence OS입니다.',
+      '커리어 활동과 프로젝트·문서·학습 기록을 근거 중심으로 관리하고, Next.js + Spring Boot + PostgreSQL 전체 API/데이터 흐름 및 Proxmox 홈서버 인프라를 설계한 Career Evidence OS입니다.',
     techStack: [
       'Next.js',
       'TypeScript',
       'Spring Boot',
       'PostgreSQL',
+      'Proxmox',
       'Docker',
       'GitHub Actions',
-      'Proxmox',
+      'Tailscale',
+      'WireGuard',
+      'Cloudflare Tunnel',
     ],
     highlights: [
       '지원서·프로젝트·수상·자격증·학습 노트를 각각 독립된 Evidence로 저장하고, 동일 경험을 복사하지 않고 여러 지원서와 포트폴리오에서 참조하도록 데이터 관계를 재구성했습니다.',
       'Evidence Graph에서 프로젝트 구현, 문서, 수상과 학습 기록을 노드로 연결하고 AI 생성 결과가 참조한 근거를 저장해 결과 문장에서 원본 기록까지 역추적하도록 구현했습니다.',
-      'Spring Boot 서비스는 Proxmox 홈서버 기반 온프레미스 환경에 배포해 직접 관리 가능한 실행 환경으로 운영했습니다.',
-      'GitHub Actions 자가 호스팅 러너를 구성하고 Docker 이미지 빌드·전송·적재를 거치는 배포 워크플로를 만들어 홈서버 배포를 자동화했습니다.',
+      'Spring Boot 서비스는 Proxmox 홈서버 기반 온프레미스 VM/CT 환경에 배포해 직접 관리 가능한 실행 환경으로 운영했습니다.',
+      'Tailscale, WireGuard, Cloudflare Tunnel, Reverse Proxy를 통해 홈서버 보안 네트워크 터널링을 구축했습니다.',
+      'GitHub Actions 자가 호스팅 러너(Self-hosted Runner)를 구성하고 Docker 이미지 빌드·전송·적재를 거치는 배포 워크플로를 만들어 홈서버 배포를 자동화했습니다.',
       '로그인을 미루고 서비스와 UI의 가치를 먼저 보여주도록 진입 흐름을 바꾸며, 초기 진입 장벽을 낮추고 첫 사용자 UX를 개선하는 방법을 배웠습니다.',
     ],
   },
   {
     name: 'KB_NEWS_AI',
     category: '외부 활동',
+    domainCategories: ['AI / AX'],
     organization: '대회 프로젝트',
     period: '2025.08',
     role: '데이터 파이프라인 및 AI 분석 개발',
     contribution:
       '금융 뉴스 수집부터 종목별 검색, RAG 기반 요약·감성 분석, 품질 평가와 실행 오케스트레이션까지 이어지는 Python 기반 파이프라인을 구현했습니다.',
-    outcome:
-      '종목별 금융 뉴스 수집부터 RAG 요약까지 재현 가능한 분석 흐름을 완성하고, 50개 금융 문장 기반 감성 분류 평가와 10개 종목 요약의 LLM-as-Judge 비교, 벡터 DB 수명 관리를 함께 구성했습니다.',
     summary:
-      'RAG 기반 주식 뉴스 파이프라인을 활용해 종목별 뉴스 분석과 주식 추천 정보를 제공하는 프로젝트입니다.',
+      'RAG 기반 주식 뉴스 파이프라인을 활용해 종목별 뉴스 분석과 주식 추천 정보를 제공하는 AI RAG 파이프라인 대표 프로젝트입니다.',
     techStack: [
       'Python',
       'ChromaDB',
       'LangChain',
       'Ollama',
       'Selenium',
+      'BeautifulSoup',
       'RAG',
       'sLM',
+      'LLM-as-Judge',
     ],
     highlights: [
       'Investing.com의 동적 검색 페이지는 Selenium으로 탐색하고 기사 본문은 requests와 BeautifulSoup으로 파싱했으며, Alpha Vantage API 결과까지 LangChain Document 형식으로 정규화했습니다.',
@@ -153,13 +266,12 @@ export const projects = [
   {
     name: '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
     category: '사이드 프로젝트',
+    domainCategories: ['Frontend'],
     organization: '개인 프로젝트',
     period: '2026.05',
     role: '프론트엔드 및 서버리스 풀스택 개발',
     contribution:
       '실시간 협업 경험의 제품 흐름을 설계하고, 타입 안전한 서버 함수와 SSE 기반 동기화, 데스크톱 실행 환경, E2E 검증까지 서비스 전반을 구현했습니다.',
-    outcome:
-      '주제 생성부터 실시간 세션, 결과 아카이브까지 이어지는 협업 흐름을 완성하고 주요 사용자 시나리오를 E2E 테스트로 검증했습니다.',
     summary:
       '팀 내 아이디어, 회의 주제, 회고 내용을 하나의 흐름으로 모으고 논의할 수 있는 실시간 협업 플랫폼을 개발했습니다.',
     techStack: [
@@ -175,7 +287,7 @@ export const projects = [
     highlights: [
       '주제 작성, 댓글 참여, 실시간 세션, 결과 아카이브로 이어지는 협업 흐름을 설계해 단순 게시판이 아닌 지속적인 지식 공유 경험을 구현했습니다.',
       'TanStack Start 기반 서버 함수 구조를 활용해 인증, 주제 작성, 세션 제어, 댓글·인사이트 저장 등 주요 동작을 타입 안정성이 있는 API 흐름으로 구성했습니다.',
-      'Server-Sent Events를 도입해 여러 사용자가 동시에 참여하는 세션에서 상태, 댓글, 인사이트가 실시간에 가깝게 반영되도록 구현했습니다.',
+      'Server-Sent Events(SSE)를 도입해 여러 사용자가 동시에 참여하는 세션에서 상태, 댓글, 인사이트가 실시간에 가깝게 반영되도록 구현했습니다.',
       '프로젝트 단위로 관련 주제와 결과를 묶어 볼 수 있는 작업공간을 구현해 논의가 일회성으로 끝나지 않고 이후 참고 가능한 지식 자산으로 남도록 구성했습니다.',
       'Tauri 기반 데스크탑 실행 환경과 알림 기능을 연동해 웹 기반 서비스를 데스크탑 사용 흐름까지 확장했습니다.',
       'Playwright E2E 테스트로 주제 작성, 권한별 세션 참여, 실시간 동기화, 결과 확인, 삭제 흐름까지 주요 사용자 시나리오를 검증했습니다.',
@@ -190,22 +302,24 @@ export const projects = [
   {
     name: 'AI 기반 HWP 문서 자동 작성 서비스 — 또박또박',
     category: '외부 활동',
+    domainCategories: ['AI / AX'],
     organization: 'AI Hack Camp 2026',
     period: '2026.05',
     role: '프론트엔드 및 WebAssembly 개발',
     contribution:
       'HWP Schema 기반 대화형 입력 UX와 Rust/WebAssembly 음성 전처리 파이프라인을 구현하고, OCR·모바일 입력까지 접근성 범위를 확장했습니다.',
-    outcome:
-      '2026 AI HACK CAMP 본선에서 부총리 및 과학기술정보통신부 장관상을 수상했고, 실제 시연 가능한 문서 작성 플로우를 완성했습니다.',
     summary:
-      '공공기관 HWP 문서 작성 과정의 접근성 문제를 해결하기 위해, AI 대화형 입력 기반 문서 자동 작성 서비스를 구현했습니다.',
+      '공공기관 HWP 문서 작성 과정의 접근성 문제를 해결하기 위해, AI 대화형 입력 및 Rust WebAssembly 기반 브라우저 음성 전처리를 적용한 문서 자동 작성 서비스입니다.',
     techStack: [
       'Next.js',
       'TypeScript',
       'Rust',
       'WebAssembly',
       'Web Audio API',
+      'AudioWorklet',
       'Tesseract.js',
+      'STT',
+      'OCR',
     ],
     highlights: [
       'HWP Schema를 기반으로 질문 흐름이 동적으로 변하는 채팅형 입력 인터페이스를 설계해 문서 작성 과정을 단계형 UX로 단순화했습니다.',
@@ -229,17 +343,48 @@ export const projects = [
     ],
   },
   {
+    name: '도메인 주도 프론트엔드 구조와 AI Agent 개발 효율 실험',
+    category: '사이드 프로젝트',
+    domainCategories: ['AI / AX', 'Frontend'],
+    organization: '개인 연구',
+    period: '2026.07',
+    role: 'AI Agent 실험 및 프론트엔드 아키텍처 연구',
+    contribution:
+      '925개 파일, 65,004 LOC 규모의 프론트엔드 코드베이스에서 기술 레이어 vs 도메인 구조 및 AGENTS.md 배치가 AI Agent의 토큰·비용·품질에 미치는 영향을 실험하고 분석했습니다.',
+    summary:
+      '동일한 프론트엔드 코드베이스를 대상으로 폴더 구조와 AGENTS.md 배치 방식을 독립적으로 다르게 적용하며 AI Agent의 탐색 비용, 토큰 소비량, 작업 품질을 벤치마킹한 연구 프로젝트입니다.',
+    techStack: [
+      'AI Agent',
+      'AGENTS.md',
+      'Next.js',
+      'TypeScript',
+      'Benchmark',
+      'Token Optimization',
+    ],
+    highlights: [
+      '925개 파일, 65,004 LOC 규모의 프론트엔드 코드베이스를 대상으로 코드는 동일하게 유지하고 기술 레이어 구조 vs 도메인 구조 및 지침 배치를 변경하며 벤치마킹했습니다.',
+      '초기 단일 측정에서 도메인 구조 비용이 56% 감소했으나 5회 반복 측정 후 평균 +1.8%(비용 +11.3%, 토큰 +13.6%)로 수렴하는 것을 관찰하여 단일 결과가 아닌 반복 측정의 필요성을 입증했습니다.',
+      '전역 루트 AGENTS.md 단일 배치(비용 -3.4%)보다 작업 위치와 가까운 17개 로컬 AGENTS.md 지역화 배치(비용 -9.8%)가 AI Agent의 비용과 토큰을 더 효과적으로 절감함을 입증했습니다.',
+      'AI가 직관적 폴더 트리보다 심볼 앵커 맵, 책임 경계, 금지 패턴과 대안, 코드 밖의 함정을 중심으로 맥락을 파악한다는 점을 정립하고 AGENTS.md 작성 원칙을 제시했습니다.',
+    ],
+    relatedPosts: [
+      {
+        label: '도메인 주도 프론트엔드 구조는 AI 개발 효율을 높일 수 있을까',
+        slug: 'domain-driven-frontend-agents-mdx',
+      },
+    ],
+  },
+  {
     name: 'Moazip',
     category: '실무 및 인턴',
+    domainCategories: [],
     organization: '(주)데브파이브',
     period: '2026.03 - 2026.04',
     role: 'macOS 앱 개발',
     contribution:
       '파일명 정규화 문제를 해결하는 macOS 앱의 사용자 흐름과 병렬 처리 구조를 구현하고, 스토어 배포와 QA까지 제품 출시 과정을 담당했습니다.',
-    outcome:
-      'ZIP 기준 최대 32배 처리 속도 개선을 달성하고 App Store와 Microsoft Store에 배포해 실제 사용자가 설치할 수 있는 제품으로 출시했습니다.',
     summary:
-      'macOS에서 생성된 한글 파일명이 Windows에서 자모 단위로 깨지는 문제를 해결하기 위해 만든 macOS 앱입니다.',
+      'macOS에서 생성된 한글 파일명이 Windows에서 자모 단위로 깨지는 문제를 해결하기 위해 만든 macOS 데스크톱 애플리케이션입니다.',
     techStack: ['Tauri 2', 'Rust', 'Next.js', 'rayon', 'crossbeam'],
     highlights: [
       'ZIP, RAR, 7z, tar 등 주요 압축 포맷을 지원했습니다.',
@@ -262,20 +407,22 @@ export const projects = [
   {
     name: '동아·동서 글로컬 연합대학 홈페이지',
     category: '실무 및 인턴',
+    domainCategories: ['Full-stack', 'DevOps'],
     organization: '(주)데브파이브',
     period: '2026.01 - 2026.04',
     role: '웹 풀스택 개발자',
     contribution:
       '공개 홈페이지와 관리자 시스템을 개발하면서 검색·좌표 모델링을 설계하고, 기존 컨테이너 배포 자동화 흐름에 맞춰 Kubernetes manifest를 수정했습니다.',
-    outcome:
-      '검색과 관리자 운영 기능을 갖춘 홈페이지를 구축하고, 기존 CI/CD·GitOps 배포 흐름에 맞춰 manifest를 정리해 반복 배포가 안정적으로 반영되도록 했습니다.',
     summary:
-      '동아·동서 글로컬 연합대학을 소개하는 홈페이지와 관리자 시스템을 만들었습니다.',
+      '동아·동서 글로컬 연합대학을 소개하는 홈페이지와 관리자 시스템, 그리고 Bi-gram & Bitset 역색인 검색 엔진을 구축했습니다.',
     techStack: [
       'Rust',
       'Next.js 16',
       'React 19',
       'TypeScript',
+      'Bi-gram',
+      'Inverted Index',
+      'Bitset',
       'Kubernetes',
       'GitHub Actions',
       'Argo CD',
@@ -299,16 +446,24 @@ export const projects = [
   {
     name: '제주국제관악제 홈페이지',
     category: '실무 및 인턴',
+    domainCategories: ['Full-stack'],
     organization: '(주)데브파이브',
     period: '2026.01 - 2026.05',
     role: '웹 풀스택 개발자',
     contribution:
       '신청·결제·관리자 흐름에서 데이터 병합과 파일 정리를 안정적으로 처리하도록 백엔드와 프론트엔드의 상태·삭제 정책을 함께 구현했습니다.',
-    outcome:
-      '외부 결제 리다이렉트와 동시 수정 상황에서도 신청 데이터가 유실되지 않도록 만들고, 경연곡 저장 API를 20회에서 1회로 줄였으며 첨부 파일 정리로 스토리지 운영 부담을 낮췄습니다.',
     summary:
-      '제주국제관악제 및 콩쿠르 운영을 위한 홈페이지와 관리자 시스템을 만들었습니다.',
-    techStack: ['Rust', 'Next.js 16', 'React 19', 'TypeScript', 'S3'],
+      '제주국제관악제 및 콩쿠르 운영을 위한 홈페이지와 관리자 시스템으로, 멀티스텝 Form 상태 병합, Bulk API 1회 통합, DB-S3 삭제 정책을 적용했습니다.',
+    techStack: [
+      'Rust',
+      'Next.js 16',
+      'React 19',
+      'TypeScript',
+      'PostgreSQL',
+      'S3',
+      'Bulk API',
+      'Transaction',
+    ],
     highlights: [
       '기존 데이터를 마이그레이션하며 불필요한 컬럼과 중복 데이터를 정리했습니다.',
       '멀티스텝 신청 폼에서 step 간 의존 데이터가 서로 덮어써지는 문제를 해결하기 위해 자동 동기화 필드와 사용자 입력 보존 필드를 분리한 상태 병합 로직을 만들었습니다.',
@@ -338,15 +493,14 @@ export const projects = [
   {
     name: '쉬운 글 작성 - 온글 landing 페이지',
     category: '실무 및 인턴',
+    domainCategories: ['Frontend'],
     organization: '(주)데브파이브',
     period: '2025.09 - 2025.11',
     role: '웹 프론트엔드 개발',
     contribution:
       '어려운 문서를 쉽게 이해시키는 랜딩 경험을 구현하고, 체험형 비교 UI·다크 모드·튜토리얼을 통해 서비스 진입과 사용 흐름을 설계했습니다.',
-    outcome:
-      '체험형 랜딩 경험을 제공하고 Vitest 기반 테스트 커버리지 100%를 유지해 기능 변경 시의 회귀 위험을 낮췄습니다.',
     summary:
-      '공공기관 안내문, 전문 문서처럼 이해하기 어려운 정보를 쉽게 변환해 정보 접근성을 높이기 위한 서비스의 랜딩 페이지를 개발했습니다.',
+      '공공기관 안내문, 전문 문서처럼 이해하기 어려운 정보를 쉽게 변환해 정보 접근성을 높이기 위한 서비스의 랜딩 페이지입니다.',
     techStack: ['Next.js 16', 'React', 'TypeScript', 'react-joyride', 'Vitest'],
     highlights: [
       '서비스 설명만으로는 쉬운 글 변환 효과를 전달하기 어렵다고 판단해, 사용자가 원문을 입력하고 변환 결과를 같은 화면에서 비교하는 체험형 인터페이스를 핵심 진입점으로 구현했습니다.',
@@ -359,19 +513,18 @@ export const projects = [
   {
     name: 'NH 올원뱅크 캐시백 쿠폰몰 결제 및 프로모션 페이지',
     category: '실무 및 인턴',
+    domainCategories: ['Frontend'],
     organization: '(주)데브파이브',
     period: '2025.09 - 2025.11',
     role: '웹 프론트엔드 개발',
     contribution:
       '모바일 결제 제약을 고려해 프로모션과 결제 화면을 구현하고, 입력 단계가 긴 사용 흐름의 포커스 처리와 인터랙션 일관성을 개선했습니다.',
-    outcome:
-      'Safari iOS의 결제 제약을 고려한 화면 흐름을 구현하고, 반복 입력이 필요한 결제 단계의 사용 경험을 안정화했습니다.',
     summary:
-      'NH 올원뱅크 캐시백 쿠폰몰의 결제 및 프로모션 페이지를 개발했습니다.',
-    techStack: ['Next.js', 'React', 'TypeScript'],
+      'NH 올원뱅크 캐시백 쿠폰몰의 결제 및 프로모션 페이지로, iOS Safari 환경 제약 극복, iframe 결제창 생명주기 및 postMessage 통신을 구성했습니다.',
+    techStack: ['Next.js', 'React', 'TypeScript', 'iframe', 'postMessage'],
     highlights: [
       'Safari iOS 환경에서 PG 결제가 앱 정책과 충돌하는 문제를 마주했고, 정책을 변경하기보다 가능한 구현 범위를 중심으로 결제 플로우를 구성했습니다.',
-      'PG 결제창을 iframe으로 열고 결제 완료 화면의 마운트 신호를 수신해 창을 닫는 메시지 흐름을 구성하여 외부 결제 UI의 생명주기를 제어했습니다.',
+      'PG 결제창을 iframe으로 열고 결제 완료 화면의 마운트 신호를 수신해 창을 닫는 메시지(postMessage) 통신 흐름을 구성하여 외부 결제 UI의 생명주기를 제어했습니다.',
       '입력 단계가 많은 화면에서 사용자 입력 흐름이 끊기는 문제를 인지하고, input focus 로직을 컴포넌트화하여 결제 경험의 일관성을 개선했습니다.',
     ],
     relatedPosts: [
@@ -384,16 +537,15 @@ export const projects = [
   {
     name: '탈중앙화 거래소 차익거래 모니터링 시스템',
     category: '실무 및 인턴',
+    domainCategories: [],
     organization: 'BlockwaveLabs',
     period: '2024.06 - 2024.08',
     role: 'Node.js 개발자',
     contribution:
       '여러 네트워크의 DEX 데이터를 탐색하는 모니터링 서비스에서 병렬 처리와 차익거래 사이클링 알고리즘을 구현하고, 네트워크별 확장 구조를 정리했습니다.',
-    outcome:
-      '차익거래 사이클링 결과를 600ms 이내에 생성하도록 최적화하고, 신규 네트워크를 모듈 단위로 확장할 수 있는 구조를 마련했습니다.',
     summary:
       '여러 네트워크의 탈중앙화 거래소 데이터를 기반으로 차익거래 기회를 탐색하는 모니터링 시스템을 개발했습니다.',
-    techStack: ['Node.js'],
+    techStack: ['Node.js', 'TypeScript'],
     highlights: [
       '네트워크와 DEX별 시세 조회를 순차 처리할 때 탐색 시간이 누적되는 문제를 해결하기 위해 작업 단위를 분리하고 병렬 프로세스 수에 따른 처리 시간과 무료 계층 자원 사용량을 비교했습니다.',
       '토큰을 정점, 교환 경로를 간선으로 모델링하고 시작 자산으로 되돌아오는 교환 사이클의 예상 수익을 계산해 후보 경로만 남기는 차익거래 사이클링 알고리즘을 구현했습니다.',
@@ -404,16 +556,15 @@ export const projects = [
   {
     name: 'sLM(small language model)을 활용한 분석 투자 솔루션',
     category: '학교',
+    domainCategories: ['Frontend'],
     organization: '교내 캡스톤 프로젝트',
     period: '2025년 1학기',
     role: '프론트엔드 개발',
     contribution:
       '실시간 주가·뉴스·AI 분석 결과를 전달하는 화면의 데이터 갱신과 차트 표현을 담당하며, 사용자에게 의미 있는 변화만 보여 주도록 렌더링 비용을 제어했습니다.',
-    outcome:
-      '차트 갱신 범위와 조건부 패칭을 정리해 실시간 데이터 환경에서 불필요한 렌더링과 요청을 줄이는 사용자 화면을 구현했습니다.',
     summary:
-      '실시간 데이터 시각화에서 발생하는 불필요한 연산을 최소화하고, 사용자에게 필요한 정보만 안정적으로 전달했습니다.',
-    techStack: ['React', 'SWR', 'TypeScript'],
+      '실시간 주가 데이터 환경에서 SWR 조건부 패칭/캐싱 및 useMemo 기반 불필요한 렌더링을 최적화한 분석 투자 솔루션 프론트엔드입니다.',
+    techStack: ['React', 'SWR', 'TypeScript', 'useMemo'],
     highlights: [
       '불필요한 리렌더링을 줄이기 위해 Y축 범위를 현재 가격 기준 ±0.1%로 제한하고, useMemo를 활용해 의미 있는 변화에만 차트가 갱신되도록 개선했습니다.',
       '실시간 데이터 갱신 과정에서 의미 없는 요청과 상태 변경이 반복되는 문제를 해결하기 위해, SWR의 조건부 패칭과 캐싱을 활용해 데이터 갱신 시점을 정리했습니다.',
@@ -434,13 +585,12 @@ export const projects = [
   {
     name: '블록체인 기반 데이터 저장 구조 설계',
     category: '학교',
+    domainCategories: [],
     organization: '교내 캡스톤 프로젝트',
     period: '2024년 2학기',
     role: '프론트엔드 및 스마트컨트랙트 개발',
     contribution:
       '사용자 서명과 온체인 실행을 분리하는 메타 트랜잭션 구조를 설계하고, 의료 데이터의 보안·비용·사용성을 함께 고려한 저장 모델을 구현했습니다.',
-    outcome:
-      '사용자는 가스비를 직접 부담하지 않고 서명만으로 상태를 변경할 수 있게 했으며, 권한 검증과 재전송 공격 방지 구조를 구현했습니다.',
     summary:
       '사용자 진입 장벽을 낮추기 위해 비용 부담과 보안 리스크를 함께 고려한 데이터 저장 구조를 설계했습니다.',
     techStack: ['Solidity', 'EIP-712', 'React', 'TypeScript'],
@@ -468,15 +618,14 @@ export const projects = [
   {
     name: '숭실대학교 인공지능 프로젝트 — TSP 최적화',
     category: '학교',
+    domainCategories: ['AI / AX'],
     organization: '숭실대학교',
     period: '2024년 1학기',
     role: '팀원',
     contribution:
       '유전 알고리즘과 강화학습 기반 TSP 해법을 직접 구현하고, 선택·돌연변이·학습 방식별 실험을 통해 성능과 한계를 비교·분석했습니다.',
-    outcome:
-      '탐색 전략과 돌연변이율에 따른 성능 차이를 수치로 비교하고, 강화학습 접근에서의 상태 공간·보상 설계 한계를 분석했습니다.',
     summary:
-      'TSP 문제를 대상으로 유전 알고리즘과 강화학습 기반 접근을 직접 구현하고, 선택 연산·돌연변이율·학습 방식에 따른 최적화 성능을 비교했습니다.',
+      'TSP 문제를 대상으로 유전 알고리즘과 강화학습(Q-Learning, DQN) 기반 접근을 직접 구현하고, 선택 연산·돌연변이율·학습 방식에 따른 최적화 성능을 실험·분석한 AI 알고리즘 프로젝트입니다.',
     techStack: [
       'Python',
       'Genetic Algorithm',
@@ -497,13 +646,12 @@ export const projects = [
   {
     name: '숭실대학교 운영체제 과제 — xv6 커널 수정',
     category: '학교',
+    domainCategories: [],
     organization: '숭실대학교',
     period: '2023년 2학기',
     role: '개인',
     contribution:
       'xv6의 시스템 콜·스케줄러·메모리 관리 영역을 직접 수정하며 프로세스 실행과 Copy-on-Write의 동작을 구현하고 검증했습니다.',
-    outcome:
-      '운영체제의 프로세스 생성·스케줄링·메모리 복사 과정을 커널 수준에서 구현해 저수준 시스템 동작을 직접 검증했습니다.',
     summary:
       'xv6 커널을 직접 수정하며 시스템 콜 등록, 프로세스 스케줄링, Copy-on-Write까지 운영체제 내부 동작을 구현했습니다.',
     techStack: ['C', 'xv6', 'Operating System', 'Kernel'],
@@ -523,10 +671,7 @@ export const links = {
 };
 
 export type Project = (typeof projects)[number];
-export type ProjectCategory = (typeof projectCategories)[number];
 
-// The resume remains concise, while the downloadable portfolio documents the
-// complete project history across company, school, personal, and external work.
 export const resumeProjectNames = [
   '바시 필라테스',
   '사내 콘솔 웹페이지',

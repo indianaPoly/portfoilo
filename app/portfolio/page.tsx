@@ -3,7 +3,12 @@ import type { Metadata } from 'next';
 
 import { ProjectCard } from '@/components/pages/portfolio/ProjectCard';
 import { ProjectCategoryTabs } from '@/components/pages/portfolio/ProjectCategoryTabs';
-import { projectCategories, projects } from '@/data/portfolioContent';
+import {
+  domainCategories,
+  domainMetadata,
+  projects,
+} from '@/data/portfolioContent';
+import type { DomainCategory } from '@/data/portfolioContent';
 import { portfolioMetadata } from '@/data/static/meta-data/portfolio.meta-data';
 import { getSearchParamValue, resolveSearchParams } from '@/lib/searchParams';
 
@@ -16,19 +21,38 @@ export default async function PortfolioPage({
 }) {
   const resolvedSearchParams = await resolveSearchParams(searchParams);
   const rawCategory = getSearchParamValue(resolvedSearchParams.category);
-  const selectedCategory = projectCategories.includes(
-    rawCategory as (typeof projectCategories)[number]
+
+  const selectedCategory: DomainCategory = domainCategories.includes(
+    rawCategory as DomainCategory
   )
-    ? String(rawCategory)
+    ? (rawCategory as DomainCategory)
     : '전체';
+
+  const domainMeta =
+    selectedCategory !== '전체'
+      ? domainMetadata[selectedCategory as Exclude<DomainCategory, '전체'>]
+      : null;
 
   const filteredProjects =
     selectedCategory === '전체'
       ? projects
-      : projects.filter((project) => project.category === selectedCategory);
+      : domainMeta
+        ? [
+            ...domainMeta.representativeProjects.flatMap((name) => {
+              const match = projects.find((p) => p.name === name);
+              return match ? [match] : [];
+            }),
+            ...projects.filter(
+              (p) =>
+                p.domainCategories?.includes(
+                  selectedCategory as Exclude<DomainCategory, '전체'>
+                ) && !domainMeta.representativeProjects.includes(p.name)
+            ),
+          ]
+        : [];
 
   return (
-    <VStack align="stretch" gap={{ base: 10, md: 14 }}>
+    <VStack align="stretch" gap={{ base: 8, md: 10 }}>
       <ProjectCategoryTabs selectedCategory={selectedCategory} />
 
       <SimpleGrid columns={1} gap={{ base: 5, md: 6 }}>

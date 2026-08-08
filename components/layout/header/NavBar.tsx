@@ -95,23 +95,26 @@ function DownloadMenu() {
 
           <Box borderTop="1px solid" borderColor="line.100" />
 
-          <Link
-            href={getPortfolioDownloadHref()}
-            download
-            borderRadius="14px"
-            color="ink.900"
-            fontSize="14px"
-            fontWeight="600"
-            letterSpacing="-0.035em"
-            lineHeight="1.45"
-            bg="white"
-            px={3}
-            py={2}
-            _hover={{ bg: 'paper.200', color: 'brand.700' }}
-            _focus={{ bg: 'paper.200', color: 'brand.700' }}
-          >
-            {navContent.downloads.portfolioLabel}
-          </Link>
+          {navContent.downloads.domainDownloads.map((item) => (
+            <Link
+              key={item.slug}
+              href={getPortfolioDownloadHref(item.slug)}
+              download
+              borderRadius="14px"
+              color="ink.900"
+              fontSize="14px"
+              fontWeight="600"
+              letterSpacing="-0.035em"
+              lineHeight="1.45"
+              bg="white"
+              px={3}
+              py={2}
+              _hover={{ bg: 'paper.200', color: 'brand.700' }}
+              _focus={{ bg: 'paper.200', color: 'brand.700' }}
+            >
+              {item.label}
+            </Link>
+          ))}
         </VStack>
       </Box>
     </Box>

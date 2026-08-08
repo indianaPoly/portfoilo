@@ -8,6 +8,7 @@ import {
 
 import {
   getPdfDownloadHeaders,
+  renderCategoryPortfolioPdf,
   renderProjectPortfolioPdf,
   renderResumePdf,
 } from './pdfDocuments';
@@ -42,6 +43,26 @@ describe('PDF documents', () => {
 
     expect(resume.byteLength).toBeGreaterThan(1000);
     expect(portfolio.byteLength).toBeGreaterThan(1000);
+  });
+
+  test('renders domain-specific portfolio PDFs for all 4 categories', async () => {
+    const [frontend, fullstack, devops, aiAx] = await Promise.all([
+      renderCategoryPortfolioPdf('Frontend'),
+      renderCategoryPortfolioPdf('Full-stack'),
+      renderCategoryPortfolioPdf('DevOps'),
+      renderCategoryPortfolioPdf('AI / AX'),
+    ]);
+
+    expect(frontend.byteLength).toBeGreaterThan(1000);
+    expect(fullstack.byteLength).toBeGreaterThan(1000);
+    expect(devops.byteLength).toBeGreaterThan(1000);
+    expect(aiAx.byteLength).toBeGreaterThan(1000);
+
+    // Domain portfolio contains 1 overview page + representative project pages
+    expect(getMediaBoxes(frontend)).toHaveLength(6);
+    expect(getMediaBoxes(fullstack)).toHaveLength(6);
+    expect(getMediaBoxes(devops)).toHaveLength(5);
+    expect(getMediaBoxes(aiAx)).toHaveLength(5);
   });
 
   test('renders resume and portfolio pages in A4 size', async () => {
@@ -81,15 +102,6 @@ describe('PDF documents', () => {
     expect(new Set(portfolioProjectNames).size).toBe(
       portfolioProjectNames.length
     );
-    expect(
-      projects
-        .filter((project) => resumeProjectNames.includes(project.name))
-        .filter((project) => project.category === '학교')
-        .map((project) => project.name)
-    ).toEqual([
-      'sLM(small language model)을 활용한 분석 투자 솔루션',
-      '블록체인 기반 데이터 저장 구조 설계',
-    ]);
 
     for (const name of [...resumeProjectNames, ...portfolioProjectNames]) {
       expect(projectNames.has(name)).toBe(true);
