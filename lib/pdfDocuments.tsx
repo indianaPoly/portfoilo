@@ -425,6 +425,11 @@ const styles = StyleSheet.create({
     textDecoration: 'underline',
     lineHeight: 1.3,
   },
+  reportLinkUrl: {
+    color: colors.brand,
+    fontSize: 8.2,
+    textDecoration: 'underline',
+  },
   resumeAsideTitle: {
     fontSize: 7.8,
     fontWeight: 700,
@@ -743,22 +748,33 @@ function CategoryPortfolioDocument({
           project.links?.length ? (
             <View style={styles.reportSection}>
               <Text style={styles.reportLabel}>EVIDENCE / RELATED WRITING</Text>
-              <View style={styles.reportLinksRow}>
+              <View style={styles.reportBulletList}>
                 {'relatedPosts' in project
-                  ? project.relatedPosts?.map((post) => (
-                      <Link
-                        key={post.slug}
-                        src={`${website}/blog/${post.slug}`}
-                        style={styles.reportLink}
-                      >
-                        {post.label}
-                      </Link>
-                    ))
+                  ? project.relatedPosts?.map((post) => {
+                      const postUrl = `${website}/blog/${post.slug}`;
+                      return (
+                        <View key={post.slug} style={styles.reportBulletItem}>
+                          <View style={styles.reportBulletDot} />
+                          <Link src={postUrl} style={styles.reportBulletText}>
+                            {post.label}
+                            {'  '}
+                            <Text style={styles.reportLinkUrl}>
+                              ({postUrl})
+                            </Text>
+                          </Link>
+                        </View>
+                      );
+                    })
                   : null}
                 {project.links?.map((link) => (
-                  <Link key={link.url} src={link.url} style={styles.reportLink}>
-                    {link.label}
-                  </Link>
+                  <View key={link.url} style={styles.reportBulletItem}>
+                    <View style={styles.reportBulletDot} />
+                    <Link src={link.url} style={styles.reportBulletText}>
+                      {link.label}
+                      {'  '}
+                      <Text style={styles.reportLinkUrl}>({link.url})</Text>
+                    </Link>
+                  </View>
                 ))}
               </View>
             </View>
@@ -820,22 +836,33 @@ function ProjectPortfolioDocument() {
           project.links?.length ? (
             <View style={styles.reportSection}>
               <Text style={styles.reportLabel}>EVIDENCE / RELATED WRITING</Text>
-              <View style={styles.reportLinksRow}>
+              <View style={styles.reportBulletList}>
                 {'relatedPosts' in project
-                  ? project.relatedPosts?.map((post) => (
-                      <Link
-                        key={post.slug}
-                        src={`${website}/blog/${post.slug}`}
-                        style={styles.reportLink}
-                      >
-                        {post.label}
-                      </Link>
-                    ))
+                  ? project.relatedPosts?.map((post) => {
+                      const postUrl = `${website}/blog/${post.slug}`;
+                      return (
+                        <View key={post.slug} style={styles.reportBulletItem}>
+                          <View style={styles.reportBulletDot} />
+                          <Link src={postUrl} style={styles.reportBulletText}>
+                            {post.label}
+                            {'  '}
+                            <Text style={styles.reportLinkUrl}>
+                              ({postUrl})
+                            </Text>
+                          </Link>
+                        </View>
+                      );
+                    })
                   : null}
                 {project.links?.map((link) => (
-                  <Link key={link.url} src={link.url} style={styles.reportLink}>
-                    {link.label}
-                  </Link>
+                  <View key={link.url} style={styles.reportBulletItem}>
+                    <View style={styles.reportBulletDot} />
+                    <Link src={link.url} style={styles.reportBulletText}>
+                      {link.label}
+                      {'  '}
+                      <Text style={styles.reportLinkUrl}>({link.url})</Text>
+                    </Link>
+                  </View>
                 ))}
               </View>
             </View>
