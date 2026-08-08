@@ -343,7 +343,7 @@ export const projects: ProjectItem[] = [
     name: '도메인 주도 프론트엔드 구조와 AI Agent 개발 효율 실험',
     category: '사이드 프로젝트',
     domainCategories: ['AI / AX', 'Frontend'],
-    organization: '개인 연구',
+    organization: '(주)데브파이브',
     period: '2026.07',
     role: 'AI Agent 실험 및 프론트엔드 아키텍처 연구',
     contribution:
