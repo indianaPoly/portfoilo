@@ -370,6 +370,13 @@ const styles = StyleSheet.create({
     fontSize: 9.2,
     lineHeight: 1.42,
   },
+  techStackText: {
+    color: colors.ink,
+    fontSize: 9.4,
+    fontWeight: 600,
+    lineHeight: 1.4,
+    marginTop: 3,
+  },
   reportStackRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -722,13 +729,9 @@ function CategoryPortfolioDocument({
 
           <View style={styles.reportSection}>
             <Text style={styles.reportLabel}>TECH STACK</Text>
-            <View style={styles.pillRow}>
-              {project.techStack.map((stack) => (
-                <Text key={stack} style={styles.pill}>
-                  {stack}
-                </Text>
-              ))}
-            </View>
+            <Text style={styles.techStackText}>
+              {project.techStack.join('  ·  ')}
+            </Text>
           </View>
 
           <View style={styles.reportSection}>
@@ -803,13 +806,9 @@ function ProjectPortfolioDocument() {
 
           <View style={styles.reportSection}>
             <Text style={styles.reportLabel}>TECH STACK</Text>
-            <View style={styles.pillRow}>
-              {project.techStack.map((stack) => (
-                <Text key={stack} style={styles.pill}>
-                  {stack}
-                </Text>
-              ))}
-            </View>
+            <Text style={styles.techStackText}>
+              {project.techStack.join('  ·  ')}
+            </Text>
           </View>
 
           <View style={styles.reportSection}>
