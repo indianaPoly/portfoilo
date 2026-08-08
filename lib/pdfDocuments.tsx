@@ -430,6 +430,16 @@ const styles = StyleSheet.create({
     fontSize: 8.2,
     textDecoration: 'underline',
   },
+  reportEvidenceBlock: {
+    flex: 1,
+  },
+  reportLinkUrlText: {
+    color: colors.brand,
+    fontSize: 7.8,
+    marginTop: 1,
+    lineHeight: 1.25,
+    textDecoration: 'none',
+  },
   resumeAsideTitle: {
     fontSize: 7.8,
     fontWeight: 700,
@@ -755,13 +765,17 @@ function CategoryPortfolioDocument({
                       return (
                         <View key={post.slug} style={styles.reportBulletItem}>
                           <View style={styles.reportBulletDot} />
-                          <Link src={postUrl} style={styles.reportBulletText}>
-                            {post.label}
-                            {'  '}
-                            <Text style={styles.reportLinkUrl}>
-                              ({postUrl})
+                          <View style={styles.reportEvidenceBlock}>
+                            <Text style={styles.reportBulletText}>
+                              {post.label}
                             </Text>
-                          </Link>
+                            <Link
+                              src={postUrl}
+                              style={styles.reportLinkUrlText}
+                            >
+                              {postUrl}
+                            </Link>
+                          </View>
                         </View>
                       );
                     })
@@ -769,11 +783,12 @@ function CategoryPortfolioDocument({
                 {project.links?.map((link) => (
                   <View key={link.url} style={styles.reportBulletItem}>
                     <View style={styles.reportBulletDot} />
-                    <Link src={link.url} style={styles.reportBulletText}>
-                      {link.label}
-                      {'  '}
-                      <Text style={styles.reportLinkUrl}>({link.url})</Text>
-                    </Link>
+                    <View style={styles.reportEvidenceBlock}>
+                      <Text style={styles.reportBulletText}>{link.label}</Text>
+                      <Link src={link.url} style={styles.reportLinkUrlText}>
+                        {link.url}
+                      </Link>
+                    </View>
                   </View>
                 ))}
               </View>
@@ -843,13 +858,17 @@ function ProjectPortfolioDocument() {
                       return (
                         <View key={post.slug} style={styles.reportBulletItem}>
                           <View style={styles.reportBulletDot} />
-                          <Link src={postUrl} style={styles.reportBulletText}>
-                            {post.label}
-                            {'  '}
-                            <Text style={styles.reportLinkUrl}>
-                              ({postUrl})
+                          <View style={styles.reportEvidenceBlock}>
+                            <Text style={styles.reportBulletText}>
+                              {post.label}
                             </Text>
-                          </Link>
+                            <Link
+                              src={postUrl}
+                              style={styles.reportLinkUrlText}
+                            >
+                              {postUrl}
+                            </Link>
+                          </View>
                         </View>
                       );
                     })
@@ -857,11 +876,12 @@ function ProjectPortfolioDocument() {
                 {project.links?.map((link) => (
                   <View key={link.url} style={styles.reportBulletItem}>
                     <View style={styles.reportBulletDot} />
-                    <Link src={link.url} style={styles.reportBulletText}>
-                      {link.label}
-                      {'  '}
-                      <Text style={styles.reportLinkUrl}>({link.url})</Text>
-                    </Link>
+                    <View style={styles.reportEvidenceBlock}>
+                      <Text style={styles.reportBulletText}>{link.label}</Text>
+                      <Link src={link.url} style={styles.reportLinkUrlText}>
+                        {link.url}
+                      </Link>
+                    </View>
                   </View>
                 ))}
               </View>
