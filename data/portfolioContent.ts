@@ -182,7 +182,7 @@ export const projects: ProjectItem[] = [
     period: '진행 중',
     role: '풀스택 개발',
     contribution:
-      '정기구독 로직을 4개 상태와 8개 이벤트의 상태 머신으로 정리하고, 판정 로직은 순수 함수로 분리했습니다.',
+      '정기구독 정책과 결제 예외 처리를 명확한 상태 모델로 정비하고, 자동화 검증 체계를 구축해 서비스 운영 포털 전반을 개발했습니다.',
     summary:
       '자체 소프트웨어 판매와 교육 운영을 위한 사내 포털 서비스로, 강의 관리부터 이수증 발급, 구독 및 결제까지 통합 관리할 수 있도록 개발했습니다.',
     techStack: ['Next.js', 'Rust', 'PostgreSQL', 'State Machine'],
