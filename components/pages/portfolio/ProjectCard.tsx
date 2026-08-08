@@ -165,13 +165,13 @@ export function ProjectCard({ project }: { project: Project }) {
               px="14px"
               py="8px"
               borderRadius="999px"
-              bg="paper.200"
-              color="ink.900"
+              bg="brand.50"
+              color="brand.700"
               fontSize="14px"
               fontWeight="600"
               letterSpacing="-0.03em"
               transition="background-color 180ms ease, color 180ms ease, transform 180ms ease"
-              _hover={{ bg: 'paper.300', textDecoration: 'none' }}
+              _hover={{ bg: 'brand.100', textDecoration: 'none' }}
               _active={{ transform: 'scale(0.95)' }}
               _focusVisible={{
                 outline: '2px solid',
