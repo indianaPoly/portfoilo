@@ -447,11 +447,10 @@ const styles = StyleSheet.create({
     left: 36,
     right: 36,
     bottom: 18,
-    paddingTop: 5,
-    borderTopWidth: 1,
-    borderTopColor: colors.line,
     color: colors.inkMuted,
-    fontSize: 7.2,
+    fontSize: 8.5,
+    fontWeight: 700,
+    textAlign: 'center',
   },
 
   // Category overview specific styles
@@ -699,14 +698,9 @@ function CategoryPortfolioDocument({
       {targetProjects.map((project, index) => (
         <Page key={project.name} size="A4" style={styles.portfolioPage}>
           <View style={styles.header}>
-            <View style={styles.portfolioHeaderMeta}>
-              <Text style={styles.eyebrow}>
-                {meta.name} Project {String(index + 1).padStart(2, '0')} · Poly
-              </Text>
-              <Text style={styles.portfolioPageMark}>
-                PAGE {String(index + 1).padStart(2, '0')}
-              </Text>
-            </View>
+            <Text style={styles.eyebrow}>
+              {meta.name} Project {String(index + 1).padStart(2, '0')}
+            </Text>
             <Text style={styles.projectTitle}>
               {portfolioDisplayTitles[project.name] ?? project.name}
             </Text>
@@ -768,7 +762,7 @@ function CategoryPortfolioDocument({
           ) : null}
 
           <Text style={styles.footer}>
-            Poly Journal {meta.name} 영역 프로젝트 1-page 문서입니다.
+            PAGE {String(index + 1).padStart(2, '0')}
           </Text>
         </Page>
       ))}
@@ -785,14 +779,9 @@ function ProjectPortfolioDocument() {
       {portfolioProjects.map((project, index) => (
         <Page key={project.name} size="A4" style={styles.portfolioPage}>
           <View style={styles.header}>
-            <View style={styles.portfolioHeaderMeta}>
-              <Text style={styles.eyebrow}>
-                Project Portfolio {String(index + 1).padStart(2, '0')} · Poly
-              </Text>
-              <Text style={styles.portfolioPageMark}>
-                PAGE {String(index + 1).padStart(2, '0')}
-              </Text>
-            </View>
+            <Text style={styles.eyebrow}>
+              Project Portfolio {String(index + 1).padStart(2, '0')}
+            </Text>
             <Text style={styles.projectTitle}>
               {portfolioDisplayTitles[project.name] ?? project.name}
             </Text>
@@ -854,7 +843,7 @@ function ProjectPortfolioDocument() {
           ) : null}
 
           <Text style={styles.footer}>
-            Poly Journal 프로젝트 1-page 포트폴리오 문서입니다.
+            PAGE {String(index + 1).padStart(2, '0')}
           </Text>
         </Page>
       ))}
