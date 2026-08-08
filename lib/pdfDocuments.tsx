@@ -360,15 +360,15 @@ const styles = StyleSheet.create({
   },
   reportValue: {
     color: colors.ink,
-    fontSize: 11.3,
+    fontSize: 10.8,
     fontWeight: 700,
-    lineHeight: 1.3,
+    lineHeight: 1.35,
   },
   reportSubValue: {
-    marginTop: 2,
+    marginTop: 6,
     color: colors.inkSoft,
     fontSize: 9.2,
-    lineHeight: 1.32,
+    lineHeight: 1.42,
   },
   reportStackRow: {
     flexDirection: 'row',
