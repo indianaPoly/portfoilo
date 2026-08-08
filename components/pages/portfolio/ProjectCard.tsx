@@ -131,7 +131,6 @@ export function ProjectCard({ project }: { project: Project }) {
                     as="span"
                     display="inline-flex"
                     alignItems="center"
-                    gap={1.5}
                     px="14px"
                     py="8px"
                     borderRadius="999px"
@@ -149,9 +148,6 @@ export function ProjectCard({ project }: { project: Project }) {
                       outlineOffset: '3px',
                     }}
                   >
-                    <Box as="span" fontSize="13px">
-                      📝
-                    </Box>{' '}
                     {post.label}
                   </Link>
                 </NextLink>

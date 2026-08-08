@@ -91,7 +91,7 @@ describe('PDF documents', () => {
       '제주국제관악제 홈페이지',
       'Moazip',
       '동아·동서 글로컬 연합대학 홈페이지',
-      'sLM(small language model)을 활용한 분석 투자 솔루션',
+      'sLM을 활용한 분석 투자 솔루션',
       '블록체인 기반 데이터 저장 구조 설계',
     ]);
     expect(portfolioProjectNames).toHaveLength(projects.length);
