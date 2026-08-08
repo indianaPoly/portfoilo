@@ -432,12 +432,18 @@ const styles = StyleSheet.create({
   },
   reportEvidenceBlock: {
     flex: 1,
+    flexDirection: 'column',
   },
-  reportLinkUrlText: {
+  reportEvidenceTitle: {
+    color: colors.inkSoft,
+    fontSize: 8.8,
+    lineHeight: 1.32,
+  },
+  reportEvidenceUrl: {
     color: colors.brand,
     fontSize: 7.8,
-    marginTop: 1,
     lineHeight: 1.25,
+    marginTop: 2,
     textDecoration: 'none',
   },
   resumeAsideTitle: {
@@ -766,12 +772,12 @@ function CategoryPortfolioDocument({
                         <View key={post.slug} style={styles.reportBulletItem}>
                           <View style={styles.reportBulletDot} />
                           <View style={styles.reportEvidenceBlock}>
-                            <Text style={styles.reportBulletText}>
+                            <Text style={styles.reportEvidenceTitle}>
                               {post.label}
                             </Text>
                             <Link
                               src={postUrl}
-                              style={styles.reportLinkUrlText}
+                              style={styles.reportEvidenceUrl}
                             >
                               {postUrl}
                             </Link>
@@ -784,8 +790,10 @@ function CategoryPortfolioDocument({
                   <View key={link.url} style={styles.reportBulletItem}>
                     <View style={styles.reportBulletDot} />
                     <View style={styles.reportEvidenceBlock}>
-                      <Text style={styles.reportBulletText}>{link.label}</Text>
-                      <Link src={link.url} style={styles.reportLinkUrlText}>
+                      <Text style={styles.reportEvidenceTitle}>
+                        {link.label}
+                      </Text>
+                      <Link src={link.url} style={styles.reportEvidenceUrl}>
                         {link.url}
                       </Link>
                     </View>
@@ -859,12 +867,12 @@ function ProjectPortfolioDocument() {
                         <View key={post.slug} style={styles.reportBulletItem}>
                           <View style={styles.reportBulletDot} />
                           <View style={styles.reportEvidenceBlock}>
-                            <Text style={styles.reportBulletText}>
+                            <Text style={styles.reportEvidenceTitle}>
                               {post.label}
                             </Text>
                             <Link
                               src={postUrl}
-                              style={styles.reportLinkUrlText}
+                              style={styles.reportEvidenceUrl}
                             >
                               {postUrl}
                             </Link>
@@ -877,8 +885,10 @@ function ProjectPortfolioDocument() {
                   <View key={link.url} style={styles.reportBulletItem}>
                     <View style={styles.reportBulletDot} />
                     <View style={styles.reportEvidenceBlock}>
-                      <Text style={styles.reportBulletText}>{link.label}</Text>
-                      <Link src={link.url} style={styles.reportLinkUrlText}>
+                      <Text style={styles.reportEvidenceTitle}>
+                        {link.label}
+                      </Text>
+                      <Link src={link.url} style={styles.reportEvidenceUrl}>
                         {link.url}
                       </Link>
                     </View>
