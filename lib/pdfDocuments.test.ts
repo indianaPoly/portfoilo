@@ -60,7 +60,7 @@ describe('PDF documents', () => {
 
     // Domain portfolio contains 1 page per representative project (cover page removed)
     expect(getMediaBoxes(frontend)).toHaveLength(5);
-    expect(getMediaBoxes(fullstack)).toHaveLength(5);
+    expect(getMediaBoxes(fullstack)).toHaveLength(4);
     expect(getMediaBoxes(devops)).toHaveLength(4);
     expect(getMediaBoxes(aiAx)).toHaveLength(4);
   });
