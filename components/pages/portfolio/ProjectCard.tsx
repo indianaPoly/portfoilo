@@ -88,23 +88,12 @@ export function ProjectCard({ project }: { project: Project }) {
 
         {project.contribution ? (
           <Box
-            p={{ base: 3.5, md: 4 }}
-            borderRadius="16px"
-            bg="paper.200"
-            border="1px solid"
-            borderColor="line.100"
-            mt={1}
+            borderLeft="3px solid"
+            borderColor="brand.500"
+            pl={3.5}
+            py={0.5}
+            my={1}
           >
-            <Text
-              fontSize="12px"
-              fontWeight="700"
-              color="brand.700"
-              letterSpacing="0.02em"
-              textTransform="uppercase"
-              mb={1}
-            >
-              Role & Contribution
-            </Text>
             <Text
               fontSize={{ base: '14px', md: '15px' }}
               color="ink.800"
