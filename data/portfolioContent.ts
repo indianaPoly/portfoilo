@@ -53,7 +53,7 @@ export const domainMetadata: Record<
       '사용자의 화면에서 발생하는 상태와 데이터 흐름을 이해하고, 실시간 통신과 성능, 사용자 경험까지 고려해 구현할 수 있는 개발자',
     representativeProjects: [
       '도메인 주도 프론트엔드 구조와 AI Agent 개발 효율 실험',
-      '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
+      '실시간 협업형 지식 공유 서비스 — Weekly Threads Study',
       'NH 올원뱅크 캐시백 쿠폰몰',
       '온글 (쉬운 글 작성) landing 페이지',
       'sLM을 활용한 분석 투자 솔루션',
@@ -262,7 +262,7 @@ export const projects: ProjectItem[] = [
     ],
   },
   {
-    name: '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
+    name: '실시간 협업형 지식 공유 서비스 — Weekly Threads Study',
     category: '사이드 프로젝트',
     domainCategories: ['Frontend'],
     organization: '개인 프로젝트',
@@ -271,7 +271,7 @@ export const projects: ProjectItem[] = [
     contribution:
       '실시간 협업 경험의 흐름을 설계하고, 타입 안전한 서버 함수와 SSE 기반 동기화, 데스크톱 실행 환경, E2E 검증까지 서비스 전반을 구현했습니다.',
     summary:
-      '팀 내 아이디어, 회의 주제, 회고 내용을 하나의 흐름으로 모으고 논의할 수 있는 실시간 협업 플랫폼을 개발했습니다.',
+      '팀 내 아이디어, 회의 주제, 회고 내용을 하나의 흐름으로 모으고 논의할 수 있는 실시간 협업 서비스입니다.',
     techStack: [
       'TanStack Start',
       'TanStack Router',
@@ -349,7 +349,6 @@ export const projects: ProjectItem[] = [
       '동일한 프론트엔드 코드베이스를 대상으로 폴더 구조와 AGENTS.md 배치 방식을 독립적으로 다르게 적용하며 AI Agent의 탐색 비용, 토큰 소비량, 작업 품질을 벤치마킹한 연구 프로젝트입니다.',
     techStack: ['AI Agent', 'AGENTS.md', 'Next.js'],
     highlights: [
-      '925개 파일, 65,004 LOC 규모의 프론트엔드 코드베이스를 대상으로 코드는 동일하게 유지하고 기술 레이어 구조 vs 도메인 구조 및 지침 배치를 변경하며 벤치마킹했습니다.',
       '초기 단일 측정에서 도메인 구조 비용이 56% 감소했으나 5회 반복 측정 후 평균 +1.8%(비용 +11.3%, 토큰 +13.6%)로 수렴하는 것을 관찰하여 단일 결과가 아닌 반복 측정의 필요성을 입증했습니다.',
       '전역 루트 AGENTS.md 단일 배치(비용 -3.4%)보다 작업 위치와 가까운 17개 로컬 AGENTS.md 지역화 배치(비용 -9.8%)가 AI Agent의 비용과 토큰을 더 효과적으로 절감함을 입증했습니다.',
       'AI가 직관적 폴더 트리보다 심볼 앵커 맵, 책임 경계, 금지 패턴과 대안, 코드 밖의 함정을 중심으로 맥락을 파악한다는 점을 정립하고 AGENTS.md 작성 원칙을 제시했습니다.',
@@ -503,9 +502,9 @@ export const projects: ProjectItem[] = [
     period: '2025.09 - 2025.11',
     role: '웹 프론트엔드 개발',
     contribution:
-      '모바일 결제 제약을 고려해 프로모션과 결제 화면을 구현하고, 입력 단계가 긴 사용 흐름의 포커스 처리와 인터랙션 일관성을 개선했습니다.',
+      'iOS Safari 웹뷰 환경의 PG 결제 흐름 제약과 화면 이탈 문제를 해결하기 위해 iframe 결제창 생명주기와 postMessage 통신 구조를 설계하고 프로모션·결제 화면을 구현했습니다.',
     summary:
-      'NH올원뱅크 캐시백 쿠폰몰의 결제 구현 및 프로모션 페이지를 개발했습니다.',
+      'NH올원뱅크 앱 사용자에게 쿠폰 구매와 캐시백 프로모션 혜택을 제공하는 웹뷰 기반 결제 및 프로모션 서비스입니다.',
     techStack: ['Next.js', 'iframe'],
     highlights: [
       'Safari iOS 환경에서 PG 결제가 앱 정책과 충돌하는 문제를 마주했고, 정책을 변경하기보다 가능한 구현 범위를 중심으로 결제 플로우를 구성했습니다.',
@@ -661,7 +660,7 @@ export const resumeProjectNames = [
   '사내 포털 서비스',
   'MYCMS',
   'AI 기반 HWP 문서 자동 작성 서비스 — 또박또박',
-  '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
+  '실시간 협업형 지식 공유 서비스 — Weekly Threads Study',
   '제주국제관악제 홈페이지',
   'Moazip',
   '동아·동서 글로컬 연합대학 홈페이지',

@@ -87,7 +87,7 @@ describe('PDF documents', () => {
       '사내 포털 서비스',
       'MYCMS',
       'AI 기반 HWP 문서 자동 작성 서비스 — 또박또박',
-      '실시간 협업형 지식 공유 플랫폼 — Weekly Threads Study',
+      '실시간 협업형 지식 공유 서비스 — Weekly Threads Study',
       '제주국제관악제 홈페이지',
       'Moazip',
       '동아·동서 글로컬 연합대학 홈페이지',
