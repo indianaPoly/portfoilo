@@ -502,7 +502,7 @@ export const projects: ProjectItem[] = [
     period: '2025.09 - 2025.11',
     role: '웹 프론트엔드 개발',
     contribution:
-      'iOS Safari 환경의 PG 결제 흐름 제약과 화면 이탈 문제를 해결하기 위해 iframe 결제창 생명주기와 postMessage 통신 구조를 설계하고 프로모션·결제 화면을 구현했습니다.',
+      '앱 이탈 없는 결제 경험을 제공하기 위해 외부 결제창 생명주기와 이벤트 통신 구조를 설계하고, 프로모션부터 쿠폰 결제까지의 전반적인 화면을 개발했습니다.',
     summary:
       'NH올원뱅크 앱 사용자에게 쿠폰 구매와 캐시백 프로모션 혜택을 제공하는 결제 및 프로모션 서비스입니다.',
     techStack: ['Next.js', 'iframe'],
