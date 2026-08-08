@@ -687,41 +687,6 @@ function CategoryPortfolioDocument({
 
   return (
     <Document title={`Poly ${meta.name} Portfolio`} author="Poly Journal">
-      {/* Page 1: Domain Overview & Representative Projects */}
-      <Page size="A4" style={styles.portfolioPage}>
-        <View style={styles.header}>
-          <View style={styles.portfolioHeaderMeta}>
-            <Text style={styles.eyebrow}>Domain Portfolio · {meta.name}</Text>
-            <Text style={styles.portfolioPageMark}>PAGE 01</Text>
-          </View>
-          <Text style={styles.projectTitle}>{meta.name} Portfolio</Text>
-          <Text style={styles.summary}>{meta.subtitle}</Text>
-        </View>
-
-        <View style={styles.reportSection}>
-          <Text style={styles.reportLabel}>이 영역에서 보여줄 역량</Text>
-          <View style={styles.competencyBox}>
-            <Text style={styles.competencyText}>{meta.competency}</Text>
-          </View>
-        </View>
-
-        <View style={styles.reportSection}>
-          <Text style={styles.reportLabel}>REPRESENTATIVE PROJECTS</Text>
-          <View style={styles.pillRow}>
-            {meta.representativeProjects.map((pName) => (
-              <Text key={pName} style={styles.pill}>
-                {pName}
-              </Text>
-            ))}
-          </View>
-        </View>
-
-        <Text style={styles.footer}>
-          Poly Journal {meta.name} 영역 맞춤 포트폴리오 문서입니다.
-        </Text>
-      </Page>
-
-      {/* Page 2+: Representative Project Details */}
       {targetProjects.map((project, index) => (
         <Page key={project.name} size="A4" style={styles.portfolioPage}>
           <View style={styles.header}>
@@ -730,7 +695,7 @@ function CategoryPortfolioDocument({
                 {meta.name} Project {String(index + 1).padStart(2, '0')} · Poly
               </Text>
               <Text style={styles.portfolioPageMark}>
-                PAGE {String(index + 2).padStart(2, '0')}
+                PAGE {String(index + 1).padStart(2, '0')}
               </Text>
             </View>
             <Text style={styles.projectTitle}>
@@ -819,7 +784,7 @@ function CategoryPortfolioDocument({
           ) : null}
 
           <Text style={styles.footer}>
-            Poly Journal {meta.name} 영역 맞춤 프로젝트 1-page 문서입니다.
+            Poly Journal {meta.name} 영역 프로젝트 1-page 문서입니다.
           </Text>
         </Page>
       ))}

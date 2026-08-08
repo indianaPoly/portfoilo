@@ -58,11 +58,11 @@ describe('PDF documents', () => {
     expect(devops.byteLength).toBeGreaterThan(1000);
     expect(aiAx.byteLength).toBeGreaterThan(1000);
 
-    // Domain portfolio contains 1 overview page + representative project pages
-    expect(getMediaBoxes(frontend)).toHaveLength(6);
-    expect(getMediaBoxes(fullstack)).toHaveLength(6);
-    expect(getMediaBoxes(devops)).toHaveLength(5);
-    expect(getMediaBoxes(aiAx)).toHaveLength(5);
+    // Domain portfolio contains 1 page per representative project (cover page removed)
+    expect(getMediaBoxes(frontend)).toHaveLength(5);
+    expect(getMediaBoxes(fullstack)).toHaveLength(5);
+    expect(getMediaBoxes(devops)).toHaveLength(4);
+    expect(getMediaBoxes(aiAx)).toHaveLength(4);
   });
 
   test('renders resume and portfolio pages in A4 size', async () => {
